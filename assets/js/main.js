@@ -1,4 +1,7 @@
-(function () {
+// Need to wait until the DOM is fully loaded before running the script
+// This is to ensure that all elements are available for manipulation
+
+function toExecuteOnLoad() {
   "use strict";
 
   /**
@@ -304,4 +307,9 @@
     selectTheme.value = "light";
     body.classList.remove("dark-mode");
   }
-})();
+}
+
+document.addEventListener("DOMContentLoaded", toExecuteOnLoad);
+// This ensures that the function toExecuteOnLoad is executed once the DOM is fully loaded
+// and ready for manipulation. This is important for ensuring that all elements are available
+// before the script tries to access them.
