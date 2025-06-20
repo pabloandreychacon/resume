@@ -4,7 +4,7 @@ class MyHeader extends HTMLElement {
   }
 
   connectedCallback() {
-    this.innerHTML = `
+    this.innerHTML = `      
       <header
         id="header"
         class="header d-flex flex-column justify-content-center"
@@ -92,3 +92,20 @@ class MyFooter extends HTMLElement {
 
 // Define the element
 customElements.define("my-footer", MyFooter);
+
+class MyMenu extends HTMLElement {
+  constructor() {
+    super();
+  }
+
+  connectedCallback() {
+    this.innerHTML = `      
+      <nav class="navbar-expand-lg navbar-light bg-light h-auto d-flex justify-content-center align-items-center">
+        <a class="navbar-brand" href="/" style="color: #333; text-decoration: none; font-size: 18px; padding: 10px 15px; margin: 0 5px; border-radius: 15px; transition: all 0.3s; background: #f0f0f0;">Home</a>                
+        <a class="navbar-brand" href="download.html" style="color: #333; text-decoration: none; font-size: 18px; padding: 10px 15px; margin: 0 5px; border-radius: 15px; transition: all 0.3s; background: #f0f0f0;">Download</a>              </nav>
+    `;
+  }
+}
+
+// Define the element
+customElements.define("my-menu", MyMenu);

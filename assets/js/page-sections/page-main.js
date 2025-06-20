@@ -51,21 +51,18 @@ class MyMainHero extends HTMLElement {
                   <option value="light">Light</option>
                   <option value="dark" selected>Dark</option>
                 </select>                
-              </div>
+              </div>              
               <!-- Download Section -->
               <section id="download" class="download section">
                 <div class="container" data-aos="fade-up">
-                  <h2>Download My Sales App: POStore</h2>
+                  <h3>Download My Sales App: <b>Postore</b></h3>
                   <p>
-                    Get the latest version of my Point of Sales App for free! Click the button
-                    below to download.
+                    Get the latest version of my Point of Sales App for free! Click the
+                    button below to download.
                   </p>
-                  <a
-                    href="https://1drv.ms/u/c/d130d85d851919d9/EdLFh8RPTtdAuiUuTbm5dRgBxW69U1onjbuvRSZJfN8rig?e=tf428y"
-                    class="btn btn-primary"
-                    target="_blank"
-                    >Download Now</a
-                  >
+                  <div class="language-switch mt-3">
+                    <a href="download.html" class="btn btn-outline-primary">Download</a>
+                  </div>                  
                 </div>
               </section>
             </div>
@@ -76,7 +73,6 @@ class MyMainHero extends HTMLElement {
   }
 }
 
-// Define the element
 customElements.define("my-main-hero", MyMainHero);
 
 class MyMainAbout extends HTMLElement {
