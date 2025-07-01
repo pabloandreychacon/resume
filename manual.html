@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>POStore - User Manual</title>
+    <meta content="" name="description" />
+    <meta content="" name="keywords" />
+    <!-- Base -->
+    <base href="https://pabloandreychacon.github.io/resume/" />
+
+    <!-- Favicons -->
+    <link href="assets/img/favicon.png" rel="icon" />
+
+    <!-- Vendor CSS Files -->
+    <link
+      rel="stylesheet"
+      href="	https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css"
+    />
+    <!-- aos -->
+    <!-- AOS (Animate On Scroll) is a lightweight JavaScript library that allows elements to animate as you scroll down or up the page. -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"
+    />
+    <link
+      href="assets/vendor/bootstrap-icons/bootstrap-icons.css"
+      rel="stylesheet"
+    />
+    <!-- Main CSS File -->
+    <link href="assets/css/main.css" rel="stylesheet" />
+  </head>
+  <body>
+    <!-- Header -->
+    <my-menu></my-menu>
+    <main class="main">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <h1>POStore - Point of Sale System Manual</h1>
+
+            <h2>Main Forms</h2>
+
+            <div
+              class="form-section mb-4 p-4 bg-light rounded shadow-sm border"
+            >
+              <h3>Main</h3>
+              <p>
+                <strong>Purpose:</strong> Main application window and navigation
+                hub
+              </p>
+              <ul>
+                <li>Provides access to all system modules</li>
+                <li>Displays business information and logo</li>
+                <li>Manages user authentication and permissions</li>
+                <li>Contains menu system for navigation</li>
+                <li>Shows dashboard with key metrics</li>
+              </ul>
+            </div>
+
+            <div
+              class="form-section mb-4 p-4 bg-light rounded shadow-sm border"
+            >
+              <h3>Dashboard</h3>
+              <p>
+                <strong>Purpose:</strong> System overview and key performance
+                indicators
+              </p>
+              <ul>
+                <li>Displays sales summary and statistics</li>
+                <li>Shows inventory alerts and low stock warnings</li>
+                <li>Provides quick access to common tasks</li>
+                <li>Real-time business metrics</li>
+              </ul>
+            </div>
+
+            <div
+              class="form-section mb-4 p-4 bg-light rounded shadow-sm border"
+            >
+              <h3>Login</h3>
+              <p>
+                <strong>Purpose:</strong> User authentication for paid licenses
+              </p>
+              <ul>
+                <li>Validates user credentials</li>
+                <li>Determines user permissions (Admin/Regular)</li>
+                <li>Controls access to system features</li>
+              </ul>
+            </div>
+
+            <div
+              class="form-section mb-4 p-4 bg-light rounded shadow-sm border"
+            >
+              <h3>About</h3>
+              <p>
+                <strong>Purpose:</strong> Application information and version
+                details
+              </p>
+              <ul>
+                <li>Shows application version and build information</li>
+                <li>Displays licensing information</li>
+                <li>Contact and support details</li>
+              </ul>
+            </div>
+
+            <h2>Maintenance Forms</h2>
+
+            <div class="category bg-light p-4 rounded mb-4">
+              <h3>General Maintenance</h3>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>User Maintenance</h3>
+                <p><strong>Purpose:</strong> Manage system users</p>
+                <ul>
+                  <li>Add, edit, and delete user accounts</li>
+                  <li>Set user permissions (Admin/Regular)</li>
+                  <li>Manage user contact information</li>
+                  <li>Control user active status</li>
+                </ul>
+              </div>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Settings Maintenance</h3>
+                <p><strong>Purpose:</strong> Configure system settings</p>
+                <ul>
+                  <li>Business information setup</li>
+                  <li>Receipt configuration (size, printing)</li>
+                  <li>Email settings for notifications</li>
+                  <li>Logo and branding setup</li>
+                </ul>
+              </div>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Module Maintenance</h3>
+                <p><strong>Purpose:</strong> Manage system modules</p>
+                <ul>
+                  <li>Configure module settings</li>
+                  <li>Set consecutive numbering</li>
+                  <li>Assign transaction types to modules</li>
+                </ul>
+              </div>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Transaction Type Maintenance</h3>
+                <p><strong>Purpose:</strong> Manage transaction types</p>
+                <ul>
+                  <li>Define transaction categories</li>
+                  <li>Set positive/negative transaction flags</li>
+                  <li>Configure transaction codes</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="category bg-light p-4 rounded mb-4">
+              <h3>Inventory Maintenance</h3>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Product Maintenance</h3>
+                <p><strong>Purpose:</strong> Manage product catalog</p>
+                <ul>
+                  <li>Add, edit, and delete products</li>
+                  <li>Set pricing and cost information</li>
+                  <li>Configure minimum stock levels</li>
+                  <li>Assign products to categories</li>
+                  <li>Link products to suppliers</li>
+                </ul>
+              </div>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Category Maintenance</h3>
+                <p>
+                  <strong>Purpose:</strong> Organize products into categories
+                </p>
+                <ul>
+                  <li>Create and manage product categories</li>
+                  <li>Organize inventory structure</li>
+                  <li>Enable category-based reporting</li>
+                </ul>
+              </div>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Unit Of Measure Maintenance</h3>
+                <p><strong>Purpose:</strong> Define measurement units</p>
+                <ul>
+                  <li>Create units of measure (pieces, kg, liters, etc.)</li>
+                  <li>Standardize product measurements</li>
+                  <li>Support inventory calculations</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="category bg-light p-4 rounded mb-4">
+              <h3>Sales Maintenance</h3>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Client Maintenance</h3>
+                <p><strong>Purpose:</strong> Manage customer information</p>
+                <ul>
+                  <li>Add and edit customer details</li>
+                  <li>Set credit limits and payment terms</li>
+                  <li>Track customer balances</li>
+                  <li>Configure interest rates for credit</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="category bg-light p-4 rounded mb-4">
+              <h3>Supply Maintenance</h3>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Supplier Maintenance</h3>
+                <p><strong>Purpose:</strong> Manage supplier information</p>
+                <ul>
+                  <li>Add and edit supplier details</li>
+                  <li>Track supplier contact information</li>
+                  <li>Manage supplier relationships</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="category bg-light p-4 rounded mb-4">
+              <h3>Credit Maintenance</h3>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Payment Plans Maintenance</h3>
+                <p><strong>Purpose:</strong> Configure credit payment plans</p>
+                <ul>
+                  <li>Create installment payment plans</li>
+                  <li>Set payment frequencies</li>
+                  <li>Define number of installments</li>
+                </ul>
+              </div>
+            </div>
+
+            <h2>Transaction Forms</h2>
+
+            <div class="category bg-light p-4 rounded mb-4">
+              <h3>Sales Transactions</h3>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Sales</h3>
+                <p><strong>Purpose:</strong> Process sales transactions</p>
+                <ul>
+                  <li>Create new sales bills</li>
+                  <li>Add products to sales</li>
+                  <li>Apply discounts and taxes</li>
+                  <li>Process payments (cash/credit)</li>
+                  <li>Print receipts</li>
+                  <li>Hold bills for later completion</li>
+                </ul>
+              </div>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Sales Reversal</h3>
+                <p><strong>Purpose:</strong> Reverse completed sales</p>
+                <ul>
+                  <li>Cancel or return sales transactions</li>
+                  <li>Restore inventory levels</li>
+                  <li>Process refunds</li>
+                </ul>
+              </div>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Payment</h3>
+                <p><strong>Purpose:</strong> Process customer payments</p>
+                <ul>
+                  <li>Record customer payments</li>
+                  <li>Apply payments to outstanding balances</li>
+                  <li>Handle partial payments</li>
+                </ul>
+              </div>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>On Hold Bills</h3>
+                <p><strong>Purpose:</strong> Manage held sales transactions</p>
+                <ul>
+                  <li>View bills put on hold</li>
+                  <li>Resume held transactions</li>
+                  <li>Delete abandoned bills</li>
+                </ul>
+              </div>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Credit Sales List</h3>
+                <p><strong>Purpose:</strong> Manage credit sales</p>
+                <ul>
+                  <li>View all credit transactions</li>
+                  <li>Track payment status</li>
+                  <li>Process credit payments</li>
+                </ul>
+              </div>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Payment Plan Select</h3>
+                <p>
+                  <strong>Purpose:</strong> Choose payment plans for credit
+                  sales
+                </p>
+                <ul>
+                  <li>Select appropriate payment plan</li>
+                  <li>Configure installment terms</li>
+                  <li>Set payment schedules</li>
+                </ul>
+              </div>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Change Display</h3>
+                <p><strong>Purpose:</strong> Display change calculation</p>
+                <ul>
+                  <li>Show change due to customer</li>
+                  <li>Large display for easy reading</li>
+                  <li>Payment confirmation</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="category bg-light p-4 rounded mb-4">
+              <h3>Inventory Transactions</h3>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Inventory Stock</h3>
+                <p><strong>Purpose:</strong> Manage inventory stock levels</p>
+                <ul>
+                  <li>Adjust stock quantities</li>
+                  <li>Record stock movements</li>
+                  <li>Handle stock corrections</li>
+                  <li>Track inventory changes</li>
+                </ul>
+              </div>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Inventory Product Import</h3>
+                <p>
+                  <strong>Purpose:</strong> Import products from external files
+                </p>
+                <ul>
+                  <li>Import products from CSV files</li>
+                  <li>Bulk product creation</li>
+                  <li>Data validation and error handling</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="category bg-light p-4 rounded mb-4">
+              <h3>General Transactions</h3>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Backup Database</h3>
+                <p><strong>Purpose:</strong> Database backup and restore</p>
+                <ul>
+                  <li>Create database backups</li>
+                  <li>Restore from backup files</li>
+                  <li>Secure data protection</li>
+                </ul>
+              </div>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Database Cleanup</h3>
+                <p><strong>Purpose:</strong> Clean and optimize database</p>
+                <ul>
+                  <li>Remove old transaction data</li>
+                  <li>Optimize database performance</li>
+                  <li>Clean up temporary data</li>
+                </ul>
+              </div>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Run Scripts</h3>
+                <p><strong>Purpose:</strong> Execute SQL scripts</p>
+                <ul>
+                  <li>Run custom SQL commands</li>
+                  <li>Database maintenance scripts</li>
+                  <li>Advanced database operations</li>
+                </ul>
+              </div>
+
+              <div class="form-section mb-4 p-4 bg-light rounded shadow-sm border">
+                <h3>Client Email</h3>
+                <p><strong>Purpose:</strong> Send emails to clients</p>
+                <ul>
+                  <li>Send receipts via email</li>
+                  <li>Customer communication</li>
+                  <li>Automated email notifications</li>
+                </ul>
+              </div>
+            </div>
+
+            <h2>Report s</h2>
+
+            <div
+              class="form-section mb-4 p-4 bg-light rounded shadow-sm border"
+            >
+              <h3>Sales Bill Report</h3>
+              <p><strong>Purpose:</strong> Sales transaction reports</p>
+              <ul>
+                <li>View sales history by date range</li>
+                <li>Filter by customer, product, or category</li>
+                <li>Export to CSV format</li>
+                <li>Sales performance analysis</li>
+              </ul>
+            </div>
+
+            <div
+              class="form-section mb-4 p-4 bg-light rounded shadow-sm border"
+            >
+              <h3>Inventory Stock Report</h3>
+              <p><strong>Purpose:</strong> Current inventory status</p>
+              <ul>
+                <li>View current stock levels</li>
+                <li>Identify low stock items</li>
+                <li>Filter by category or supplier</li>
+                <li>Stock valuation reports</li>
+              </ul>
+            </div>
+
+            <div
+              class="form-section mb-4 p-4 bg-light rounded shadow-sm border"
+            >
+              <h3>Inventory Transaction Report</h3>
+              <p><strong>Purpose:</strong> Inventory movement history</p>
+              <ul>
+                <li>Track all inventory transactions</li>
+                <li>View stock adjustments and movements</li>
+                <li>Filter by date, product, or transaction type</li>
+                <li>Audit trail for inventory changes</li>
+              </ul>
+            </div>
+
+            <div
+              class="form-section mb-4 p-4 bg-light rounded shadow-sm border"
+            >
+              <h3>Inventory Movement Report</h3>
+              <p><strong>Purpose:</strong> Detailed inventory movements</p>
+              <ul>
+                <li>Comprehensive movement tracking</li>
+                <li>In/out inventory analysis</li>
+                <li>Movement patterns and trends</li>
+              </ul>
+            </div>
+
+            <div
+              class="form-section mb-4 p-4 bg-light rounded shadow-sm border"
+            >
+              <h3>Sales Most Sold Product Report</h3>
+              <p><strong>Purpose:</strong> Best-selling products analysis</p>
+              <ul>
+                <li>Identify top-selling products</li>
+                <li>Sales quantity and revenue analysis</li>
+                <li>Filter by category and supplier</li>
+                <li>Performance ranking</li>
+              </ul>
+            </div>
+
+            <div
+              class="form-section mb-4 p-4 bg-light rounded shadow-sm border"
+            >
+              <h3>Sales Credit Transaction Report</h3>
+              <p>
+                <strong>Purpose:</strong> Credit sales and payments tracking
+              </p>
+              <ul>
+                <li>Monitor credit transactions</li>
+                <li>Track payment history</li>
+                <li>Outstanding balance reports</li>
+                <li>Credit performance analysis</li>
+              </ul>
+            </div>
+
+            <div
+              class="form-section mb-4 p-4 bg-light rounded shadow-sm border"
+            >
+              <h3>Logs Report</h3>
+              <p><strong>Purpose:</strong> System activity logs</p>
+              <ul>
+                <li>View system activity history</li>
+                <li>User action tracking</li>
+                <li>Error and event logging</li>
+                <li>System audit trail</li>
+              </ul>
+            </div>
+            <div
+              class="form-section mb-4 p-4 bg-light rounded shadow-sm border"
+            >
+              <strong>Note:</strong> Some features may be restricted based on
+              your license type (Free vs Paid). Paid licenses provide access to
+              advanced reporting, user management, and additional features.
+            </div>
+
+            <h2>Navigation Tips</h2>
+            <div
+              class="form-section mb-4 p-4 bg-light rounded shadow-sm border"
+            >
+            <ul class="list-unstyled">
+              <li class="mb-2">
+                Use the main menu to access different modules
+              </li>
+              <li class="mb-2">
+                Forms are organized by category (Maintenance, Transactions,
+                Reports)
+              </li>
+              <li class="mb-2">
+                Most forms support keyboard shortcuts for faster navigation
+              </li>
+              <li class="mb-2">
+                Use filters in reports to narrow down results
+              </li>
+              <li class="mb-2">
+                Export functionality is available in most report forms
+              </li>
+            </ul>
+
+          </div>
+        </div>
+      </div>
+    </main>
+    <my-footer></my-footer>
+
+    <!-- Vendor JS Files -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <script src="assets/js/page-sections/page-sections.js"></script>
+    <script src="assets/js/page-sections/page-main.js"></script>
+  </body>
+</html>
