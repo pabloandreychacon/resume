@@ -60,17 +60,7 @@ class MyFooter extends HTMLElement {
       <div class="container">
         <h3 class="sitename">Andrey Chacon</h3>
         <!-- <p>Et aut eum quis fuga eos sunt ipsa nihil. Labore corporis magni eligendi fuga maxime saepe commodi placeat.</p> -->
-        <div class="social-links d-flex justify-content-center">
-          <a
-            href="https://www.facebook.com/profile.php?id=100088596949141"
-            target="_blank"
-            ><i class="bi bi-facebook"></i
-          ></a>
-          <a
-            href="https://www.instagram.com/pabloandreychaconluna/"
-            target="_blank"
-            ><i class="bi bi-instagram"></i
-          ></a>
+        <div class="social-links d-flex justify-content-center">          
           <a
             href="https://www.linkedin.com/in/pabloandreychaconluna/"
             target="_blank"
