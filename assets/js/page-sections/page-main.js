@@ -24,16 +24,6 @@ class MyMainHero extends HTMLElement {
               </p>
               <div class="social-links w-50">
                 <a
-                  href="https://www.facebook.com/profile.php?id=100088596949141"
-                  target="_blank"
-                  ><i class="bi bi-facebook"></i
-                ></a>
-                <a
-                  href="https://www.instagram.com/pabloandreychaconluna/"
-                  target="_blank"
-                  ><i class="bi bi-instagram"></i
-                ></a>
-                <a
                   href="https://www.linkedin.com/in/pabloandreychaconluna/"
                   target="_blank"
                   ><i class="bi bi-linkedin"></i
