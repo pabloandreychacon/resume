@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQ - POStore</title>
+    <meta
+      name="description"
+      content="Frequently Asked Questions about POStore products, shipping, returns, and more."
+    />
+    <meta
+      name="keywords"
+      content="FAQ, questions, help, support, shipping, returns, payment, POStore"
+    />
+    <meta name="author" content="POStore Team" />
+    <link rel="icon" href="../assets/favicon.ico" type="image/x-icon" />
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
+    />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="../css/style.css" />
+    <!-- Section Loader JS -->
+    <script src="../js/section-loader.js"></script>
+    <script defer>
+      // Load sections when the page is ready
+      document.addEventListener("DOMContentLoaded", function () {
+        loadSection("headerSection", "../sections/header-pages.html");
+        loadSection("footerSection", "../sections/footer-pages.html");
+        loadSection("commonElements", "../sections/common-elements-pages.html");
+      });
+    </script>
+  </head>
+  <body>
+    <!-- Header Section -->
+    <div id="headerSection"></div>
+    
+    <!-- Common Elements (Cart, Wishlist, Product Modal) -->
+    <div id="commonElements"></div>
+
+    <!-- Page Header -->
+    <section class="bg-primary text-white py-5 mt-5">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-8">
+            <h1 class="display-4 fw-bold">Frequently Asked Questions</h1>
+            <p class="lead">Find answers to common questions about our products and services.</p>
+          </div>
+          <div class="col-lg-4 text-lg-end">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb justify-content-lg-end mb-0">
+                <li class="breadcrumb-item"><a href="../index.html" class="text-white">Home</a></li>
+                <li class="breadcrumb-item active text-white" aria-current="page">FAQ</li>
+              </ol>
+            </nav>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Categories -->
+    <section class="py-5">
+      <div class="container">
+        <div class="row justify-content-center mb-5">
+          <div class="col-lg-8 text-center">
+            <p class="lead text-muted">Browse through our most frequently asked questions to find quick answers to your inquiries.</p>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <ul class="nav nav-pills mb-4 justify-content-center" id="faqTab" role="tablist">
+              <li class="nav-item mx-2" role="presentation">
+                <button class="nav-link active" id="general-tab" data-bs-toggle="pill" data-bs-target="#general" type="button" role="tab">
+                  General
+                </button>
+              </li>
+              <li class="nav-item mx-2" role="presentation">
+                <button class="nav-link" id="orders-tab" data-bs-toggle="pill" data-bs-target="#orders" type="button" role="tab">
+                  Orders & Shipping
+                </button>
+              </li>
+              <li class="nav-item mx-2" role="presentation">
+                <button class="nav-link" id="returns-tab" data-bs-toggle="pill" data-bs-target="#returns" type="button" role="tab">
+                  Returns & Refunds
+                </button>
+              </li>
+              <li class="nav-item mx-2" role="presentation">
+                <button class="nav-link" id="payment-tab" data-bs-toggle="pill" data-bs-target="#payment" type="button" role="tab">
+                  Payment
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Content -->
+    <section class="pb-5">
+      <div class="container">
+        <div class="tab-content" id="faqTabContent">
+          <!-- General FAQs -->
+          <div class="tab-pane fade show active" id="general" role="tabpanel">
+            <div class="accordion" id="accordionGeneral">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#generalOne">
+                    What is POStore?
+                  </button>
+                </h2>
+                <div id="generalOne" class="accordion-collapse collapse show" data-bs-parent="#accordionGeneral">
+                  <div class="accordion-body">
+                    POStore is a premium online shopping destination offering high-quality products across multiple categories including electronics, fashion, and home goods. We curate our selection to ensure every product meets our standards for quality, design, and value.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#generalTwo">
+                    How do I create an account?
+                  </button>
+                </h2>
+                <div id="generalTwo" class="accordion-collapse collapse" data-bs-parent="#accordionGeneral">
+                  <div class="accordion-body">
+                    Creating an account is easy! Click on the "Sign Up" button in the top right corner of our website. Fill in your details including name, email address, and password. Once submitted, you'll receive a confirmation email to verify your account.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#generalThree">
+                    Are all products brand new?
+                  </button>
+                </h2>
+                <div id="generalThree" class="accordion-collapse collapse" data-bs-parent="#accordionGeneral">
+                  <div class="accordion-body">
+                    Yes, all products sold on POStore are brand new and authentic. We work directly with manufacturers and authorized distributors to ensure the quality and authenticity of every item we sell.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#generalFour">
+                    How can I contact customer service?
+                  </button>
+                </h2>
+                <div id="generalFour" class="accordion-collapse collapse" data-bs-parent="#accordionGeneral">
+                  <div class="accordion-body">
+                    You can contact our customer service team through multiple channels: by email at support@postore.com, by phone at +1 (800) 123-4567 (Monday-Friday, 9am-6pm EST), or by filling out the contact form on our <a href="contact.html">Contact page</a>.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Orders & Shipping FAQs -->
+          <div class="tab-pane fade" id="orders" role="tabpanel">
+            <div class="accordion" id="accordionOrders">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#ordersOne">
+                    How long does shipping take?
+                  </button>
+                </h2>
+                <div id="ordersOne" class="accordion-collapse collapse show" data-bs-parent="#accordionOrders">
+                  <div class="accordion-body">
+                    Standard shipping typically takes 3-5 business days within the continental US. Express shipping options are available at checkout for 1-2 business day delivery. International shipping times vary by destination, generally taking 7-14 business days.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ordersTwo">
+                    Do you ship internationally?
+                  </button>
+                </h2>
+                <div id="ordersTwo" class="accordion-collapse collapse" data-bs-parent="#accordionOrders">
+                  <div class="accordion-body">
+                    Yes, we ship to most countries worldwide. International shipping rates and delivery times are calculated at checkout based on your location and the items in your cart. Please note that customers are responsible for any import duties or taxes that may apply.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ordersThree">
+                    How can I track my order?
+                  </button>
+                </h2>
+                <div id="ordersThree" class="accordion-collapse collapse" data-bs-parent="#accordionOrders">
+                  <div class="accordion-body">
+                    Once your order ships, you'll receive a confirmation email with a tracking number. You can use this number to track your package on our website under "Order History" in your account, or directly through the carrier's website.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#ordersFour">
+                    Can I change or cancel my order?
+                  </button>
+                </h2>
+                <div id="ordersFour" class="accordion-collapse collapse" data-bs-parent="#accordionOrders">
+                  <div class="accordion-body">
+                    Orders can be modified or canceled within 1 hour of placement. After this window, we begin processing orders for shipment and changes cannot be guaranteed. Please contact customer service immediately if you need to make changes to a recent order.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Returns & Refunds FAQs -->
+          <div class="tab-pane fade" id="returns" role="tabpanel">
+            <div class="accordion" id="accordionReturns">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#returnsOne">
+                    What is your return policy?
+                  </button>
+                </h2>
+                <div id="returnsOne" class="accordion-collapse collapse show" data-bs-parent="#accordionReturns">
+                  <div class="accordion-body">
+                    We offer a 30-day return policy for most items. Products must be in their original condition with all packaging and tags intact. Some categories like electronics may have a 15-day return window. Personalized items and certain hygiene products cannot be returned.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#returnsTwo">
+                    How do I initiate a return?
+                  </button>
+                </h2>
+                <div id="returnsTwo" class="accordion-collapse collapse" data-bs-parent="#accordionReturns">
+                  <div class="accordion-body">
+                    To initiate a return, log into your account and go to "Order History." Select the order containing the item(s) you wish to return and follow the return instructions. You'll receive a return shipping label and instructions for packaging your return.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#returnsThree">
+                    When will I receive my refund?
+                  </button>
+                </h2>
+                <div id="returnsThree" class="accordion-collapse collapse" data-bs-parent="#accordionReturns">
+                  <div class="accordion-body">
+                    Once we receive and inspect your return, refunds are typically processed within 3-5 business days. The time it takes for the refund to appear in your account depends on your payment method and financial institution, usually 5-10 business days.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#returnsFour">
+                    Do I have to pay for return shipping?
+                  </button>
+                </h2>
+                <div id="returnsFour" class="accordion-collapse collapse" data-bs-parent="#accordionReturns">
+                  <div class="accordion-body">
+                    For standard returns, customers are responsible for return shipping costs unless the item arrived damaged or defective. Premium members receive free return shipping on all orders. Return shipping fees are deducted from your refund amount.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Payment FAQs -->
+          <div class="tab-pane fade" id="payment" role="tabpanel">
+            <div class="accordion" id="accordionPayment">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#paymentOne">
+                    What payment methods do you accept?
+                  </button>
+                </h2>
+                <div id="paymentOne" class="accordion-collapse collapse show" data-bs-parent="#accordionPayment">
+                  <div class="accordion-body">
+                    We accept all major credit cards (Visa, Mastercard, American Express, Discover), PayPal, Apple Pay, Google Pay, and Shop Pay. For select high-value purchases, we also offer financing options through Affirm.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#paymentTwo">
+                    Is it safe to use my credit card on your website?
+                  </button>
+                </h2>
+                <div id="paymentTwo" class="accordion-collapse collapse" data-bs-parent="#accordionPayment">
+                  <div class="accordion-body">
+                    Yes, our website uses industry-standard SSL encryption to protect your personal and payment information. We are PCI DSS compliant and never store your full credit card details on our servers. All transactions are processed through secure payment gateways.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#paymentThree">
+                    When will my card be charged?
+                  </button>
+                </h2>
+                <div id="paymentThree" class="accordion-collapse collapse" data-bs-parent="#accordionPayment">
+                  <div class="accordion-body">
+                    Your card is authorized when you place your order but is only charged when your order ships. For pre-orders or backordered items, we'll notify you before charging your card and shipping your order.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#paymentFour">
+                    Do you offer any discounts or promotions?
+                  </button>
+                </h2>
+                <div id="paymentFour" class="accordion-collapse collapse" data-bs-parent="#accordionPayment">
+                  <div class="accordion-body">
+                    Yes, we regularly offer seasonal sales and promotions. Sign up for our newsletter to stay informed about upcoming deals. We also have a loyalty program where you earn points on purchases that can be redeemed for discounts on future orders.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Still Have Questions -->
+    <section class="py-5 bg-light">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 text-center">
+            <h2 class="display-6 fw-bold mb-4">Still Have Questions?</h2>
+            <p class="lead mb-5">Our customer support team is here to help you with any other questions you might have.</p>
+            <a href="contact.html" class="btn btn-primary btn-lg px-5">Contact Us</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer Section -->
+    <div id="footerSection"></div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Performance Optimization -->
+    <script src="../js/performance.js"></script>
+    
+    <!-- Custom JS -->
+    <script src="../js/store-minimal.js"></script>
+    <script src="../js/social-share.js"></script>
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        // Add active class to the FAQ link in footer when it's loaded
+        const checkFooter = setInterval(function() {
+          const footerLinks = document.querySelectorAll('footer a');
+          if (footerLinks.length > 0) {
+            footerLinks.forEach(link => {
+              if (link.textContent === 'FAQ') {
+                link.href = 'pages/faq.html';
+              }
+            });
+            clearInterval(checkFooter);
+          }
+        }, 100);
+        
+        // Handle search functionality after header is loaded
+        const checkHeader = setInterval(function() {
+          const searchBtn = document.getElementById("searchBtn");
+          const searchInput = document.getElementById("searchInput");
+          
+          if (searchBtn && searchInput) {
+            // Handle search button click
+            searchBtn.addEventListener("click", function() {
+              const query = searchInput.value;
+              window.location.href = `../index.html?search=${encodeURIComponent(query)}#products`;
+            });
+            
+            // Handle search input enter key
+            searchInput.addEventListener("keydown", function(e) {
+              if (e.key === "Enter") {
+                const query = this.value;
+                window.location.href = `../index.html?search=${encodeURIComponent(query)}#products`;
+              }
+            });
+            
+            clearInterval(checkHeader);
+          }
+        }, 100);
+      });
+    </script>
+  </body>
+</html>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Postore - Premium Ecommerce</title>
+    <title>POStore - Premium Ecommerce</title>
     <meta
       name="description"
       content="Discover premium products at unbeatable prices. Shop the latest trends with our curated collection of high-quality items."
@@ -14,6 +14,19 @@
     />
     <meta name="author" content="POStore Team" />
     <link rel="icon" href="./assets/favicon.ico" type="image/x-icon" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://postore.com/" />
+    <meta property="og:title" content="POStore - Premium Ecommerce" />
+    <meta property="og:description" content="Discover premium products at unbeatable prices. Shop the latest trends with our curated collection of high-quality items." />
+    <meta property="og:image" content="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://postore.com/" />
+    <meta property="twitter:title" content="POStore - Premium Ecommerce" />
+    <meta property="twitter:description" content="Discover premium products at unbeatable prices. Shop the latest trends with our curated collection of high-quality items." />
+    <meta property="twitter:image" content="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800" />
     <!-- Bootstrap CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
@@ -25,9 +38,9 @@
       href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
     />
     <!-- Custom CSS -->
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="css/style.css" />
     <!-- Section Loader JS -->
-    <script src="section-loader.js"></script>
+    <script src="js/section-loader.js"></script>
     <script defer>
       // Load sections when the page is ready
       document.addEventListener("DOMContentLoaded", function () {
@@ -94,6 +107,7 @@
                     src="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800"
                     class="d-block w-100 carousel-image"
                     alt="Premium Shopping Experience"
+                    loading="lazy"
                   />
                   <div class="carousel-caption d-none d-md-block">
                     <h5 class="fw-bold">Premium Shopping Experience</h5>
@@ -108,6 +122,7 @@
                     src="https://images.pexels.com/photos/1005638/pexels-photo-1005638.jpeg?auto=compress&cs=tinysrgb&w=800"
                     class="d-block w-100 carousel-image"
                     alt="Latest Technology"
+                    loading="lazy"
                   />
                   <div class="carousel-caption d-none d-md-block">
                     <h5 class="fw-bold">Latest Technology</h5>
@@ -122,6 +137,7 @@
                     src="https://images.pexels.com/photos/1488463/pexels-photo-1488463.jpeg?auto=compress&cs=tinysrgb&w=800"
                     class="d-block w-100 carousel-image"
                     alt="Fashion & Style"
+                    loading="lazy"
                   />
                   <div class="carousel-caption d-none d-md-block">
                     <h5 class="fw-bold">Fashion & Style</h5>
@@ -334,9 +350,14 @@
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
+    <!-- Performance Optimization -->
+    <script src="js/performance.js"></script>
+    
     <!-- Custom JS -->
     <script src="js/category-buttons.js"></script>
-    <script src="main.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/social-share.js"></script>
+    <!-- structured-data.js removed -->
 
     <script>
       // Hide navbar on scroll down, show on scroll up
@@ -344,12 +365,52 @@
 
       // Initialize navbar functionality after DOM is fully loaded
       document.addEventListener("DOMContentLoaded", function () {
+        // Check for category and search parameters in URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const categoryParam = urlParams.get('category');
+        const searchParam = urlParams.get('search');
+        
         // Wait for sections to load
         document.addEventListener("sectionLoaded", function (e) {
           if (e.detail.id === "headerSection") {
             // Give the DOM time to update
             setTimeout(function () {
               setupNavbar();
+              
+              // Apply category filter if parameter exists
+              if (categoryParam && typeof filterProductsByCategory === "function") {
+                setTimeout(() => {
+                  filterProductsByCategory(categoryParam);
+                  
+                  // Update active button in category filters
+                  document.querySelectorAll(".d-flex.gap-2.flex-wrap [data-category]").forEach(btn => {
+                    btn.classList.remove("active");
+                    if (btn.getAttribute("data-category") === categoryParam) {
+                      btn.classList.add("active");
+                    }
+                  });
+                  
+                  // Scroll to products section
+                  document.getElementById("products").scrollIntoView({ behavior: "smooth" });
+                }, 500);
+              }
+              
+              // Apply search filter if parameter exists
+              if (searchParam && store) {
+                setTimeout(() => {
+                  // Set search input value
+                  const searchInput = document.getElementById("searchInput");
+                  const searchInputSmall = document.getElementById("searchInputSmall");
+                  if (searchInput) searchInput.value = searchParam;
+                  if (searchInputSmall) searchInputSmall.value = searchParam;
+                  
+                  // Search products
+                  store.searchProducts(searchParam);
+                  
+                  // Scroll to products section
+                  document.getElementById("products").scrollIntoView({ behavior: "smooth" });
+                }, 800);
+              }
             }, 200);
           }
         });
