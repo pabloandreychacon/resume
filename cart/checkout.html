@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- No permissions policy -->
+    <title>Checkout - POStore</title>
+
+    <!-- Bootstrap CSS -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <!-- Bootstrap Icons -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
+    />
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css" />
+    <!-- PayPal SDK -->
+    <script src="https://www.paypal.com/sdk/js?client-id=AcyP_DyBRe1ld98usHQGctGqBqLRavAH5tg2Fu_JLTzR1ylCxsP7Cw4klndZ6xnW_V11koQsdc2AyNHm&currency=USD&disable-funding=credit"></script>
+  </head>
+  <body class="bg-light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+      <div class="container">
+        <a
+          class="navbar-brand fw-bold text-primary"
+          href="index.html"
+          style="font-size: 1.5rem"
+        >
+          <i class="bi bi-shop me-2"></i>POStore
+        </a>
+
+        <div class="d-flex align-items-center">
+          <a href="index.html" class="btn btn-outline-primary me-2">
+            <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Checkout Progress -->
+    <div class="container mt-4">
+      <div class="row justify-content-center">
+        <div class="col-lg-8">
+          <div class="checkout-progress mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="step active">
+                <div class="step-number">1</div>
+                <div class="step-label">Cart</div>
+              </div>
+              <div class="step-line"></div>
+              <div class="step active">
+                <div class="step-number">2</div>
+                <div class="step-label">Checkout & Payment</div>
+              </div>
+              <div class="step-line"></div>
+              <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-label">Complete</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Checkout Content -->
+    <div class="container mb-5">
+      <div class="row">
+        <!-- Checkout Form -->
+        <div class="col-lg-8">
+          <!-- Cart Items -->
+          <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+              <h5 class="mb-0"><i class="bi bi-cart me-2"></i>Your Items</h5>
+            </div>
+            <div class="card-body">
+              <div id="cartItems" class="mb-3">
+                <!-- Cart items will be populated by JavaScript -->
+              </div>
+            </div>
+          </div>
+
+          <!-- PayPal Info Notice -->
+          <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+              <h5 class="mb-0">
+                <i class="bi bi-info-circle me-2"></i>Payment Information
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="alert alert-info mb-0">
+                <i class="bi bi-paypal me-2"></i>
+                Your shipping and billing information will be collected securely
+                through PayPal during checkout. You can pay with PayPal or
+                credit/debit card.
+              </div>
+            </div>
+          </div>
+
+          <!-- Shipping Method -->
+          <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+              <h5 class="mb-0">
+                <i class="bi bi-box-seam me-2"></i>Shipping Method
+              </h5>
+            </div>
+            <div class="card-body">
+              <div class="form-check mb-2">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="shipping"
+                  id="pickupShipping"
+                  value="0"
+                  checked
+                />
+                <label
+                  class="form-check-label d-flex justify-content-between w-100"
+                  for="pickupShipping"
+                >
+                  <span>Pickup at Store (Available Today)</span>
+                  <span class="fw-bold text-success">FREE</span>
+                </label>
+              </div>
+              <div class="form-check mb-2">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="shipping"
+                  id="standardShipping"
+                  value="5.99"
+                />
+                <label
+                  class="form-check-label d-flex justify-content-between w-100"
+                  for="standardShipping"
+                >
+                  <span>Standard Shipping (5-7 business days)</span>
+                  <span class="fw-bold">$5.99</span>
+                </label>
+              </div>
+              <div class="form-check mb-2">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="shipping"
+                  id="expressShipping"
+                  value="12.99"
+                />
+                <label
+                  class="form-check-label d-flex justify-content-between w-100"
+                  for="expressShipping"
+                >
+                  <span>Express Shipping (2-3 business days)</span>
+                  <span class="fw-bold">$12.99</span>
+                </label>
+              </div>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  name="shipping"
+                  id="overnightShipping"
+                  value="24.99"
+                />
+                <label
+                  class="form-check-label d-flex justify-content-between w-100"
+                  for="overnightShipping"
+                >
+                  <span>Overnight Shipping (1 business day)</span>
+                  <span class="fw-bold">$24.99</span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div class="col-lg-4">
+          <div class="card shadow-sm sticky-top" style="top: 20px">
+            <div class="card-header bg-white">
+              <h5 class="mb-0">
+                <i class="bi bi-receipt me-2"></i>Order Summary
+              </h5>
+            </div>
+            <div class="card-body">
+              <div id="orderItems">
+                <!-- Order items will be populated by JavaScript -->
+              </div>
+
+              <hr />
+
+              <div class="d-flex justify-content-between mb-2">
+                <span>Subtotal:</span>
+                <span id="subtotal">$0.00</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span>Shipping:</span>
+                <span id="shippingCost">$0.00</span>
+              </div>
+              <div class="d-flex justify-content-between mb-2">
+                <span>Tax:</span>
+                <span id="tax">$0.00</span>
+              </div>
+              <hr />
+              <div class="d-flex justify-content-between fw-bold fs-5">
+                <span>Total:</span>
+                <span id="total">$0.00</span>
+              </div>
+
+              <div class="mt-4">
+                <!-- PayPal Button Container -->
+                <div id="paypal-button-container"></div>
+
+                <!-- PayPal Button Configuration -->
+                <script>
+                  paypal
+                    .Buttons({
+                      // Sets up the transaction when a payment button is clicked
+                      createOrder: function (data, actions) {
+                        // Calculate total from cart
+                        const total = document
+                          .getElementById("total")
+                          .innerText.replace("$", "");
+
+                        return actions.order.create({
+                          purchase_units: [
+                            {
+                              amount: {
+                                value: total, // Use the total from the order summary
+                                currency_code: "USD",
+                              },
+                            },
+                          ],
+                        });
+                      },
+
+                      // Finalize the transaction after payer approval
+                      onApprove: function (data, actions) {
+                        return actions.order
+                          .capture()
+                          .then(function (orderData) {
+                            // Show success modal
+                            const orderNumber =
+                              "PP-" + Date.now().toString().slice(-8);
+                            document.getElementById("orderNumber").textContent =
+                              orderNumber;
+
+                            // Get cart items before clearing
+                            const cart = JSON.parse(
+                              localStorage.getItem("modernstore_cart") || "[]"
+                            );
+
+                            // Get order items from the DOM
+                            const orderItemsHtml =
+                              document.getElementById("orderItems").innerHTML;
+
+                            // Display success modal
+                            new bootstrap.Modal(
+                              document.getElementById("successModal")
+                            ).show();
+
+                            // Send confirmation email using EmailJS
+                            var script = document.createElement("script");
+                            script.src =
+                              "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
+                            script.onload = function () {
+                              emailjs.init("L7o6hZUmFJQ_Jbqu0");
+
+                              // Get shipping method
+                              const shippingMethod = document
+                                .querySelector('input[name="shipping"]:checked')
+                                .nextElementSibling.textContent.trim();
+
+                              // Use cart items captured before clearing
+                              let itemsList = "";
+                              if (cart && cart.length > 0) {
+                                cart.forEach((item) => {
+                                  itemsList += `${item.name || "Product"} - $${
+                                    item.price || "0.00"
+                                  } x ${item.quantity || 1}\n`;
+                                });
+                              } else {
+                                // Fallback to get items from the order summary HTML
+                                itemsList = "Items as shown in order summary";
+                              }
+
+                              // Get payment details from PayPal response
+                              const shippingAddress =
+                                orderData.purchase_units[0].shipping?.address ||
+                                {};
+                              const addressStr = shippingAddress.address_line_1
+                                ? `${shippingAddress.address_line_1}, ${
+                                    shippingAddress.admin_area_2 || ""
+                                  }, ${shippingAddress.admin_area_1 || ""}, ${
+                                    shippingAddress.postal_code || ""
+                                  }, ${shippingAddress.country_code || ""}`
+                                : "Store Pickup";
+
+                              // Get customer info
+                              const customerName =
+                                orderData.payer?.name?.given_name +
+                                  " " +
+                                  orderData.payer?.name?.surname || "Customer";
+                              const customerEmail =
+                                orderData.payer?.email_address ||
+                                "customer@example.com";
+
+                              emailjs.send(
+                                "service_s481rtv",
+                                "template_771ecr6",
+                                {
+                                  to_email: "pabloandreychacon@gmail.com",
+                                  from_email: customerEmail,
+                                  message: `
+                                    Order Number: ${orderNumber}\n\n
+                                    Customer: ${customerName}\n
+                                    Email: ${customerEmail}\n\n
+                                    Shipping Method: ${shippingMethod}\n
+                                    Shipping Address: ${addressStr}\n\n
+                                    Items:\n${itemsList}\n
+                                    Subtotal: ${
+                                      document.getElementById("subtotal")
+                                        .textContent
+                                    }\n
+                                    Shipping: ${
+                                      document.getElementById("shippingCost")
+                                        .textContent
+                                    }\n
+                                    Tax: ${
+                                      document.getElementById("tax").textContent
+                                    }\n
+                                    Total: ${
+                                      document.getElementById("total")
+                                        .textContent
+                                    }
+                                  `,
+                                }
+                              );
+                            };
+                            document.head.appendChild(script);
+
+                            // Clear cart
+                            localStorage.removeItem("modernstore_cart");
+                          })
+                          .catch(function (error) {
+                            console.error("PayPal error:", error);
+                            alert(
+                              "There was an error processing your payment. Please try again."
+                            );
+                          });
+                      },
+                    })
+                    .render("#paypal-button-container");
+                </script>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body text-center py-5">
+            <i class="bi bi-check-circle-fill text-success display-1 mb-3"></i>
+            <h3 class="mb-3">Order Placed Successfully!</h3>
+            <p class="text-muted mb-4">
+              Thank you for your purchase. You will receive a confirmation email
+              shortly.
+            </p>
+            <div class="mb-4">
+              <strong>Order Number: <span id="orderNumber"></span></strong>
+            </div>
+            <a href="index.html" class="btn btn-primary">Continue Shopping</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Checkout JS -->
+    <script src="checkout.js"></script>
+  </body>
+</html>

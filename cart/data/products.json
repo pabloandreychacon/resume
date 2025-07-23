@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "name": "Wireless Bluetooth Headphones",
+    "category": "electronics",
+    "price": 0.01,
+    "image":
+      "https://images.pexels.com/photos/3394650/pexels-photo-3394650.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "description":
+      "Premium wireless headphones with noise cancellation and 30-hour battery life. Perfect for music lovers and professionals."
+  },
+  {
+    "id": 2,
+    "name": "Smart Fitness Watch",
+    "category": "electronics",
+    "price": 0.01,
+    "image":
+      "https://images.pexels.com/photos/437037/pexels-photo-437037.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "description":
+      "Advanced fitness tracking with heart rate monitoring, GPS, and smartphone notifications. Water resistant up to 50m."
+  },
+  {
+    "id": 3,
+    "name": "Designer Cotton T-Shirt",
+    "category": "fashion",
+    "price": 0.01,
+    "image":
+      "https://images.pexels.com/photos/1040945/pexels-photo-1040945.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "description":
+      "Premium quality cotton t-shirt with modern fit. Available in multiple colors and sizes. Machine washable."
+  },
+  {
+    "id": 4,
+    "name": "Leather Crossbody Bag",
+    "category": "fashion",
+    "price": 0.01,
+    "image":
+      "https://images.pexels.com/photos/2529148/pexels-photo-2529148.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "description":
+      "Genuine leather crossbody bag with adjustable strap. Perfect for everyday use with multiple compartments."
+  },
+  {
+    "id": 5,
+    "name": "Modern Table Lamp",
+    "category": "home",
+    "price": 0.01,
+    "image":
+      "https://images.pexels.com/photos/1112598/pexels-photo-1112598.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "description":
+      "Stylish table lamp with LED bulb included. Perfect for bedside or office desk. Touch-sensitive dimmer."
+  },
+  {
+    "id": 6,
+    "name": "Smartphone with 128GB Storage",
+    "category": "electronics",
+    "price": 0.01,
+    "image":
+      "https://images.pexels.com/photos/699122/pexels-photo-699122.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "description":
+      "Latest smartphone with advanced camera system, 128GB storage, and all-day battery life."
+  },
+  {
+    "id": 7,
+    "name": "Casual Denim Jeans",
+    "category": "fashion",
+    "price": 0.01,
+    "image":
+      "https://images.pexels.com/photos/1598505/pexels-photo-1598505.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "description":
+      "Comfortable denim jeans with stretch fabric. Classic fit suitable for casual and semi-formal occasions."
+  },
+  {
+    "id": 8,
+    "name": "Indoor Plant Pot Set",
+    "category": "home",
+    "price": 0.01,
+    "image":
+      "https://images.pexels.com/photos/1006293/pexels-photo-1006293.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "description":
+      "Set of 3 ceramic plant pots with drainage holes. Perfect for herbs, succulents, and small plants."
+  },
+  {
+    "id": 9,
+    "name": "Wireless Earbuds",
+    "category": "electronics",
+    "price": 0.01,
+    "image":
+      "https://images.pexels.com/photos/377183/pexels-photo-377183.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "description":
+      "Compact wireless earbuds with high-quality sound and touch controls. Includes charging case."
+  },
+  {
+    "id": 10,
+    "name": "Stylish Sunglasses",
+    "category": "fashion",
+    "price": 0.01,
+    "image":
+      "https://images.pexels.com/photos/164338/pexels-photo-164338.jpeg?auto=compress&cs=tinysrgb&w=400",
+    "description":
+      "UV-protected stylish sunglasses with polarized lenses. Perfect for summer outings."
+  }
+]

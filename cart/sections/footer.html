@@ -1,0 +1,194 @@
+<!-- Footer -->
+<footer class="bg-dark text-white py-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-4">
+        <h5 class="fw-bold mb-3"><i class="bi bi-shop me-2"></i>POStore</h5>
+        <p class="">
+          Your trusted destination for premium products and exceptional shopping
+          experience.
+        </p>
+      </div>
+      <div class="col-md-2 mb-4">
+        <h6 class="fw-bold mb-3">Quick Links</h6>
+        <ul class="list-unstyled">
+          <li>
+            <a href="#" class="text-decoration-none">About Us</a>
+          </li>
+          <li>
+            <a href="#" class="text-decoration-none">Contact</a>
+          </li>
+          <li>
+            <a href="#" class="text-decoration-none">FAQ</a>
+          </li>
+          <li>
+            <a href="#" class="text-decoration-none">Support</a>
+          </li>
+        </ul>
+      </div>
+      <div class="col-md-2 mb-4">
+        <h6 class="fw-bold mb-3">Categories</h6>
+        <ul class="list-unstyled" id="footerCategories">
+          <!-- Categories will be loaded dynamically -->
+        </ul>
+        <script>
+          // Load categories from JSON file
+          fetch("data/categories.json")
+            .then((response) => response.json())
+            .then((categories) => {
+              const categoryList = document.getElementById("footerCategories");
+
+              categories.forEach((category) => {
+                const li = document.createElement("li");
+                const a = document.createElement("a");
+                a.href = "#products";
+                a.className = "text-decoration-none";
+                a.textContent = category.displayName;
+                a.setAttribute("data-category", category.name);
+
+                // Add click event to filter products
+                a.addEventListener("click", function (e) {
+                  e.preventDefault();
+                  // Scroll to products section
+                  document
+                    .getElementById("products")
+                    .scrollIntoView({ behavior: "smooth" });
+                  // Filter products after a small delay to ensure scrolling completes
+                  setTimeout(() => {
+                    if (typeof filterProductsByCategory === "function") {
+                      filterProductsByCategory(category.name);
+
+                      // Update active button in category filters
+                      document
+                        .querySelectorAll(
+                          ".d-flex.gap-2.flex-wrap [data-category]"
+                        )
+                        .forEach((btn) => {
+                          btn.classList.remove("active");
+                          if (
+                            btn.getAttribute("data-category") === category.name
+                          ) {
+                            btn.classList.add("active");
+                          }
+                        });
+                    }
+                  }, 500);
+                });
+
+                li.appendChild(a);
+                categoryList.appendChild(li);
+              });
+            })
+            .catch((error) =>
+              console.error("Error loading categories:", error)
+            );
+        </script>
+      </div>
+      <div class="col-md-4 mb-4">
+        <h6 class="fw-bold mb-3">Newsletter</h6>
+        <p class="">Subscribe to get updates on new products and offers.</p>
+        <form id="newsletterForm" class="needs-validation" novalidate>
+          <input
+            type="hidden"
+            name="subject"
+            value="New Newsletter Subscription"
+          />
+          <div class="input-group">
+            <input
+              type="email"
+              class="form-control"
+              placeholder="Enter your email"
+              id="newsletterEmail"
+              name="replyTo"
+              required
+            />
+            <button class="btn btn-primary" type="submit">Subscribe</button>
+          </div>
+          <div class="invalid-feedback">
+            Please enter a valid email address.
+          </div>
+          <div class="form-text text-light mt-2 d-none" id="newsletterSuccess">
+            Thank you for subscribing!
+          </div>
+          <div class="form-text text-danger mt-2 d-none" id="newsletterError">
+            There was an error. Please try again.
+          </div>
+        </form>
+        <script>
+          document
+            .getElementById("newsletterForm")
+            .addEventListener("submit", function (event) {
+              event.preventDefault();
+
+              if (!this.checkValidity()) {
+                this.classList.add("was-validated");
+                return;
+              }
+
+              var email = document.getElementById("newsletterEmail").value;
+
+              // Mostrar mensaje de éxito
+              document
+                .getElementById("newsletterSuccess")
+                .classList.remove("d-none");
+              document
+                .getElementById("newsletterError")
+                .classList.add("d-none");
+
+              // Cargar EmailJS dinámicamente
+              var script = document.createElement("script");
+              script.src =
+                "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
+              script.onload = function () {
+                // Inicializar EmailJS y enviar el correo
+                emailjs.init("L7o6hZUmFJQ_Jbqu0");
+
+                emailjs
+                  .send("service_s481rtv", "template_771ecr6", {
+                    to_email: "pabloandreychacon@gmail.com",
+                    from_email: email,
+                    message: "Nueva suscripción al newsletter de: " + email,
+                  })
+                  .then(
+                    function () {
+                      console.log("Email enviado correctamente!");
+                    },
+                    function (error) {
+                      console.error("Error al enviar email:", error);
+                      document
+                        .getElementById("newsletterError")
+                        .classList.remove("d-none");
+                      document
+                        .getElementById("newsletterSuccess")
+                        .classList.add("d-none");
+                    }
+                  );
+              };
+
+              script.onerror = function () {
+                console.error("Error al cargar EmailJS");
+                document
+                  .getElementById("newsletterError")
+                  .classList.remove("d-none");
+                document
+                  .getElementById("newsletterSuccess")
+                  .classList.add("d-none");
+              };
+
+              document.body.appendChild(script);
+              this.reset();
+            });
+        </script>
+      </div>
+    </div>
+    <hr class="my-4" />
+    <div class="text-center">
+      <p class="mb-0">
+        &copy; <span id="year"></span> POStore. All rights reserved.
+      </p>
+      <script>
+        document.querySelector("#year").textContent = new Date().getFullYear();
+      </script>
+    </div>
+  </div>
+</footer>

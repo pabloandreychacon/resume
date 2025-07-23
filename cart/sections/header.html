@@ -1,0 +1,124 @@
+<!-- Floating Home Button -->
+<button
+  id="homePanelBtn"
+  class="btn btn-primary position-fixed"
+  style="
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 1051;
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: none;
+  "
+>
+  <i class="bi bi-arrow-up"></i>
+</button>
+
+<!-- Left Offcanvas Navigation -->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="navOffcanvas">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title"><i class="bi bi-shop me-2"></i>POStore</h5>
+    <button
+      type="button"
+      class="btn-close"
+      data-bs-dismiss="offcanvas"
+    ></button>
+  </div>
+  <div class="offcanvas-body">
+    <ul class="nav flex-column">
+      <li class="nav-item"><a class="nav-link" href="#home">Home</a></li>
+      <li class="nav-item">
+        <a class="nav-link" href="#products">Products</a>
+      </li>
+      <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+      <li class="nav-item">
+        <a class="nav-link" href="#contact">Contact</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- Navigation -->
+<nav
+  id="mainNavbar"
+  class="navbar navbar-expand-lg navbar-light bg-white shadow-sm fixed-top"
+>
+  <div class="container">
+    <a
+      class="navbar-brand fw-bold text-primary"
+      href="#"
+      style="font-size: 1.5rem"
+    >
+      <i class="bi bi-shop me-2"></i>POStore
+    </a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="#home">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#products">Products</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#about">About</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#contact">Contact</a>
+        </li>
+      </ul>
+
+      <div class="d-flex align-items-center">
+        <div class="input-group me-3" style="width: 300px">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search products..."
+            id="searchInput"
+          />
+          <button class="btn btn-outline-primary" type="button" id="searchBtn">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+
+        <button
+          class="btn btn-primary position-relative me-2"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#cartOffcanvas"
+        >
+          <i class="bi bi-cart3"></i>
+          <span
+            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            id="cartCount"
+          >
+            0
+          </span>
+        </button>
+
+        <button
+          class="btn btn-outline-primary position-relative me-2"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#wishlistOffcanvas"
+        >
+          <i class="bi bi-heart"></i>
+          <span
+            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            id="wishlistCount"
+          >
+            0
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</nav>
