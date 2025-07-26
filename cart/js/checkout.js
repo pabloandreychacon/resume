@@ -26,11 +26,11 @@ function loadCartItems() {
           <div class="d-flex justify-content-between align-items-center">
             <div class="d-flex align-items-center">
               <div class="me-3">
-                <img src="${item.image || 'https://via.placeholder.com/50'}" alt="${item.name}" width="50" height="50" class="rounded">
+                <img src="${item.ImageUrl || item.imageUrl || item.image || 'https://via.placeholder.com/50'}" alt="${item.Name || item.name}" width="50" height="50" class="rounded">
               </div>
               <div>
-                <h6 class="mb-0">${item.name}</h6>
-                <p class="text-muted mb-0">$${item.price.toFixed(2)}</p>
+                <h6 class="mb-0">${item.Name || item.name}</h6>
+                <p class="text-muted mb-0">$${(item.Price || item.price).toFixed(2)}</p>
               </div>
             </div>
             <div class="d-flex align-items-center">
@@ -69,13 +69,14 @@ function loadOrderSummary() {
   let itemsHtml = "";
 
   cart.forEach((item) => {
-    const itemTotal = item.price * item.quantity;
+    const itemPrice = item.Price || item.price;
+    const itemTotal = itemPrice * item.quantity;
     subtotal += itemTotal;
 
     itemsHtml += `
       <div class="d-flex justify-content-between align-items-center mb-3">
         <div>
-          <h6 class="mb-0">${item.name}</h6>
+          <h6 class="mb-0">${item.Name || item.name}</h6>
           <small class="text-muted">Qty: ${item.quantity}</small>
         </div>
         <span>$${itemTotal.toFixed(2)}</span>

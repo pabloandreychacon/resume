@@ -18,15 +18,52 @@
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://postore.com/" />
     <meta property="og:title" content="POStore - Premium Ecommerce" />
-    <meta property="og:description" content="Discover premium products at unbeatable prices. Shop the latest trends with our curated collection of high-quality items." />
-    <meta property="og:image" content="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800" />
-    
+    <meta
+      property="og:description"
+      content="Discover premium products at unbeatable prices. Shop the latest trends with our curated collection of high-quality items."
+    />
+    <meta
+      property="og:image"
+      content="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800"
+    />
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
     <meta property="twitter:url" content="https://postore.com/" />
     <meta property="twitter:title" content="POStore - Premium Ecommerce" />
-    <meta property="twitter:description" content="Discover premium products at unbeatable prices. Shop the latest trends with our curated collection of high-quality items." />
-    <meta property="twitter:image" content="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800" />
+    <meta
+      property="twitter:description"
+      content="Discover premium products at unbeatable prices. Shop the latest trends with our curated collection of high-quality items."
+    />
+    <meta
+      property="twitter:image"
+      content="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800"
+    />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://postore.com/" />
+    <meta property="og:title" content="POStore - Premium Ecommerce" />
+    <meta
+      property="og:description"
+      content="Discover premium products at unbeatable prices. Shop the latest trends with our curated collection of high-quality items."
+    />
+    <meta
+      property="og:image"
+      content="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800"
+    />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://postore.com/" />
+    <meta property="twitter:title" content="POStore - Premium Ecommerce" />
+    <meta
+      property="twitter:description"
+      content="Discover premium products at unbeatable prices. Shop the latest trends with our curated collection of high-quality items."
+    />
+    <meta
+      property="twitter:image"
+      content="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800"
+    />
     <!-- Bootstrap CSS -->
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
@@ -196,30 +233,20 @@
         </div>
       </div>
     </section>
+
     <!-- Filters Section -->
     <section class="pb-2 bg-light">
       <div class="container">
         <div class="row align-items-center">
           <div class="col-md-6">
-            <div class="d-flex gap-2 flex-wrap">
+            <div class="d-flex gap-2 flex-wrap" id="categoryButtons">
               <button
                 class="btn btn-outline-primary active"
                 data-category="all"
               >
                 All Products
               </button>
-              <button
-                class="btn btn-outline-primary"
-                data-category="electronics"
-              >
-                Electronics
-              </button>
-              <button class="btn btn-outline-primary" data-category="fashion">
-                Fashion
-              </button>
-              <button class="btn btn-outline-primary" data-category="home">
-                Home
-              </button>
+              <!-- Category buttons will be dynamically loaded here -->
             </div>
           </div>
           <div class="col-md-6 text-end">
@@ -349,11 +376,11 @@
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Supabase JS -->
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-    <!-- Performance Optimization -->
-    <script src="js/performance.js"></script>
-    
     <!-- Custom JS -->
+    <script src="js/supabase-config.js"></script>
     <script src="js/category-buttons.js"></script>
     <script src="js/main.js"></script>
     <script src="js/social-share.js"></script>
@@ -365,52 +392,12 @@
 
       // Initialize navbar functionality after DOM is fully loaded
       document.addEventListener("DOMContentLoaded", function () {
-        // Check for category and search parameters in URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const categoryParam = urlParams.get('category');
-        const searchParam = urlParams.get('search');
-        
         // Wait for sections to load
         document.addEventListener("sectionLoaded", function (e) {
           if (e.detail.id === "headerSection") {
             // Give the DOM time to update
             setTimeout(function () {
               setupNavbar();
-              
-              // Apply category filter if parameter exists
-              if (categoryParam && typeof filterProductsByCategory === "function") {
-                setTimeout(() => {
-                  filterProductsByCategory(categoryParam);
-                  
-                  // Update active button in category filters
-                  document.querySelectorAll(".d-flex.gap-2.flex-wrap [data-category]").forEach(btn => {
-                    btn.classList.remove("active");
-                    if (btn.getAttribute("data-category") === categoryParam) {
-                      btn.classList.add("active");
-                    }
-                  });
-                  
-                  // Scroll to products section
-                  document.getElementById("products").scrollIntoView({ behavior: "smooth" });
-                }, 500);
-              }
-              
-              // Apply search filter if parameter exists
-              if (searchParam && store) {
-                setTimeout(() => {
-                  // Set search input value
-                  const searchInput = document.getElementById("searchInput");
-                  const searchInputSmall = document.getElementById("searchInputSmall");
-                  if (searchInput) searchInput.value = searchParam;
-                  if (searchInputSmall) searchInputSmall.value = searchParam;
-                  
-                  // Search products
-                  store.searchProducts(searchParam);
-                  
-                  // Scroll to products section
-                  document.getElementById("products").scrollIntoView({ behavior: "smooth" });
-                }, 800);
-              }
             }, 200);
           }
         });

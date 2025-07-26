@@ -28,5 +28,25 @@
     "id": 6,
     "name": "sports",
     "displayName": "Sports & Outdoors"
+  },
+  {
+    "id": 7,
+    "name": "sports",
+    "displayName": "Sports & Outdoors"
+  },
+  {
+    "id": 8,
+    "name": "health",
+    "displayName": "Health & Personal Care"
+  },
+  {
+    "id": 9,
+    "name": "automotive",
+    "displayName": "Automotive"
+  },
+  {
+    "id": 10,
+    "name": "pet",
+    "displayName": "Pet Supplies"
   }
 ]
