@@ -467,7 +467,7 @@ section,
 .section {
   color: var(--default-color);
   background-color: var(--background-color);
-  padding: 60px 0;
+  padding: 30px 0;
   overflow: clip;
 }
 
@@ -562,7 +562,6 @@ section,
 
 .hero p {
   margin: 5px 0 0 0;
-  font-size: 26px;
 }
 
 .hero p span {
@@ -571,7 +570,7 @@ section,
 }
 
 .hero .social-links {
-  margin-top: 25px;
+  margin-top: 10px;
 }
 
 .hero .social-links a {
