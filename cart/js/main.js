@@ -148,7 +148,7 @@ class EcommerceStore {
     let filteredProducts = products || this.products;
 
     // Apply category filter only if not searching
-    if (!products && this.currentFilter !== "all") {
+    if (!products && this.currentFilter && this.currentFilter !== "all") {
       filteredProducts = filteredProducts.filter(
         (product) => this.categories[product.CategoryId] === this.currentFilter
       );
@@ -302,9 +302,6 @@ class EcommerceStore {
       bootstrap.Modal.getInstance(
         document.getElementById("productModal")
       ).hide();
-      setTimeout(() => {
-        this.renderProducts();
-      }, 100);
     };
 
     // Update wishlist button in modal
@@ -521,7 +518,21 @@ class EcommerceStore {
 
     this.saveToStorage("modernstore_wishlist", this.wishlist);
     this.updateCartUI(); // <-- was this.updateWishlistUI()
-    this.renderProducts();
+
+    // Update only the specific product card's wishlist button instead of re-rendering all products
+    this.updateWishlistButton(product.Id);
+  }
+
+  updateWishlistButton(productId) {
+    const wishlistBtn = document.querySelector(
+      `[data-product-id="${productId}"].wishlist-btn`
+    );
+    if (wishlistBtn) {
+      const isInWishlist = this.isInWishlist(productId);
+      wishlistBtn.innerHTML = `<i class="bi bi-heart${
+        isInWishlist ? "-fill" : ""
+      } me-2"></i>${isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}`;
+    }
   }
 
   checkout() {
