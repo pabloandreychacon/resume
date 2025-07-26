@@ -122,4 +122,11 @@ function shareProductDirect(platform, product) {
   if (shareUrl) {
     window.open(shareUrl, "_blank", "width=600,height=400");
   }
+  
+  // Ensure products remain visible after sharing
+  setTimeout(() => {
+    if (window.store) {
+      window.store.renderProducts();
+    }
+  }, 100);
 }

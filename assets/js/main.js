@@ -5,6 +5,33 @@ function toExecuteOnLoad() {
   "use strict";
 
   /**
+   * Load navigation dynamically
+   */
+  function loadNavigation() {
+    const navSection = document.getElementById("navSection");
+    if (navSection) {
+      fetch("sections/nav.html")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to load navigation");
+          }
+          return response.text();
+        })
+        .then((html) => {
+          navSection.innerHTML = html;
+          console.log("Navigation loaded successfully");
+        })
+        .catch((error) => {
+          console.error("Error loading navigation:", error);
+          navSection.innerHTML = "<p>Navigation could not be loaded</p>";
+        });
+    }
+  }
+
+  // Load navigation when DOM is ready
+  loadNavigation();
+
+  /**
    * Header toggle
    */
   const headerToggleBtn = document.querySelector(".header-toggle");

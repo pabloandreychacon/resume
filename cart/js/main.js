@@ -302,6 +302,9 @@ class EcommerceStore {
       bootstrap.Modal.getInstance(
         document.getElementById("productModal")
       ).hide();
+      setTimeout(() => {
+        this.renderProducts();
+      }, 100);
     };
 
     // Update wishlist button in modal
