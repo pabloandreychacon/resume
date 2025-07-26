@@ -1,0 +1,78 @@
+  
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Contact</h2>    
+  </div>
+  <div class="container" data-aos="fade" data-aos-delay="100">
+    <div class="row gy-4">
+      <div class="col-lg-4">
+        <div
+          class="info-item d-flex"
+          data-aos="fade-up"
+          data-aos-delay="200"
+        >
+          <i class="bi bi-geo-alt flex-shrink-0"></i>
+          <div>
+            <h3>Address</h3>
+            <p>Calle La Joaquina, San Rafael, Heredia, Costa Rica</p>
+          </div>
+        </div>
+        <div
+          class="info-item d-flex"
+          data-aos="fade-up"
+          data-aos-delay="300"
+        >
+          <i class="bi bi-telephone flex-shrink-0"></i>
+          <div>
+            <h3>Call Us</h3>
+            <p>+(506) 86906111</p>
+          </div>
+        </div>
+        <div
+          class="info-item d-flex"
+          data-aos="fade-up"
+          data-aos-delay="400"
+        >
+          <i class="bi bi-envelope flex-shrink-0"></i>
+          <div>
+            <h3>Email</h3>
+            <p>pabloandreychaconluna@hotmail.com</p>
+          </div>
+        </div>
+      </div>
+    
+       <div class="col-lg-8">
+         <form id="contactForm" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+           <div class="row gy-4">
+
+             <div class="col-md-6">
+               <input type="text" name="from_name" class="form-control" placeholder="Your Name" required="">
+             </div>
+
+             <div class="col-md-6">
+               <input type="email" name="from_email" class="form-control" placeholder="Your Email" required="">
+             </div>
+             <div class="col-md-12">
+               <input type="text" name="subject" class="form-control" placeholder="Subject" required="">
+             </div>
+             <div class="col-md-12">
+               <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
+             </div>
+             <div class="col-md-12 text-center">
+               <button type="submit" id="submitBtn" class="btn btn-primary">
+                 Send Message
+                 <i class="bi bi-send ms-2"></i>
+               </button>
+               <button class="btn btn-primary d-none" type="button" disabled id="loadingBtn">
+                 <span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+                 Sending...
+               </button>
+             </div>
+           </div>
+         </form>
+         <div id="formSuccess" class="alert alert-success mt-4 d-none">
+           Thank you for your message! We'll get back to you shortly.
+         </div>
+       </div>
+     </div>
+   </div>
+ 

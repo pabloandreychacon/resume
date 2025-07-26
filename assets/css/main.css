@@ -157,7 +157,7 @@ h6 {
   transition: all ease-in-out 0.3s;
   overflow-y: auto;
   z-index: 997;
-  min-width: 200px;
+  /*min-width: 200px;*/
 }
 
 @media (max-width: 1199px) {
@@ -220,7 +220,7 @@ h6 {
   list-style: none;
   padding: 0 0 20px 0;
   margin: 0;
-  width: 140px;
+  /* width: 140px; */
 }
 
 .navmenu a,

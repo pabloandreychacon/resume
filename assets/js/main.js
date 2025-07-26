@@ -8,16 +8,22 @@ function toExecuteOnLoad() {
    * Load navigation dynamically
    */
   function loadNavigation() {
+    console.log("loadNavigation function called");
     const navSection = document.getElementById("navSection");
+    console.log("navSection element:", navSection);
+
     if (navSection) {
+      console.log("Attempting to fetch sections/nav.html");
       fetch("sections/nav.html")
         .then((response) => {
+          console.log("Navigation fetch response status:", response.status);
           if (!response.ok) {
             throw new Error("Failed to load navigation");
           }
           return response.text();
         })
         .then((html) => {
+          console.log("Navigation HTML content received, length:", html.length);
           navSection.innerHTML = html;
           console.log("Navigation loaded successfully");
         })
@@ -25,11 +31,143 @@ function toExecuteOnLoad() {
           console.error("Error loading navigation:", error);
           navSection.innerHTML = "<p>Navigation could not be loaded</p>";
         });
+    } else {
+      console.error("navSection element not found");
     }
   }
 
   // Load navigation when DOM is ready
   loadNavigation();
+
+  /**
+   * Load contact section dynamically
+   */
+  function loadContactSection() {
+    const contactSection = document.getElementById("contactSection");
+    if (contactSection) {
+      fetch("sections/contact.html")
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error("Failed to load contact section");
+          }
+          return response.text();
+        })
+        .then((html) => {
+          console.log("Raw HTML content:", html);
+          console.log("HTML content length:", html.length);
+
+          contactSection.innerHTML = html;
+          console.log("Contact section loaded successfully");
+          console.log("Contact section element:", contactSection);
+          console.log("Contact section innerHTML:", contactSection.innerHTML);
+
+          // Force visibility
+          contactSection.style.display = "block";
+          contactSection.style.visibility = "visible";
+          contactSection.style.opacity = "1";
+
+          // Check if the section is actually visible
+          const computedStyle = window.getComputedStyle(contactSection);
+          console.log("Contact section computed styles:", {
+            display: computedStyle.display,
+            visibility: computedStyle.visibility,
+            opacity: computedStyle.opacity,
+            height: computedStyle.height,
+            width: computedStyle.width,
+          });
+        })
+        .catch((error) => {
+          console.error("Error loading contact section:", error);
+          contactSection.innerHTML =
+            "<p>Contact section could not be loaded</p>";
+        });
+    }
+  }
+
+  // Load contact section when DOM is ready
+  loadContactSection();
+
+  /**
+   * Handle contact form submission with EmailJS
+   */
+  function initializeContactForm() {
+    const contactForm = document.getElementById("contactForm");
+    if (contactForm) {
+      contactForm.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        // Show loading button, hide submit button
+        const submitBtn = document.getElementById("submitBtn");
+        const loadingBtn = document.getElementById("loadingBtn");
+        const formSuccess = document.getElementById("formSuccess");
+
+        if (submitBtn && loadingBtn) {
+          submitBtn.classList.add("d-none");
+          loadingBtn.classList.remove("d-none");
+        }
+
+        // Get form data
+        const formData = new FormData(contactForm);
+        const name = formData.get("from_name");
+        const email = formData.get("from_email");
+        const subject = formData.get("subject");
+        const message = formData.get("message");
+
+        // Load EmailJS dynamically
+        var script = document.createElement("script");
+        script.src =
+          "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
+        script.onload = function () {
+          // Initialize EmailJS
+          emailjs.init("L7o6hZUmFJQ_Jbqu0");
+
+          // Send the email
+          emailjs
+            .send("service_s481rtv", "template_771ecr6", {
+              to_email: "pabloandreychacon@gmail.com",
+              from_name: name,
+              from_email: email,
+              subject: subject,
+              message: `Subject: ${subject}
+From: ${email}
+
+${message}`,
+            })
+            .then(
+              function () {
+                // Show success message
+                if (formSuccess) {
+                  formSuccess.classList.remove("d-none");
+                }
+                contactForm.reset();
+
+                // Hide loading button, show submit button
+                if (loadingBtn && submitBtn) {
+                  loadingBtn.classList.add("d-none");
+                  submitBtn.classList.remove("d-none");
+                }
+              },
+              function (error) {
+                console.error("Email sending failed:", error);
+                alert("Failed to send message. Please try again later.");
+
+                // Hide loading button, show submit button
+                if (loadingBtn && submitBtn) {
+                  loadingBtn.classList.add("d-none");
+                  submitBtn.classList.remove("d-none");
+                }
+              }
+            );
+        };
+        document.head.appendChild(script);
+      });
+    }
+  }
+
+  // Initialize contact form after contact section is loaded
+  setTimeout(() => {
+    initializeContactForm();
+  }, 1000);
 
   /**
    * Header toggle
