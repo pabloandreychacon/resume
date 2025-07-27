@@ -64,9 +64,7 @@
                                   <i class="bi bi-geo-alt fs-2"></i>
                               </div>
                               <h3 class="h4 mb-3">Our Location</h3>
-                              <p class="text-muted mb-0">123 Commerce Street</p>
-                              <p class="text-muted mb-0">Suite 500</p>
-                              <p class="text-muted">New York, NY 10001</p>
+                              <p id="business-address" class="text-muted mb-0">123 Commerce Street</p>                              
                           </div>
                       </div>
                   </div>
@@ -78,7 +76,7 @@
                               </div>
                               <h3 class="h4 mb-3">Phone Number</h3>
                               <p class="text-muted mb-0">Customer Service:</p>
-                              <p class="text-muted mb-0">+1 (800) 123-4567</p>
+                              <p id="business-phone" class="text-muted mb-0">+1 (800) 123-4567</p>
                               <p class="text-muted">Mon-Fri: 9am - 6pm EST</p>
                           </div>
                       </div>
@@ -91,8 +89,7 @@
                               </div>
                               <h3 class="h4 mb-3">Email Address</h3>
                               <p class="text-muted mb-0">Customer Support:</p>
-                              <p class="text-muted mb-0">support@postore.com</p>
-                              <p class="text-muted">Business Inquiries: info@postore.com</p>
+                              <p id="business-email" class="text-muted mb-0">support@postore.com</p>
                           </div>
                       </div>
                   </div>
@@ -181,7 +178,7 @@
               <div class="row">
                   <div class="col-12">
                       <div class="ratio ratio-21x9 rounded shadow overflow-hidden">
-                          <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d747.5023706999765!2d-84.11690653621802!3d9.9985776402904!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fa0fac4705da317%3A0x1d6528332a4c602!2sMonumento%20Nacional%20Casa%20Alfredo%20Gonz%C3%A1lez%20Flores!5e1!3m2!1ses-419!2scr!4v1753551386846!5m2!1ses-419!2scr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+                          <iframe id="business-location" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d171.12713250416522!2d-73.72860815528284!3d40.68220458419986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNueva%20York%2C%20EE.%20UU.!5e1!3m2!1ses-419!2scr!4v1753604260812!5m2!1ses-419!2scr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
                           </iframe>
                       </div>
                   </div>
@@ -282,6 +279,26 @@
               };
               document.head.appendChild(script);
             })
+
+            // Set business phone number
+            const businessPhone = window.globalStore.state.Phone || "+1 (800) 123-4567";
+            // Update phone link and text 
+            document.getElementById("business-phone").textContent = businessPhone;
+
+            // Set business email
+            const businessEmail = window.globalStore.state.Email || "";
+            // Update email text
+            document.getElementById("business-email").textContent = businessEmail; 
+
+            // Set business address
+            const businessAddress = window.globalStore.state.Address || "123 Commerce Street";
+            // Update address text
+            document.getElementById("business-address").textContent = businessAddress;
+
+            // Set business location
+            const businessLocation = window.globalStore.state.LocationMaps || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d171.12713250416522!2d-73.72860815528284!3d40.68220458419986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNueva%20York%2C%20EE.%20UU.!5e1!3m2!1ses-419!2scr!4v1753604260812!5m2!1ses-419!2scr";
+            // Update iframe src
+            document.getElementById("business-location").src = businessLocation;
           });
     </script>
   </body>

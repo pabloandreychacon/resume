@@ -53,13 +53,7 @@ function toExecuteOnLoad() {
           return response.text();
         })
         .then((html) => {
-          console.log("Raw HTML content:", html);
-          console.log("HTML content length:", html.length);
-
           contactSection.innerHTML = html;
-          console.log("Contact section loaded successfully");
-          console.log("Contact section element:", contactSection);
-          console.log("Contact section innerHTML:", contactSection.innerHTML);
 
           // Force visibility
           contactSection.style.display = "block";
@@ -68,13 +62,6 @@ function toExecuteOnLoad() {
 
           // Check if the section is actually visible
           const computedStyle = window.getComputedStyle(contactSection);
-          console.log("Contact section computed styles:", {
-            display: computedStyle.display,
-            visibility: computedStyle.visibility,
-            opacity: computedStyle.opacity,
-            height: computedStyle.height,
-            width: computedStyle.width,
-          });
         })
         .catch((error) => {
           console.error("Error loading contact section:", error);
