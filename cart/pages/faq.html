@@ -1,39 +1,25 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>FAQ - POStore</title>
-    <meta
-      name="description"
-      content="Frequently Asked Questions about POStore products, shipping, returns, and more."
-    />
-    <meta
-      name="keywords"
-      content="FAQ, questions, help, support, shipping, returns, payment, POStore"
-    />
-    <meta name="author" content="POStore Team" />
-    <link rel="icon" href="../assets/favicon.ico" type="image/x-icon" />
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <!-- Bootstrap Icons -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
-    />
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="../css/style.css" />
+    <script src="../customElements/head-element.js"></script>
+    <custom-head 
+      page-title="FAQ - POStore" 
+      description="Frequently Asked Questions about POStore products, shipping, returns, and more."
+      keywords="FAQ, questions, help, support, shipping, returns, payment, POStore"
+      author="POStore Team"
+      favicon-url="../assets/favicon.ico"
+      stylesheets="../css/style.css"      
+    ></custom-head>
+    <title></title>        
     <!-- Section Loader JS -->
     <script src="../js/section-loader.js"></script>
     <script defer>
       // Load sections when the page is ready
       document.addEventListener("DOMContentLoaded", function () {
-        loadSection("headerSection", "../sections/header-pages.html");
-        loadSection("footerSection", "../sections/footer-pages.html");
-        loadSection("commonElements", "../sections/common-elements-pages.html");
+        // Load header section
+        loadSection("headerSection", "../sections/header-pages.html", "../");
+        // Load footer section
+        loadSection("footerSection", "../sections/footer.html", "../");   
       });
     </script>
   </head>
@@ -351,17 +337,17 @@
     <script>
       document.addEventListener("DOMContentLoaded", function() {
         // Add active class to the FAQ link in footer when it's loaded
-        const checkFooter = setInterval(function() {
-          const footerLinks = document.querySelectorAll('footer a');
-          if (footerLinks.length > 0) {
-            footerLinks.forEach(link => {
-              if (link.textContent === 'FAQ') {
-                link.href = 'pages/faq.html';
+        document.addEventListener("sectionLoaded", function (e) {
+          if (e.detail.id === "headerSection") {
+            // Add active class to the About nav link
+            document.querySelectorAll(".nav-link").forEach(
+              (link) => {
+              if (link.getAttribute("href").includes("faq")) {
+                link.classList.add("active");
               }
-            });
-            clearInterval(checkFooter);
+            })            
           }
-        }, 100);
+        });
         
         // Handle search functionality after header is loaded
         const checkHeader = setInterval(function() {

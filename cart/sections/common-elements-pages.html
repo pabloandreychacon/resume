@@ -55,22 +55,22 @@
         let html = '';
         
         cart.forEach(item => {
-          totalPrice += item.price * item.quantity;
+          totalPrice += item.Price * item.quantity;
           html += `
             <div class="cart-item">
               <div class="row align-items-center">
                 <div class="col-3">
-                  <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                  <img src="${item.Image}" alt="${item.name}" class="cart-item-image">
                 </div>
                 <div class="col-6">
                   <div class="cart-item-info">
-                    <h6>${item.name}</h6>
-                    <p class="cart-item-price mb-0">$${item.price}</p>
+                    <h6>${item.Name}</h6>
+                    <p class="cart-item-price mb-0">$${item.Price}</p>
                   </div>
                 </div>
                 <div class="col-3">
                   <div class="quantity-controls d-flex align-items-center">
-                    <span class="mx-2">${item.quantity}</span>
+                    <span class="mx-2">${item.Quantity}</span>
                   </div>
                 </div>
               </div>
