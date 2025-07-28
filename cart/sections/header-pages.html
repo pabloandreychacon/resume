@@ -1,15 +1,7 @@
 <!-- Floating Home Button -->
 <button
   id="homePanelBtn"
-  class="btn btn-primary position-fixed"
-  style="
-    bottom: 1rem;
-    z-index: 1051;
-    border-radius: 50%;
-    width: 48px;
-    height: 48px;
-    display: none;
-  "
+  class="btn btn-primary position-fixed rounded-circle"  
 >
   <i class="bi bi-arrow-up"></i>
 </button>
@@ -22,7 +14,7 @@
   <div class="container">
     <a
       class="navbar-brand fw-bold text-primary"
-      href="../index.html"
+      href="./index.html"
       style="font-size: 1.5rem"
     >
       <i class="bi bi-shop me-2"></i>POStore
@@ -61,3 +53,44 @@
     </div>
   </div>
 </nav>
+
+<style>
+  .home-button {
+    bottom: 1rem;
+    right: 1rem;
+    z-index: 1051;
+    width: 48px;
+    height: 48px;
+    display: none; /* Will be shown via JavaScript */
+  }
+</style>
+
+<script>
+  let lastScroll = 0;
+  const navbar = document.getElementById("mainNavbar");
+  // Show/hide home button based on scroll position
+  window.addEventListener('scroll', function() {
+    const currentScroll = window.pageYOffset;
+    // Always keep navbar visible
+    navbar.style.transform = "translateY(0)";
+    const homeBtn = document.getElementById('homePanelBtn');
+    if (window.scrollY > 100) {
+      homeBtn.style.display = "block";
+    } else {
+      homeBtn.style.display = "none";
+    }
+    lastScroll = currentScroll;
+
+    // Only show/hide home button based on scroll position
+    if (currentScroll > 100) {
+            homeBtn.style.display = "block";
+          } else {
+            homeBtn.style.display = "none";
+          }
+          lastScroll = currentScroll;
+  });
+  // Scroll to top when home button is clicked
+  document.getElementById('homePanelBtn').addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+</script>

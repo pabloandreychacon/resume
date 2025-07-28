@@ -44,7 +44,7 @@ class GlobalState {
 // global state object properties
 // 🏗️ Definir propiedades del estado globa
 var globalStateProperties = {
-  Email: "pabloandreychacon@hotmail.com",
+  Email: "no-paid@customers.org",
   Phone: "+506 8888-8888",
   Address: "123 Commerce Street Suite 500 New York, NY 10001",
   LocationMaps:

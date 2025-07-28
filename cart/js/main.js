@@ -61,7 +61,18 @@ class EcommerceStore {
 
   async loadProducts() {
     try {
-      const { data, error } = await supabase.from("Products").select("*");
+      // Get current business email from window.globalStore.state.Email
+      const businessEmail = window.globalStore.state.Email || "";
+      if (!businessEmail) {
+        console.error("Business email not set in globalStore");
+        return;
+      }
+      // Fetch products from Supabase filter by column: BusinessEmail === businessEmail
+      const { data, error } = await supabase
+        .from("Products")
+        .select("*")
+        .eq("BusinessEmail", businessEmail);
+      //const { data, error } = await supabase.from("Products").select("*");
 
       if (error) {
         console.error("Error fetching products from Supabase:", error);
