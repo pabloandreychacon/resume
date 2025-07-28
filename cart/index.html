@@ -1,19 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>POStore - Premium Ecommerce</title>
+    <script src="customElements/head-element.js"></script>
+    <custom-head 
+      page-title="POStore - Premium Ecommerce" 
+      description="Discover premium products at unbeatable prices. Shop the latest trends with our curated collection of high-quality items."
+      keywords="ecommerce, shopping, premium products, fashion, electronics, home goods"
+      author="POStore Team"
+      favicon-url="assets/favicon.ico"
+      stylesheets="css/style.css"      
+    ></custom-head>
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://postore.com/" />
+    <meta property="og:title" content="POStore - Premium Ecommerce" />
+    
     <meta
-      name="description"
+      property="og:image"
+      content="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800"
+    />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://postore.com/" />
+    <meta property="twitter:title" content="POStore - Premium Ecommerce" />
+    <meta
+      property="twitter:description"
       content="Discover premium products at unbeatable prices. Shop the latest trends with our curated collection of high-quality items."
     />
     <meta
-      name="keywords"
-      content="ecommerce, shopping, premium products, fashion, electronics, home goods"
+      property="twitter:image"
+      content="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800"
     />
-    <meta name="author" content="POStore Team" />
-    <link rel="icon" href="./assets/favicon.ico" type="image/x-icon" />
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://postore.com/" />
@@ -38,44 +58,7 @@
     <meta
       property="twitter:image"
       content="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800"
-    />
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://postore.com/" />
-    <meta property="og:title" content="POStore - Premium Ecommerce" />
-    <meta
-      property="og:description"
-      content="Discover premium products at unbeatable prices. Shop the latest trends with our curated collection of high-quality items."
-    />
-    <meta
-      property="og:image"
-      content="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800"
-    />
-
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content="https://postore.com/" />
-    <meta property="twitter:title" content="POStore - Premium Ecommerce" />
-    <meta
-      property="twitter:description"
-      content="Discover premium products at unbeatable prices. Shop the latest trends with our curated collection of high-quality items."
-    />
-    <meta
-      property="twitter:image"
-      content="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800"
-    />
-    <!-- Bootstrap CSS -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-    />
-    <!-- Bootstrap Icons -->
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css"
-    />
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="css/style.css" />
+    />    
     <!-- Section Loader JS -->
     <script src="js/section-loader.js"></script>
     <script defer>
