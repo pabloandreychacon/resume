@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "name": "Electronics",
+    "description": "Latest gadgets and electronic devices"
+  },
+  {
+    "id": 2,
+    "name": "Fashion",
+    "description": "Trendy clothing and accessories"
+  },
+  {
+    "id": 3,
+    "name": "Home & Garden",
+    "description": "Everything for your home and garden"
+  }
+] 

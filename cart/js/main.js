@@ -3,20 +3,54 @@
 class EcommerceStore {
   constructor() {
     this.products = [];
-    this.cart = this.loadFromStorage("modernstore_cart") || [];
-    this.wishlist = this.loadFromStorage("modernstore_wishlist") || [];
+    this.cart = this.loadFromStorage("postore_cart") || [];
+    this.wishlist = this.loadFromStorage("postore_wishlist") || [];
     this.currentFilter = "all";
     this.currentSort = "default";
     this.categories = {};
-    this.loadCategories();
     this.init();
   }
 
   async init() {
+    console.log("EcommerceStore init() called");
+
+    // Wait for globalStore to be available
+    if (!window.globalStore) {
+      console.log("Waiting for globalStore...");
+      setTimeout(() => this.init(), 100);
+      return;
+    }
+
+    // Wait for business data to be ready
+    if (!window.businessDataReady) {
+      console.log("Waiting for business data to be ready...");
+      setTimeout(() => this.init(), 100);
+      return;
+    }
+    
+    const businessEmail = window.globalStore?.state?.Email;
+    if (!businessEmail || businessEmail.trim() === "") {
+      console.error("Business email still not available after business data loaded");
+      window.globalStore.setState({
+        ...window.globalStore.state,
+        Email: "pabloandreychacon@hotmail.com",
+      });
+    }
+
+    // If we have business data but no email, set default email
+    if (!businessEmail || businessEmail.trim() === "") {
+      console.log("Setting default email since none was found");
+      window.globalStore.setState({
+        ...window.globalStore.state,
+        Email: "pabloandreychacon@hotmail.com",
+      });
+    }
+
+    const finalEmail = window.globalStore.state.Email;
+    console.log("Starting to load categories and products for:", finalEmail);
     await this.loadCategories();
     await this.loadProducts();
     this.bindEvents();
-    this.updateCartUI();
   }
 
   loadFromStorage(key) {
@@ -38,8 +72,20 @@ class EcommerceStore {
   }
 
   async loadCategories() {
+    // Get current business email from window.globalStore.state.Email
+    const businessEmail = window.globalStore?.state?.Email || "";
+    if (!businessEmail) {
+      console.error("Business email not set in globalStore");
+      return;
+    }
+    
+    console.log('Loading categories for business email:', businessEmail);
+    
     try {
-      const { data, error } = await supabase.from("Categories").select("*");
+      const { data, error } = await supabase
+        .from("Categories")
+        .select("*")
+        .eq("BusinessEmail", businessEmail);
 
       if (error) {
         console.error("Error fetching categories from Supabase:", error);
@@ -62,24 +108,28 @@ class EcommerceStore {
   async loadProducts() {
     try {
       // Get current business email from window.globalStore.state.Email
-      const businessEmail = window.globalStore.state.Email || "";
+      const businessEmail = window.globalStore?.state?.Email || "";
       if (!businessEmail) {
         console.error("Business email not set in globalStore");
         return;
       }
+
+      console.log("Loading products for business email:", businessEmail);
+
       // Fetch products from Supabase filter by column: BusinessEmail === businessEmail
       const { data, error } = await supabase
         .from("Products")
         .select("*")
         .eq("BusinessEmail", businessEmail);
-      //const { data, error } = await supabase.from("Products").select("*");
 
       if (error) {
         console.error("Error fetching products from Supabase:", error);
         return;
       }
 
+      console.log("Products loaded:", data?.length || 0, "products found");
       this.products = data || [];
+      this.cleanupCart();
       this.renderProducts();
     } catch (error) {
       console.error("Error loading products:", error);
@@ -133,27 +183,36 @@ class EcommerceStore {
     });
 
     // Sorting
-    document.getElementById("sortSelect").addEventListener("change", (e) => {
-      this.sortProducts(e.target.value);
-    });
+    const sortSelect = document.getElementById("sortSelect");
+    if (sortSelect) {
+      sortSelect.addEventListener("change", (e) => {
+        this.sortProducts(e.target.value);
+      });
+    }
 
     // Checkout button
-    document.getElementById("checkoutBtn").addEventListener("click", () => {
-      this.checkout();
-    });
+    const checkoutBtn = document.getElementById("checkoutBtn");
+    if (checkoutBtn) {
+      checkoutBtn.addEventListener("click", () => {
+        this.checkout();
+      });
+    }
 
     // Clear wishlist button
-    document
-      .getElementById("clearWishlistBtn")
-      .addEventListener("click", () => {
+    const clearWishlistBtn = document.getElementById("clearWishlistBtn");
+    if (clearWishlistBtn) {
+      clearWishlistBtn.addEventListener("click", () => {
         //if (confirm("Are you sure you want to clear your wishlist?")) {
         this.clearWishlist();
         //}
       });
+    }
   }
 
   renderProducts(products) {
     const container = document.getElementById("productsContainer");
+    if (!container) return; // Exit if container doesn't exist (not on main page)
+    
     container.innerHTML = "";
 
     let filteredProducts = products || this.products;
@@ -197,7 +256,7 @@ class EcommerceStore {
             }" data-category="${
       this.categories[product.CategoryId] || "uncategorized"
     }" id="product-${product.Id}">
-                <img src="${product.ImageUrl}" alt="${
+                <img src="${product.ImageUrl}?t=${Date.now()}" alt="${
       product.Name
     }" class="card-img-top product-image" loading="lazy">
                 <div class="card-body d-flex flex-column">
@@ -220,22 +279,24 @@ class EcommerceStore {
                           }</p>`
                         : ""
                     }
-                    <button class="btn btn-primary add-to-cart-btn mt-auto" data-product-id="${
-                      product.Id
-                    }">
-                        <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                    <button class="btn ${
+                      product.StockQuantity === 0
+                        ? "btn-secondary"
+                        : "btn-primary"
+                    } add-to-cart-btn mt-auto" data-product-id="${
+      product.Id
+    }" ${product.StockQuantity === 0 ? "disabled" : ""}>
+                        <i class="bi bi-cart-plus me-2"></i>${
+                          product.StockQuantity === 0
+                            ? "Out of Stock"
+                            : "Add to Cart"
+                        }
                     </button>
                     <button class="btn btn-outline-danger wishlist-btn mt-2" data-product-id="${
                       product.Id
                     }">
-                        <i class="bi bi-heart${
-                          this.isInWishlist(product.Id) ? "-fill" : ""
-                        } me-2"></i>
-                        ${
-                          this.isInWishlist(product.Id)
-                            ? "Remove from Wishlist"
-                            : "Add to Wishlist"
-                        }
+                        <i class="bi bi-heart me-2"></i>
+                        Add to Wishlist
                     </button>
                     <div class="social-share-mini mt-2">
                       <div class="d-flex justify-content-center gap-2">
@@ -275,20 +336,24 @@ class EcommerceStore {
         !e.target.classList.contains("share-product-btn") &&
         !e.target.closest(".share-product-btn")
       ) {
-        this.showProductDetails(product);
+        window.location.href = `pages/product-detail.html?id=${product.Id}`;
       }
     });
 
     // Add click event for add to cart button
     col.querySelector(".add-to-cart-btn").addEventListener("click", (e) => {
       e.stopPropagation();
-      this.addToCart(product);
+      if (window.store) {
+        window.store.addToCart(product);
+      }
     });
 
     // Add click event for wishlist button
     col.querySelector(".wishlist-btn").addEventListener("click", (e) => {
       e.stopPropagation();
-      this.toggleWishlist(product);
+      if (window.store) {
+        window.store.toggleWishlist(product);
+      }
     });
 
     return col;
@@ -339,36 +404,97 @@ class EcommerceStore {
   clearCart() {
     this.cart = [];
     this.updateCartUI();
-    this.saveToStorage("modernstore_cart", this.cart);
+    this.saveToStorage("postore_cart", this.cart);
+  }
+
+  cleanupCart() {
+    if (!window.store) return;
+
+    const validProductIds = this.products.map((p) => p.Id);
+    const originalCartLength = window.store.cart.length;
+    const originalWishlistLength = window.store.wishlist.length;
+
+    window.store.cart = window.store.cart.filter((item) =>
+      validProductIds.includes(item.Id || item.id)
+    );
+
+    window.store.wishlist = window.store.wishlist.filter((item) =>
+      validProductIds.includes(item.Id || item.id)
+    );
+
+    if (window.store.cart.length !== originalCartLength) {
+      window.store.saveToStorage("postore_cart", window.store.cart);
+    }
+
+    if (window.store.wishlist.length !== originalWishlistLength) {
+      window.store.saveToStorage("postore_wishlist", window.store.wishlist);
+    }
+
+    if (
+      window.store.cart.length !== originalCartLength ||
+      window.store.wishlist.length !== originalWishlistLength
+    ) {
+      if (window.store.updateCartUI) {
+        window.store.updateCartUI();
+      }
+    }
   }
 
   clearWishlist() {
     this.wishlist = [];
     this.updateCartUI(); // <-- was this.updateWishlistUI()
-    this.saveToStorage("modernstore_wishlist", this.wishlist);
+    this.saveToStorage("postore_wishlist", this.wishlist);
   }
 
-  addToCart(product) {
+  addToCart(product, quantity = 1) {
+    // Check stock validation if product manages stock
+    if (product.StockQuantity !== null && product.StockQuantity !== undefined) {
+      const existingItem = this.cart.find((item) => item.Id === product.Id);
+      const currentQuantityInCart = existingItem ? existingItem.quantity : 0;
+      
+      if (currentQuantityInCart + quantity > product.StockQuantity) {
+        const availableToAdd = product.StockQuantity - currentQuantityInCart;
+        if (availableToAdd <= 0) {
+          this.showToast(`Cannot add more ${product.Name}. Stock limit reached (${product.StockQuantity} available)`, "warning");
+          return false;
+        } else {
+          this.showToast(`Only ${availableToAdd} more can be added. Stock limit: ${product.StockQuantity}`, "warning");
+          return false;
+        }
+      }
+    }
+
     const existingItem = this.cart.find((item) => item.Id === product.Id);
 
     if (existingItem) {
-      existingItem.quantity += 1;
+      existingItem.quantity += quantity;
     } else {
       this.cart.push({
         ...product,
-        quantity: 1,
+        quantity: quantity,
       });
     }
 
-    this.updateCartUI(); // <-- was this.updateWishlistUI()
-    this.saveToStorage("modernstore_cart", this.cart);
+    this.updateCartUI();
+    this.saveToStorage("postore_cart", this.cart);
     this.showToast(`${product.Name} added to cart!`, "success");
+    return true;
+  }
+
+  addToCartFromWishlist(productId) {
+    const wishlistItem = this.wishlist.find((item) => (item.Id || item.id) === productId);
+    if (wishlistItem) {
+      const success = this.addToCart(wishlistItem, 1);
+      if (success) {
+        this.toggleWishlist(wishlistItem); // Remove from wishlist only if successfully added to cart
+      }
+    }
   }
 
   removeFromCart(productId) {
     this.cart = this.cart.filter((item) => (item.Id || item.id) !== productId);
     this.updateCartUI(); // <-- was this.updateWishlistUI()
-    this.saveToStorage("modernstore_cart", this.cart);
+    this.saveToStorage("postore_cart", this.cart);
   }
 
   updateQuantity(productId, quantity) {
@@ -379,9 +505,17 @@ class EcommerceStore {
 
     const item = this.cart.find((item) => (item.Id || item.id) === productId);
     if (item) {
+      // Check stock validation if product manages stock
+      if (item.StockQuantity !== null && item.StockQuantity !== undefined) {
+        if (quantity > item.StockQuantity) {
+          this.showToast(`Cannot set quantity to ${quantity}. Only ${item.StockQuantity} available in stock`, "warning");
+          return;
+        }
+      }
+      
       item.quantity = quantity;
       this.updateCartUI();
-      this.saveToStorage("modernstore_cart", this.cart);
+      this.saveToStorage("postore_cart", this.cart);
     }
   }
 
@@ -432,24 +566,24 @@ class EcommerceStore {
                         </div>
                         <div class="col-3">
                             <div class="quantity-controls d-flex align-items-center">
-                                <button class="btn-sm" onclick="store.updateQuantity(${
+                                <button class="btn btn-sm btn-outline-secondary" onclick="(window.store || window.productStore).updateQuantity(${
                                   item.Id || item.id
                                 }, ${item.quantity - 1})">
                                     <i class="bi bi-dash"></i>
                                 </button>
                                 <input type="number" value="${
                                   item.quantity
-                                }" min="1" class="mx-1" 
-                                       onchange="store.updateQuantity(${
+                                }" min="1" class="form-control mx-1 text-center" style="width: 60px;" 
+                                       onchange="(window.store || window.productStore).updateQuantity(${
                                          item.Id || item.id
                                        }, parseInt(this.value))">
-                                <button class="btn-sm" onclick="store.updateQuantity(${
+                                <button class="btn btn-sm btn-outline-secondary" onclick="(window.store || window.productStore).updateQuantity(${
                                   item.Id || item.id
                                 }, ${item.quantity + 1})">
                                     <i class="bi bi-plus"></i>
                                 </button>
                             </div>
-                            <button class="btn btn-sm btn-outline-danger mt-1" onclick="store.removeFromCart(${
+                            <button class="btn btn-sm btn-outline-danger mt-1" onclick="(window.store || window.productStore).removeFromCart(${
                               item.Id || item.id
                             })">
                                 <i class="bi bi-trash"></i>
@@ -491,14 +625,10 @@ class EcommerceStore {
                             </div>
                         </div>
                         <div class="col-3">
-                            <button class="btn btn-sm btn-primary mb-1 w-100" onclick="store.addToCart(store.products.find(p => p.Id === ${
-                              item.Id || item.id
-                            }))">
+                            <button class="btn btn-sm btn-primary mb-1 w-100" onclick="(window.store || window.productStore).addToCartFromWishlist(${item.Id || item.id})">
                                 <i class="bi bi-cart-plus"></i>
                             </button>
-                            <button class="btn btn-sm btn-outline-danger w-100" onclick="store.toggleWishlist(store.products.find(p => p.Id === ${
-                              item.Id || item.id
-                            }))">
+                            <button class="btn btn-sm btn-outline-danger w-100" onclick="(window.store || window.productStore).toggleWishlist({...${JSON.stringify(item).replace(/"/g, '&quot;')}, Id: ${item.Id || item.id}})">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
@@ -527,7 +657,7 @@ class EcommerceStore {
       this.showToast(`${product.Name} added to wishlist!`, "success");
     }
 
-    this.saveToStorage("modernstore_wishlist", this.wishlist);
+    this.saveToStorage("postore_wishlist", this.wishlist);
     this.updateCartUI(); // <-- was this.updateWishlistUI()
 
     // Update only the specific product card's wishlist button instead of re-rendering all products
@@ -551,8 +681,15 @@ class EcommerceStore {
 
     // Cart is already saved to localStorage automatically
 
-    // Redirect to checkout page
-    window.location.href = "pages/checkout.html";
+    // Redirect to checkout page - handle different page contexts
+    const currentPath = window.location.pathname;
+    if (currentPath.includes('/pages/')) {
+      // Already in pages folder, use relative path
+      window.location.href = "checkout.html";
+    } else {
+      // In root folder, use pages/ path
+      window.location.href = "pages/checkout.html";
+    }
   }
 
   showToast(message, type = "success") {
@@ -604,7 +741,7 @@ class EcommerceStore {
 
   renderCategoryButtons(categories) {
     const container = document.getElementById("categoryButtons");
-    if (!container) return;
+    if (!container) return; // Exit if container doesn't exist (not on main page)
 
     // Keep the "All Products" button and add category buttons
     const allButton = container.querySelector('[data-category="all"]');
@@ -636,7 +773,7 @@ class EcommerceStore {
 }
 
 // Initialize store when DOM is ready and sections are loaded
-let store;
+let productStore;
 let sectionsToLoad = ["headerSection", "footerSection"]; // List of sections that need to be loaded
 let loadedSections = [];
 
@@ -649,18 +786,20 @@ document.addEventListener("DOMContentLoaded", function () {
 
       // Check if all required sections are loaded
       if (sectionsToLoad.every((section) => loadedSections.includes(section))) {
-        initializeStore();
+        initializeProductStore();
       }
     });
   } else {
     // No dynamic sections, initialize immediately
-    initializeStore();
+    initializeProductStore();
   }
 });
 
-function initializeStore() {
-  store = new EcommerceStore();
-  window.store = store;
+function initializeProductStore() {
+  console.log("Initializing ProductStore...");
+  productStore = new EcommerceStore();
+  window.productStore = productStore;
+  window.store = productStore; // Also set as window.store for compatibility
 }
 
 // Add smooth scroll to navigation links

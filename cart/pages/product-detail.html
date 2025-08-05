@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script src="../customElements/head-element.js"></script>
+    <custom-head
+      page-title="Product Detail - POStore"
+      description="View detailed information about this product at POStore"
+      keywords="product detail, POStore, shopping"
+      author="POStore Team"
+      favicon-url="../assets/favicon.ico"
+      stylesheets="../css/style.css"
+    ></custom-head>
+    <script src="../js/section-loader.js"></script>
+    <script defer>
+      document.addEventListener("DOMContentLoaded", function () {
+        loadSection("headerSection", "../sections/header.html", "../");
+        loadSection("footerSection", "../sections/footer.html", "../");
+        loadSection("cartComponentsSection", "../sections/cart-components.html");
+      });
+    </script>
+  </head>
+  <body>
+    <!-- Header Section -->
+    <div id="headerSection"></div>
+
+    <!-- Product Detail Section -->
+    <section class="py-5 mt-5">
+      <div class="container">
+        <nav aria-label="breadcrumb" class="mb-4">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
+            <li class="breadcrumb-item active" aria-current="page" id="productBreadcrumb">Product</li>
+          </ol>
+        </nav>
+
+        <div class="row">
+          <div class="col-lg-6">
+            <div class="product-image-container">
+              <img id="productImage" src="" alt="" class="img-fluid rounded shadow">
+            </div>
+          </div>
+          <div class="col-lg-6">
+            <div class="product-info">
+              <p class="text-muted mb-2" id="productCategory"></p>
+              <h1 class="display-5 fw-bold mb-3" id="productName"></h1>
+              <div class="d-flex align-items-center mb-3">
+                <h2 class="text-primary mb-0" id="productPrice"></h2>
+                <div class="ms-3" id="stockInfo"></div>
+              </div>
+              
+              <div class="product-description mb-4">
+                <h5>Description</h5>
+                <p id="productDescription" class="text-muted"></p>
+              </div>
+
+              <div class="product-actions mb-4">
+                <div class="mb-3">
+                  <label for="quantity" class="form-label">Quantity:</label>
+                  <div class="d-flex align-items-center" style="width: 150px;">
+                    <button class="btn btn-outline-secondary" type="button" id="decreaseQty">-</button>
+                    <input type="number" class="form-control text-center mx-2" id="quantity" value="1" min="1">
+                    <button class="btn btn-outline-secondary" type="button" id="increaseQty">+</button>
+                  </div>
+                </div>
+                <div class="row g-3">
+                  <div class="col-md-6">
+                    <button class="btn btn-primary btn-lg w-100" id="addToCartBtn">
+                      <i class="bi bi-cart-plus me-2"></i>Add to Cart
+                    </button>
+                  </div>
+                  <div class="col-md-6">
+                    <button class="btn btn-outline-danger btn-lg w-100" id="addToWishlistBtn">
+                      <i class="bi bi-heart me-2"></i>Add to Wishlist
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="product-share">
+                <h6>Share this product:</h6>
+                <div class="d-flex gap-2">
+                  <button class="btn btn-outline-secondary share-product-btn" data-platform="facebook">
+                    <i class="bi bi-facebook"></i>
+                  </button>
+                  <button class="btn btn-outline-secondary share-product-btn" data-platform="twitter">
+                    <i class="bi bi-twitter"></i>
+                  </button>
+                  <button class="btn btn-outline-secondary share-product-btn" data-platform="pinterest">
+                    <i class="bi bi-pinterest"></i>
+                  </button>
+                  <button class="btn btn-outline-secondary share-product-btn" data-platform="email">
+                    <i class="bi bi-envelope"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Related Products Section -->
+    <section class="py-5 bg-light">
+      <div class="container">
+        <h3 class="mb-4">Related Products</h3>
+        <div class="row" id="relatedProductsContainer">
+          <!-- Related products will be loaded here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Cart Components Section -->
+    <div id="cartComponentsSection"></div>
+
+    <!-- Footer Section -->
+    <div id="footerSection"></div>
+
+    <script src="../customElements/bottom-scripts.js"></script>
+    <custom-bottom></custom-bottom>
+
+    <script src="../js/performance.js"></script>
+    <script src="../js/globalState.js"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/business-data.js"></script>
+    <script src="../js/main.js"></script>
+<<<<<<< HEAD
+=======
+    <script src="../js/shared-store.js"></script>
+>>>>>>> 69909810df4e092829c5b994532fb1a4a7dc63ca
+    <script src="../js/product-detail.js"></script>
+  </body>
+</html>

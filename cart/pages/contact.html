@@ -1,305 +1,246 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>        
+  <head>
     <script src="../customElements/head-element.js"></script>
-    <custom-head 
-      page-title="POStore Contact Us" 
+    <custom-head
+      page-title="POStore Contact Us"
       description="Get in touch with POStore customer service. We're here to help with any questions about our products or services."
       keywords="contact POStore, customer service, support, help, inquiries"
       author="POStore Team"
       favicon-url="../assets/favicon.ico"
-      stylesheets="../css/style.css"      
-    ></custom-head>        
+      stylesheets="../css/style.css"
+    ></custom-head>
     <script src="../js/section-loader.js"></script>
     <script defer>
       // Load sections when the page is ready
       document.addEventListener("DOMContentLoaded", function () {
         // Load header section
-        loadSection("headerSection", "../sections/header-pages.html", "../");
+        loadSection("headerSection", "../sections/header.html", "../");
         // Load footer section
-        loadSection("footerSection", "../sections/footer.html", "../");   
+        loadSection("footerSection", "../sections/footer.html", "../");
+        loadSection(
+          "cartComponentsSection",
+          "../sections/cart-components.html"
+        );
       });
     </script>
   </head>
   <body>
+    <!-- Header Section -->
+    <div id="headerSection"></div>
 
-      <!-- Header Section -->
-      <div id="headerSection"></div>
-
-      <!-- Page Header -->
-      <section class="bg-primary text-white py-5 mt-5">
-          <div class="container">
-              <div class="row align-items-center">
-                  <div class="col-lg-8">
-                      <h1 class="display-4 fw-bold">Contact Us</h1>
-                      <p class="lead">
-                          We'd love to hear from you. Get in touch with our team.
-                      </p>
-                  </div>
-                  <div class="col-lg-4 text-lg-end">
-                      <nav aria-label="breadcrumb">
-                          <ol class="breadcrumb justify-content-lg-end mb-0">
-                              <li class="breadcrumb-item">
-                                  <a href="../index.html" class="text-white">Home</a>
-                              </li>
-                              <li class="breadcrumb-item active text-white"
-                                  aria-current="page">
-                                  Contact
-                              </li>
-                          </ol>
-                      </nav>
-                  </div>
-              </div>
+    <!-- Page Header -->
+    <section class="bg-primary text-white py-5 mt-5">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-lg-8">
+            <h1 class="display-4 fw-bold">Contact Us</h1>
+            <p class="lead">
+              We'd love to hear from you. Get in touch with our team.
+            </p>
           </div>
-      </section>
-
-      <!-- Contact Info Section -->
-      <section class="py-5">
-          <div class="container">
-              <div class="row g-4">
-                  <div class="col-md-4">
-                      <div class="card h-100 border-0 shadow-sm">
-                          <div class="card-body text-center p-4">
-                              <div class="feature-icon bg-primary text-white mb-4">
-                                  <i class="bi bi-geo-alt fs-2"></i>
-                              </div>
-                              <h3 class="h4 mb-3">Our Location</h3>
-                              <p id="business-address" class="text-muted mb-0">123 Commerce Street</p>                              
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-md-4">
-                      <div class="card h-100 border-0 shadow-sm">
-                          <div class="card-body text-center p-4">
-                              <div class="feature-icon bg-primary text-white mb-4">
-                                  <i class="bi bi-telephone fs-2"></i>
-                              </div>
-                              <h3 class="h4 mb-3">Phone Number</h3>
-                              <p class="text-muted mb-0">Customer Service:</p>
-                              <p id="business-phone" class="text-muted mb-0">+1 (800) 123-4567</p>
-                              <p class="text-muted">Mon-Fri: 9am - 6pm EST</p>
-                          </div>
-                      </div>
-                  </div>
-                  <div class="col-md-4">
-                      <div class="card h-100 border-0 shadow-sm">
-                          <div class="card-body text-center p-4">
-                              <div class="feature-icon bg-primary text-white mb-4">
-                                  <i class="bi bi-envelope fs-2"></i>
-                              </div>
-                              <h3 class="h4 mb-3">Email Address</h3>
-                              <p class="text-muted mb-0">Customer Support:</p>
-                              <p id="business-email" class="text-muted mb-0">support@postore.com</p>
-                          </div>
-                      </div>
-                  </div>
-              </div>
+          <div class="col-lg-4 text-lg-end">
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb justify-content-lg-end mb-0">
+                <li class="breadcrumb-item">
+                  <a href="../index.html" class="text-white">Home</a>
+                </li>
+                <li
+                  class="breadcrumb-item active text-white"
+                  aria-current="page"
+                >
+                  Contact
+                </li>
+              </ol>
+            </nav>
           </div>
-      </section>
+        </div>
+      </div>
+    </section>
 
-      <!-- Contact Form Section -->
-      <section class="py-5 bg-light">
-          <div class="container">
-              <div class="row justify-content-center">
-                  <div class="col-lg-8">
-                      <div class="card border-0 shadow">
-                          <div class="card-body p-4 p-md-5">
-                              <h2 class="text-center mb-4">Send Us a Message</h2>
-                              <form id="contactForm">
-                                  <div class="row g-3">
-                                      <div class="col-md-6">
-                                          <label for="name" class="form-label">Your Name</label>
-                                          <input type="text"
-                                                 class="form-control"
-                                                 id="name"
-                                                 name="from_name"
-                                                 required />
-                                      </div>
-                                      <div class="col-md-6">
-                                          <label for="email" class="form-label">Email Address</label>
-                                          <input type="email"
-                                                 class="form-control"
-                                                 id="email"
-                                                 name="from_email"
-                                                 required />
-                                      </div>
-                                      <div class="col-12">
-                                          <label for="subject" class="form-label">Subject</label>
-                                          <input type="text"
-                                                 class="form-control"
-                                                 id="subject"
-                                                 name="subject"
-                                                 required />
-                                      </div>
-                                      <div class="col-12">
-                                          <label for="message" class="form-label">Message</label>
-                                          <textarea class="form-control"
-                                                    id="message"
-                                                    name="message"
-                                                    rows="5"
-                                                    required></textarea>
-                                      </div>
-                                      <div class="col-12 text-center">
-                                          <button type="submit"
-                                                  class="btn btn-primary btn-lg px-5"
-                                                  id="submitBtn">
-                                              Send Message
-                                              <i class="bi bi-send ms-2"></i>
-                                          </button>
-                                          <button class="btn btn-primary btn-lg px-5 d-none"
-                                                  type="button"
-                                                  disabled
-                                                  id="loadingBtn">
-                                              <span class="spinner-border spinner-border-sm me-2"
-                                                    role="status"
-                                                    aria-hidden="true"></span>
-                                              Sending...
-                                          </button>
-                                      </div>
-                                  </div>
-                              </form>
-                              <div id="formSuccess" class="alert alert-success mt-4 d-none">
-                                  Thank you for your message! We'll get back to you shortly.
-                              </div>
-                          </div>
-                      </div>
-                  </div>
+    <!-- Contact Info Section -->
+    <section class="py-5">
+      <div class="container">
+        <div class="row g-4">
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+              <div class="card-body text-center p-4">
+                <div class="feature-icon bg-primary text-white mb-4">
+                  <i class="bi bi-geo-alt fs-2"></i>
+                </div>
+                <h3 class="h4 mb-3">Our Location</h3>
+                <p id="business-address" class="text-muted mb-0">
+                  123 Commerce Street
+                </p>
               </div>
+            </div>
           </div>
-      </section>
-
-      <!-- Map Section -->
-      <section class="py-5">
-          <div class="container">
-              <div class="text-center mb-5">
-                  <h2 class="display-5 fw-bold">Find Us</h2>
-                  <p class="lead text-muted">Visit our store location</p>
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+              <div class="card-body text-center p-4">
+                <div class="feature-icon bg-primary text-white mb-4">
+                  <i class="bi bi-telephone fs-2"></i>
+                </div>
+                <h3 class="h4 mb-3">Phone Number</h3>
+                <p class="text-muted mb-0">Customer Service:</p>
+                <p id="business-phone" class="text-muted mb-0">
+                  +1 (800) 123-4567
+                </p>
+                <p class="text-muted">Mon-Fri: 9am - 6pm EST</p>
               </div>
-              <div class="row">
-                  <div class="col-12">
-                      <div class="ratio ratio-21x9 rounded shadow overflow-hidden">
-                          <iframe id="business-location" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d171.12713250416522!2d-73.72860815528284!3d40.68220458419986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNueva%20York%2C%20EE.%20UU.!5e1!3m2!1ses-419!2scr!4v1753604260812!5m2!1ses-419!2scr" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
-                          </iframe>
-                      </div>
-                  </div>
-              </div>
+            </div>
           </div>
-      </section>
+          <div class="col-md-4">
+            <div class="card h-100 border-0 shadow-sm">
+              <div class="card-body text-center p-4">
+                <div class="feature-icon bg-primary text-white mb-4">
+                  <i class="bi bi-envelope fs-2"></i>
+                </div>
+                <h3 class="h4 mb-3">Email Address</h3>
+                <p class="text-muted mb-0">Customer Support:</p>
+                <p id="business-email" class="text-muted mb-0">
+                  support@postore.com
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      <!-- Footer Section -->
-      <div id="footerSection"></div>
+    <!-- Contact Form Section -->
+    <section class="py-5 bg-light">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-8">
+            <div class="card border-0 shadow">
+              <div class="card-body p-4 p-md-5">
+                <h2 class="text-center mb-4">Send Us a Message</h2>
+                <form id="contactForm">
+                  <div class="row g-3">
+                    <div class="col-md-6">
+                      <label for="name" class="form-label">Your Name</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="name"
+                        name="from_name"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-6">
+                      <label for="email" class="form-label"
+                        >Email Address</label
+                      >
+                      <input
+                        type="email"
+                        class="form-control"
+                        id="email"
+                        name="from_email"
+                        required
+                      />
+                    </div>
+                    <div class="col-12">
+                      <label for="subject" class="form-label">Subject</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="subject"
+                        name="subject"
+                        required
+                      />
+                    </div>
+                    <div class="col-12">
+                      <label for="message" class="form-label">Message</label>
+                      <textarea
+                        class="form-control"
+                        id="message"
+                        name="message"
+                        rows="5"
+                        required
+                      ></textarea>
+                    </div>
+                    <div class="col-12 text-center">
+                      <button
+                        type="submit"
+                        class="btn btn-primary btn-lg px-5"
+                        id="submitBtn"
+                      >
+                        Send Message
+                        <i class="bi bi-send ms-2"></i>
+                      </button>
+                      <button
+                        class="btn btn-primary btn-lg px-5 d-none"
+                        type="button"
+                        disabled
+                        id="loadingBtn"
+                      >
+                        <span
+                          class="spinner-border spinner-border-sm me-2"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Sending...
+                      </button>
+                    </div>
+                  </div>
+                </form>
+                <div id="formSuccess" class="alert alert-success mt-4 d-none">
+                  Thank you for your message! We'll get back to you shortly.
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      <!-- Bootstrap JS -->
-      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-      
-      <!-- Performance Optimization -->
-      <script src="../js/performance.js"></script>
+    <!-- Map Section -->
+    <section class="py-5">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="display-5 fw-bold">Find Us</h2>
+          <p class="lead text-muted">Visit our store location</p>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="ratio ratio-21x9 rounded shadow overflow-hidden">
+              <iframe
+                id="business-location"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d171.12713250416522!2d-73.72860815528284!3d40.68220458419986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNueva%20York%2C%20EE.%20UU.!5e1!3m2!1ses-419!2scr!4v1753604260812!5m2!1ses-419!2scr"
+                width="600"
+                height="450"
+                style="border: 0"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              >
+              </iframe>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-      <!-- Custom JS -->
-      <script src="../js/globalState.js"></script>
+    <!-- Cart Components Section -->
+    <div id="cartComponentsSection"></div>
 
-      <script>
-          // Add custom page scripts here
-          document.addEventListener("DOMContentLoaded", function () {                            
-            // Wait for sections to load
-            document.addEventListener("sectionLoaded", function (e) {
-              if (e.detail.id === "headerSection") {
-                // Add active class to the About nav link
-                document.querySelectorAll(".nav-link").forEach(
-                (link) => {
-                  if (link.getAttribute("href").includes("contact")) {
-                    link.classList.add("active");
-                  }
-                })
-              }
-            });
-            // Handle form submission with EmailJS
-            document
-            .getElementById("contactForm")
-            .addEventListener("submit", function (e) {
+    <!-- Footer Section -->
+    <div id="footerSection"></div>
 
-              e.preventDefault();
+    <script src="../customElements/bottom-scripts.js"></script>
+    <custom-bottom></custom-bottom>
 
-              // Show loading button, hide submit button
-              document.getElementById("submitBtn").classList.add("d-none");
-              document.getElementById("loadingBtn").classList.remove("d-none");
+    <!-- Performance Optimization -->
+    <script src="../js/performance.js"></script>
 
-              // Get form data
-              const name = document.getElementById("name").value;
-              const email = document.getElementById("email").value;
-              const subject = document.getElementById("subject").value;
-              const message = document.getElementById("message").value;
+    <!-- Custom JS -->
+    <script src="../js/globalState.js"></script>
+<<<<<<< HEAD
+=======
+    <script src="../js/shared-store.js"></script>
 
-              // Load EmailJS dynamically
-              var script = document.createElement("script");
-              script.src =
-                  "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
-              script.onload = function () {
-                // Initialize EmailJS
-                emailjs.init("L7o6hZUmFJQ_Jbqu0");
-
-                // Send the email
-                emailjs
-                .send("service_s481rtv", "template_771ecr6", {
-                        to_email: "pabloandreychacon@gmail.com",
-                        from_name: name,
-                        from_email: email,
-                        subject: subject,
-                        message: `Subject: ${subject} From: ${email} ${message}`,
-                    })
-                .then(
-                  function () {
-                            // Show success message
-                            document
-                                .getElementById("formSuccess")
-                                .classList.remove("d-none");
-                            document.getElementById("contactForm").reset();
-
-                            // Hide loading button, show submit button
-                            document
-                                .getElementById("loadingBtn")
-                                .classList.add("d-none");
-                            document
-                                .getElementById("submitBtn")
-                                .classList.remove("d-none");
-                        },
-                  function (error) {
-                            console.error("Email sending failed:", error);
-                            alert("Failed to send message. Please try again later.");
-
-                            // Hide loading button, show submit button
-                            document
-                                .getElementById("loadingBtn")
-                                .classList.add("d-none");
-                            document
-                                .getElementById("submitBtn")
-                                .classList.remove("d-none");
-                        }
-                );
-              };
-              document.head.appendChild(script);
-            })
-
-            // Set business phone number
-            const businessPhone = window.globalStore.state.Phone || "+1 (800) 123-4567";
-            // Update phone link and text 
-            document.getElementById("business-phone").textContent = businessPhone;
-
-            // Set business email
-            const businessEmail = window.globalStore.state.Email || "";
-            // Update email text
-            document.getElementById("business-email").textContent = businessEmail; 
-
-            // Set business address
-            const businessAddress = window.globalStore.state.Address || "123 Commerce Street";
-            // Update address text
-            document.getElementById("business-address").textContent = businessAddress;
-
-            // Set business location
-            const businessLocation = window.globalStore.state.LocationMaps || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d171.12713250416522!2d-73.72860815528284!3d40.68220458419986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNueva%20York%2C%20EE.%20UU.!5e1!3m2!1ses-419!2scr!4v1753604260812!5m2!1ses-419!2scr";
-            // Update iframe src
-            document.getElementById("business-location").src = businessLocation;
-          });
-    </script>
+>>>>>>> 69909810df4e092829c5b994532fb1a4a7dc63ca
+    <script src="../js/contact.js"></script>
   </body>
 </html>

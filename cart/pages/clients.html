@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Postore Clients Redirection</title>
+  </head>
+  <body>
+    <script>
+      // reads email from URL params
+      const urlParams = new URLSearchParams(window.location.search);
+      const email = urlParams.get("email");
+      // if email is present, redirect to index page with email param
+      if (email) {
+        window.location.href = `../index.html?email=${email}`;
+      }
+    </script>
+  </body>
+</html>

@@ -44,12 +44,13 @@ class GlobalState {
 // global state object properties
 // 🏗️ Definir propiedades del estado globa
 var globalStateProperties = {
-  Email: "no-paid@customers.org",
+  Email: "pabloandreychacon@hotmail.com",
   Phone: "+506 8888-8888",
   Address: "123 Commerce Street Suite 500 New York, NY 10001",
-  LocationMaps:
+  MapLocation:
     "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d747.5023706999765!2d-84.11690653621802!3d9.9985776402904!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x8fa0fac4705da317%3A0x1d6528332a4c602!2sMonumento%20Nacional%20Casa%20Alfredo%20Gonz%C3%A1lez%20Flores!5e1!3m2!1ses-419!2scr!4v1753551386846!5m2!1ses-419!2scr",
   BusinessName: "POStore",
+  PaypalClientId: "",
 };
 
 // 🏁 Crear instancia global solo una vez para toda las páginas
@@ -61,8 +62,14 @@ if (!window.globalStore) {
 }
 
 // Si ya existe una instancia, cargar el estado desde localStorage
+// pero solo si no hay parámetro email en la URL
 if (window.globalStore) {
-  window.globalStore.loadFromStorage();
+  const urlParams = new URLSearchParams(window.location.search);
+  const emailParam = urlParams.get("email");
+  
+  if (!emailParam) {
+    window.globalStore.loadFromStorage();
+  }
 }
 //
 

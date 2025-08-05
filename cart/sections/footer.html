@@ -3,25 +3,52 @@
   <div class="container">
     <div class="row">
       <div class="col-md-5 mb-4">
-        <h5 class="fw-bold mb-3"><i class="bi bi-shop me-2"></i>POStore</h5>
+        <h5 class="fw-bold mb-3 footer-title">
+          <i class="bi bi-shop me-2"></i>
+        </h5>
         <p class="mb-3">
           Your trusted destination for premium products and exceptional shopping
           experience.
         </p>
         <div class="social-icons mb-3">
-          <a href="https://facebook.com" target="_blank" class="text-white me-3" aria-label="Facebook">
+          <a
+            href="https://facebook.com"
+            target="_blank"
+            class="text-white me-3"
+            aria-label="Facebook"
+          >
             <i class="bi bi-facebook fs-4"></i>
           </a>
-          <a href="https://instagram.com" target="_blank" class="text-white me-3" aria-label="Instagram">
+          <a
+            href="https://instagram.com"
+            target="_blank"
+            class="text-white me-3"
+            aria-label="Instagram"
+          >
             <i class="bi bi-instagram fs-4"></i>
           </a>
-          <a href="https://twitter.com" target="_blank" class="text-white me-3" aria-label="Twitter">
+          <a
+            href="https://twitter.com"
+            target="_blank"
+            class="text-white me-3"
+            aria-label="Twitter"
+          >
             <i class="bi bi-twitter fs-4"></i>
           </a>
-          <a href="https://youtube.com" target="_blank" class="text-white me-3" aria-label="YouTube">
+          <a
+            href="https://youtube.com"
+            target="_blank"
+            class="text-white me-3"
+            aria-label="YouTube"
+          >
             <i class="bi bi-youtube fs-4"></i>
           </a>
-          <a href="https://pinterest.com" target="_blank" class="text-white" aria-label="Pinterest">
+          <a
+            href="https://pinterest.com"
+            target="_blank"
+            class="text-white"
+            aria-label="Pinterest"
+          >
             <i class="bi bi-pinterest fs-4"></i>
           </a>
         </div>
@@ -33,13 +60,17 @@
             <a href="pages/about.html" class="text-decoration-none">About Us</a>
           </li>
           <li>
-            <a href="pages/contact.html" class="text-decoration-none">Contact</a>
+            <a href="pages/contact.html" class="text-decoration-none"
+              >Contact</a
+            >
           </li>
           <li>
             <a href="pages/faq.html" class="text-decoration-none">FAQ</a>
           </li>
           <li>
-            <a href="pages/support.html" class="text-decoration-none">Support</a>
+            <a href="pages/support.html" class="text-decoration-none"
+              >Support</a
+            >
           </li>
         </ul>
       </div>
@@ -105,7 +136,9 @@
 
                 emailjs
                   .send("service_s481rtv", "template_771ecr6", {
-                    to_email: "pabloandreychacon@gmail.com",
+                    to_email:
+                      window.globalStore.state.Email ||
+                      "pabloandreychacon@gmail.com",
                     from_email: email,
                     message: "Nueva suscripción al newsletter de: " + email,
                   })
@@ -152,3 +185,17 @@
     </div>
   </div>
 </footer>
+
+<script>
+  // Set business name after business data is loaded
+  function updateFooterBusinessName() {
+    const businessName = window.globalStore?.state?.BusinessName || "POStore";
+    const titleElement = document.querySelector(".footer-title i");
+    if (titleElement) {
+      titleElement.parentElement.innerHTML = `<i class="bi bi-shop me-2"></i>${businessName}`;
+    }
+  }
+  
+  // Listen for business data loaded event
+  window.addEventListener('businessDataLoaded', updateFooterBusinessName);
+</script>

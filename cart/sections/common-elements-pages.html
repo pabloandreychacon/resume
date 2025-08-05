@@ -17,30 +17,34 @@
     <div class="d-flex justify-content-between mb-3">
       <strong>Total: $<span id="cartTotal">0.00</span></strong>
     </div>
-    <a href="../pages/checkout.html" class="btn btn-primary w-100" id="checkoutBtn">
+    <a
+      href="../pages/checkout.html"
+      class="btn btn-primary w-100"
+      id="checkoutBtn"
+    >
       Proceed to Checkout
     </a>
   </div>
 </div>
 
 <script>
-  document.addEventListener("sectionLoaded", function(e) {
+  document.addEventListener("sectionLoaded", function (e) {
     if (e.detail.id === "commonElements") {
-      setTimeout(function() {
+      setTimeout(function () {
         updateCartOffcanvas();
         updateWishlistOffcanvas();
       }, 300);
     }
   });
-  
+
   function updateCartOffcanvas() {
     const cartItems = document.getElementById("cartItems");
     const cartTotal = document.getElementById("cartTotal");
     const checkoutBtn = document.getElementById("checkoutBtn");
-    
+
     try {
-      const cart = JSON.parse(localStorage.getItem("modernstore_cart")) || [];
-      
+      const cart = JSON.parse(localStorage.getItem("postore_cart")) || [];
+
       if (cart.length === 0) {
         cartItems.innerHTML = `
           <div class="text-center text-muted py-5">
@@ -52,9 +56,9 @@
         checkoutBtn.classList.add("disabled");
       } else {
         let totalPrice = 0;
-        let html = '';
-        
-        cart.forEach(item => {
+        let html = "";
+
+        cart.forEach((item) => {
           totalPrice += item.Price * item.quantity;
           html += `
             <div class="cart-item">
@@ -77,7 +81,7 @@
             </div>
           `;
         });
-        
+
         cartItems.innerHTML = html;
         cartTotal.textContent = totalPrice.toFixed(2);
         checkoutBtn.classList.remove("disabled");
@@ -114,10 +118,11 @@
   function updateWishlistOffcanvas() {
     const wishlistItems = document.getElementById("wishlistItems");
     const clearWishlistBtn = document.getElementById("clearWishlistBtn");
-    
+
     try {
-      const wishlist = JSON.parse(localStorage.getItem("modernstore_wishlist")) || [];
-      
+      const wishlist =
+        JSON.parse(localStorage.getItem("postore_wishlist")) || [];
+
       if (wishlist.length === 0) {
         wishlistItems.innerHTML = `
           <div class="text-center text-muted py-5">
@@ -126,9 +131,9 @@
           </div>
         `;
       } else {
-        let html = '';
-        
-        wishlist.forEach(item => {
+        let html = "";
+
+        wishlist.forEach((item) => {
           html += `
             <div class="cart-item">
               <div class="row align-items-center">
@@ -145,20 +150,19 @@
             </div>
           `;
         });
-        
+
         wishlistItems.innerHTML = html;
       }
-      
+
       // Set up clear wishlist button
-      clearWishlistBtn.addEventListener("click", function() {
-        localStorage.setItem("modernstore_wishlist", JSON.stringify([]));
+      clearWishlistBtn.addEventListener("click", function () {
+        localStorage.setItem("postore_wishlist", JSON.stringify([]));
         updateWishlistOffcanvas();
         if (window.minimalStore) {
           window.minimalStore.wishlist = [];
           window.minimalStore.updateUI();
         }
       });
-      
     } catch (error) {
       console.error("Error updating wishlist offcanvas:", error);
     }
@@ -199,20 +203,32 @@
                 <i class="bi bi-heart me-2"></i>Wishlist
               </button>
             </div>
-            <hr class="my-4">
+            <hr class="my-4" />
             <div class="social-share">
               <p class="mb-2">Share this product:</p>
               <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-outline-primary share-btn" data-platform="facebook">
+                <button
+                  class="btn btn-sm btn-outline-primary share-btn"
+                  data-platform="facebook"
+                >
                   <i class="bi bi-facebook"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-primary share-btn" data-platform="twitter">
+                <button
+                  class="btn btn-sm btn-outline-primary share-btn"
+                  data-platform="twitter"
+                >
                   <i class="bi bi-twitter"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-primary share-btn" data-platform="pinterest">
+                <button
+                  class="btn btn-sm btn-outline-primary share-btn"
+                  data-platform="pinterest"
+                >
                   <i class="bi bi-pinterest"></i>
                 </button>
-                <button class="btn btn-sm btn-outline-primary share-btn" data-platform="email">
+                <button
+                  class="btn btn-sm btn-outline-primary share-btn"
+                  data-platform="email"
+                >
                   <i class="bi bi-envelope"></i>
                 </button>
               </div>

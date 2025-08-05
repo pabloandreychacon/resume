@@ -2,17 +2,63 @@
 <html lang="en">
   <head>
     <script src="../customElements/head-element.js"></script>
-    <custom-head 
-      page-title="Checkout - POStore" 
+    <custom-head
+      page-title="Checkout - POStore"
       description="Checkout page for POStore, where you can review your cart items, select a shipping method, and complete your purchase securely with PayPal."
       keywords="checkout, cart, payment, PayPal, shipping, order summary"
       author="POStore Team"
       favicon-url="../assets/favicon.ico"
-      stylesheets="../css/style.css"      
+      stylesheets="../css/style.css"
     ></custom-head>
 
-    <!-- PayPal SDK -->
-    <script src="https://www.paypal.com/sdk/js?client-id=AcyP_DyBRe1ld98usHQGctGqBqLRavAH5tg2Fu_JLTzR1ylCxsP7Cw4klndZ6xnW_V11koQsdc2AyNHm&currency=USD"></script>
+    <script src="../js/globalState.js"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/business-data.js"></script>
+    <script src="../js/main.js"></script>
+
+    <!-- PayPal SDK add paypal script dinamically -->
+    <script>
+      // Wait for business data to load
+      function loadPayPalScript() {
+        if (!window.globalStore) {
+          setTimeout(loadPayPalScript, 100);
+          return;
+        }
+
+        const globalState = window.globalStore.getState();
+        const paypalClientId =
+          globalState.PaypalClientId ||
+          globalState.paypalclientid ||
+          globalState.PayPalClientId ||
+          globalState.paypal_client_id;
+
+        if (!paypalClientId) {
+          console.log(
+            "Waiting for PayPal Client ID...",
+            "Available keys:",
+            Object.keys(globalState)
+          );
+          setTimeout(loadPayPalScript, 200);
+          return;
+        }
+
+        console.log("Loading PayPal SDK with Client ID:", paypalClientId);
+        const scriptElement = document.createElement("script");
+        scriptElement.setAttribute(
+          "src",
+          `https://www.paypal.com/sdk/js?client-id=${paypalClientId}&currency=USD`
+        );
+        scriptElement.setAttribute("defer", "");
+        scriptElement.setAttribute("id", "paypal-sdk");
+        document.head.appendChild(scriptElement);
+      }
+
+      // Start loading after DOM is ready
+      document.addEventListener("DOMContentLoaded", () => {
+        setTimeout(loadPayPalScript, 500); // Give time for business data to load
+      });
+    </script>
   </head>
   <body class="bg-light">
     <!-- Navigation -->
@@ -23,7 +69,7 @@
           href="../index.html"
           style="font-size: 1.5rem"
         >
-          <i class="bi bi-shop me-2"></i>POStore
+          <i class="bi bi-shop me-2"></i>Home
         </a>
 
         <div class="d-flex align-items-center">
@@ -210,144 +256,235 @@
 
                 <!-- PayPal Button Configuration -->
                 <script>
-                  paypal
-                    .Buttons({
-                      // Sets up the transaction when a payment button is clicked
-                      createOrder: function (data, actions) {
-                        // Calculate total from cart
-                        const total = document
-                          .getElementById("total")
-                          .innerText.replace("$", "");
+                  // Wait for PayPal SDK to load
+                  function initPayPal() {
+                    if (typeof paypal === "undefined") {
+                      setTimeout(initPayPal, 100);
+                      return;
+                    }
 
-                        return actions.order.create({
-                          purchase_units: [
-                            {
-                              amount: {
-                                value: total, // Use the total from the order summary
-                                currency_code: "USD",
+                    // Calculate total from cart
+                    const total = document
+                      .getElementById("total")
+                      .innerText.replace("$", "");
+
+                    paypal
+                      .Buttons({
+                        // Sets up the transaction when a payment button is clicked
+                        createOrder: function (data, actions) {
+                          return actions.order.create({
+                            purchase_units: [
+                              {
+                                amount: {
+                                  value: total, // Use the total from the order summary
+                                  currency_code: "USD",
+                                },
                               },
-                            },
-                          ],
-                        });
-                      },
-
-                      // Finalize the transaction after payer approval
-                      onApprove: function (data, actions) {
-                        return actions.order
-                          .capture()
-                          .then(function (orderData) {
-                            // Show success modal
-                            const orderNumber =
-                              "PP-" + Date.now().toString().slice(-8);
-                            document.getElementById("orderNumber").textContent =
-                              orderNumber;
-
-                            // Get cart items before clearing
-                            const cart = JSON.parse(
-                              localStorage.getItem("modernstore_cart") || "[]"
-                            );
-
-                            // Get order items from the DOM
-                            const orderItemsHtml =
-                              document.getElementById("orderItems").innerHTML;
-
-                            // Display success modal
-                            new bootstrap.Modal(
-                              document.getElementById("successModal")
-                            ).show();
-
-                            // Send confirmation email using EmailJS
-                            var script = document.createElement("script");
-                            script.src =
-                              "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
-                            script.onload = function () {
-                              emailjs.init("L7o6hZUmFJQ_Jbqu0");
-
-                              // Get shipping method
-                              const shippingMethod = document
-                                .querySelector('input[name="shipping"]:checked')
-                                .nextElementSibling.textContent.trim();
-
-                              // Use cart items captured before clearing
-                              let itemsList = "";
-                              if (cart && cart.length > 0) {
-                                cart.forEach((item) => {
-                                  itemsList += `${item.name || "Product"} - $${
-                                    item.price || "0.00"
-                                  } x ${item.quantity || 1}\n`;
-                                });
-                              } else {
-                                // Fallback to get items from the order summary HTML
-                                itemsList = "Items as shown in order summary";
-                              }
-
-                              // Get payment details from PayPal response
-                              const shippingAddress =
-                                orderData.purchase_units[0].shipping?.address ||
-                                {};
-                              const addressStr = shippingAddress.address_line_1
-                                ? `${shippingAddress.address_line_1}, ${
-                                    shippingAddress.admin_area_2 || ""
-                                  }, ${shippingAddress.admin_area_1 || ""}, ${
-                                    shippingAddress.postal_code || ""
-                                  }, ${shippingAddress.country_code || ""}`
-                                : "Store Pickup";
-
-                              // Get customer info
-                              const customerName =
-                                orderData.payer?.name?.given_name +
-                                  " " +
-                                  orderData.payer?.name?.surname || "Customer";
-                              const customerEmail =
-                                orderData.payer?.email_address ||
-                                "customer@example.com";
-
-                              emailjs.send(
-                                "service_s481rtv",
-                                "template_771ecr6",
-                                {
-                                  to_email: "pabloandreychacon@gmail.com",
-                                  from_email: customerEmail,
-                                  message: `
-                                    Order Number: ${orderNumber}\n\n
-                                    Customer: ${customerName}\n
-                                    Email: ${customerEmail}\n\n
-                                    Shipping Method: ${shippingMethod}\n
-                                    Shipping Address: ${addressStr}\n\n
-                                    Items:\n${itemsList}\n
-                                    Subtotal: ${
-                                      document.getElementById("subtotal")
-                                        .textContent
-                                    }\n
-                                    Shipping: ${
-                                      document.getElementById("shippingCost")
-                                        .textContent
-                                    }\n
-                                    Tax: ${
-                                      document.getElementById("tax").textContent
-                                    }\n
-                                    Total: ${
-                                      document.getElementById("total")
-                                        .textContent
-                                    }
-                                  `,
-                                }
-                              );
-                            };
-                            document.head.appendChild(script);
-
-                            // Clear cart
-                            localStorage.removeItem("modernstore_cart");
-                          })
-                          .catch(function (error) {
-                            console.error("PayPal error:", error);
-                            alert(
-                              "There was an error processing your payment. Please try again."
-                            );
+                            ],
                           });
-                      },
-                    })
-                    .render("#paypal-button-container");
+                        },
+
+                        // Finalize the transaction after payer approval
+                        onApprove: function (data, actions) {
+                          return actions.order
+                            .capture()
+                            .then(function (orderData) {
+                              // Show success modal
+                              const orderNumber =
+                                orderData.id ||
+                                "PP-" + Date.now().toString().slice(-8);
+
+                              document.getElementById(
+                                "orderNumber"
+                              ).textContent = orderNumber;
+
+                              // Get cart items before clearing
+                              const cart = JSON.parse(
+                                localStorage.getItem("postore_cart") || "[]"
+                              );
+
+                              // Get order items from the DOM
+                              const orderItemsHtml =
+                                document.getElementById("orderItems").innerHTML;
+
+                              // Modal will be shown only after successful database save
+
+                              // Send confirmation email using EmailJS
+                              var script = document.createElement("script");
+                              script.src =
+                                "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
+                              script.onload = async function () {
+                                emailjs.init("L7o6hZUmFJQ_Jbqu0");
+
+                                // Get shipping method and calculate delivery date
+                                const shippingMethodElement = document.querySelector('input[name="shipping"]:checked');
+                                const shippingMethod = shippingMethodElement.nextElementSibling.textContent.trim();
+                                const shippingValue = parseFloat(shippingMethodElement.value);
+                                
+                                // Calculate estimated delivery date based on shipping method
+                                const today = new Date();
+                                let deliveryDays = 0;
+                                
+                                if (shippingValue === 0) {
+                                  deliveryDays = 0; // Pickup at Store (Available Today)
+                                } else if (shippingValue === 5.99) {
+                                  deliveryDays = 7; // Standard Shipping (5-7 business days) - use max
+                                } else if (shippingValue === 12.99) {
+                                  deliveryDays = 3; // Express Shipping (2-3 business days) - use max
+                                } else if (shippingValue === 24.99) {
+                                  deliveryDays = 1; // Overnight Shipping (1 business day)
+                                }
+                                
+                                const estimatedDeliveryDate = new Date(today);
+                                estimatedDeliveryDate.setDate(today.getDate() + deliveryDays);
+
+                                // Use cart items captured before clearing
+                                let itemsList = "";
+                                if (cart && cart.length > 0) {
+                                  cart.forEach((item) => {
+                                    itemsList += `${
+                                      item.Name || "Product"
+                                    } - $${item.Price || "0.00"} x ${
+                                      item.quantity || 1
+                                    }\n`;
+                                  });
+                                } else {
+                                  // Fallback to get items from the order summary HTML
+                                  itemsList = "Items as shown in order summary";
+                                }
+
+                                // Get payment details from PayPal response
+                                const shippingAddress =
+                                  orderData.purchase_units[0].shipping
+                                    ?.address || {};
+                                const addressStr =
+                                  shippingAddress.address_line_1
+                                    ? `${shippingAddress.address_line_1}, ${
+                                        shippingAddress.admin_area_2 || ""
+                                      }, ${
+                                        shippingAddress.admin_area_1 || ""
+                                      }, ${
+                                        shippingAddress.postal_code || ""
+                                      }, ${shippingAddress.country_code || ""}`
+                                    : "Store Pickup";
+                                const billingAddress =
+                                  orderData.purchase_units[0].shipping
+                                    ?.address || {};
+
+                                // Get customer info
+                                const customerName =
+                                  orderData.payer?.name?.given_name +
+                                    " " +
+                                    orderData.payer?.name?.surname ||
+                                  "Customer";
+                                const customerEmail =
+                                  orderData.payer?.email_address ||
+                                  "customer@example.com";
+
+                                // Save to Supabase first
+                                try {
+                                  const { data: orderData, error: orderError } = await supabase
+                                    .from("Orders")
+                                    .insert({
+                                      TotalAmount: parseFloat(total),
+                                      StatusId: 1,
+                                      PaymentOrderId: orderNumber,
+                                      Currency: "USD",
+                                      ShippingAddress: addressStr,
+                                      ShippingMethod: shippingMethod,
+                                      TrackingNumber: null,
+                                      EstimatedDeliveryDate: estimatedDeliveryDate,
+                                      CreatedAt: new Date(),
+                                      UpdatedAt: new Date(),
+                                      BuyerEmail: customerEmail,
+                                      BusinessEmail: window.globalStore.state.Email,
+                                    })
+                                    .select();
+
+                                  if (orderError) {
+                                    console.error('Error inserting order:', orderError);
+                                    alert('Error saving order. Please contact support.');
+                                    return;
+                                  }
+
+                                  console.log('Order saved successfully:', orderData);
+
+                                  // Insert order items
+                                  if (cart && cart.length > 0) {
+                                    const orderItemsPromises = cart.map(item => 
+                                      supabase.from("OrderItems").insert({
+                                        OrderId: orderNumber,
+                                        ProductId: item.Id,
+                                        ProductName: item.Name,
+                                        Quantity: item.quantity,
+                                        Price: item.Price,
+                                        ItemTotal: parseFloat(item.Price * item.quantity).toFixed(2),
+                                        CreatedAt: new Date(),
+                                      })
+                                    );
+
+                                    const orderItemsResults = await Promise.all(orderItemsPromises);
+                                    const hasOrderItemsError = orderItemsResults.some(result => result.error);
+                                    
+                                    if (hasOrderItemsError) {
+                                      console.error('Error inserting order items');
+                                      alert('Error saving order items. Please contact support.');
+                                      return;
+                                    }
+                                  }
+
+                                  // Send email notification after successful database save
+                                  emailjs.send(
+                                    "service_s481rtv",
+                                    "template_771ecr6",
+                                    {
+                                      to_email: "pabloandreychacon@gmail.com",
+                                      from_email: customerEmail,
+                                      message: `
+                                      Order Number: ${orderNumber}\n\n
+                                      Customer: ${customerName}\n
+                                      Email: ${customerEmail}\n\n
+                                      Shipping Method: ${shippingMethod}\n
+                                      Shipping Address: ${addressStr}\n\n
+                                      Items:\n${itemsList}\n
+                                      Subtotal: ${document.getElementById("subtotal").textContent}\n
+                                      Shipping: ${document.getElementById("shippingCost").textContent}\n
+                                      Tax: ${document.getElementById("tax").textContent}\n
+                                      Total: ${document.getElementById("total").textContent}
+                                    `,
+                                    }
+                                  );
+
+                                  // Show success modal and clear cart only after everything succeeds
+                                  document.getElementById("orderNumber").textContent = orderNumber;
+                                  const modal = new bootstrap.Modal(document.getElementById("successModal"));
+                                  modal.show();
+                                  
+                                  // Clear cart
+                                  localStorage.removeItem("postore_cart");
+                                  
+                                } catch (error) {
+                                  console.error('Error processing order:', error);
+                                  alert('Error processing order. Please try again or contact support.');
+                                  return;
+                                }
+                              };
+
+                              document.head.appendChild(script);
+                            })
+                            .catch(function (error) {
+                              console.error("PayPal error:", error);
+                              alert(
+                                "There was an error processing your payment. Please try again."
+                              );
+                            });
+                        },
+                      })
+                      .render("#paypal-button-container");
+                  }
+
+                  // Initialize PayPal when page loads
+                  document.addEventListener("DOMContentLoaded", initPayPal);
                 </script>
               </div>
             </div>
@@ -378,8 +515,8 @@
       </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../customElements/bottom-scripts.js"></script>
+    <custom-bottom></custom-bottom>
     <!-- Checkout JS -->
     <script src="../js/checkout.js"></script>
   </body>

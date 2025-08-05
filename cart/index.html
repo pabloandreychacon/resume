@@ -2,20 +2,20 @@
 <html lang="en">
   <head>
     <script src="customElements/head-element.js"></script>
-    <custom-head 
-      page-title="POStore - Premium Ecommerce" 
+    <custom-head
+      page-title="POStore - Premium Ecommerce"
       description="Discover premium products at unbeatable prices. Shop the latest trends with our curated collection of high-quality items."
       keywords="ecommerce, shopping, premium products, fashion, electronics, home goods"
       author="POStore Team"
       favicon-url="assets/favicon.ico"
-      stylesheets="css/style.css"      
+      stylesheets="css/style.css"
     ></custom-head>
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
     <meta property="og:url" content="https://postore.com/" />
     <meta property="og:title" content="POStore - Premium Ecommerce" />
-    
+
     <meta
       property="og:image"
       content="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800"
@@ -58,7 +58,8 @@
     <meta
       property="twitter:image"
       content="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800"
-    />    
+    />
+
     <!-- Section Loader JS -->
     <script src="js/section-loader.js"></script>
     <script defer>
@@ -66,6 +67,7 @@
       document.addEventListener("DOMContentLoaded", function () {
         loadSection("headerSection", "sections/header.html");
         loadSection("footerSection", "sections/footer.html");
+        loadSection("cartComponentsSection", "sections/cart-components.html");
       });
     </script>
   </head>
@@ -73,303 +75,231 @@
     <!-- Header Section -->
     <div id="headerSection"></div>
 
-      <!-- Hero Section -->
-      <section id="home" class="hero-section text-white py-5">
-        <video class="hero-video-bg" autoplay loop playsinline muted controls>
-          <source src="./assets/video/postore.mp4" type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
-        <div class="hero-overlay"></div>
-        <div class="container">
-          <div class="row align-items-center min-vh-50">
-            <div class="col-lg-6">
-              <h1 class="display-4 fw-bold mb-4">Discover Premium Products</h1>
-              <p class="lead mb-4">
-                Shop the latest trends with our curated collection of high-quality
-                products at unbeatable prices.
-              </p>
-              <a
-                href="#products"
-                class="btn btn-light btn-lg"
-                style="position: relative; z-index: 10"
-              >
-                Shop Now <i class="bi bi-arrow-right ms-2"></i>
-              </a>
-            </div>
-            <div class="col-lg-6 text-center">
-              <div
-                id="heroCarousel"
-                data-bs-interval="3000"
-                class="carousel slide"
-                data-bs-ride="carousel"
-              >
-                <div class="carousel-indicators">
-                  <button
-                    type="button"
-                    data-bs-target="#heroCarousel"
-                    data-bs-slide-to="0"
-                    class="active"
-                  ></button>
-                  <button
-                    type="button"
-                    data-bs-target="#heroCarousel"
-                    data-bs-slide-to="1"
-                  ></button>
-                  <button
-                    type="button"
-                    data-bs-target="#heroCarousel"
-                    data-bs-slide-to="2"
-                  ></button>
-                </div>
-                <div class="carousel-inner rounded shadow-lg">
-                  <div class="carousel-item active">
-                    <img
-                      src="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800"
-                      class="d-block w-100 carousel-image"
-                      alt="Premium Shopping Experience"
-                      loading="lazy"
-                    />
-                    <div class="carousel-caption d-none d-md-block">
-                      <h5 class="fw-bold">Premium Shopping Experience</h5>
-                      <p>
-                        Discover luxury products with exceptional quality and
-                        service.
-                      </p>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <img
-                      src="https://images.pexels.com/photos/1005638/pexels-photo-1005638.jpeg?auto=compress&cs=tinysrgb&w=800"
-                      class="d-block w-100 carousel-image"
-                      alt="Latest Technology"
-                      loading="lazy"
-                    />
-                    <div class="carousel-caption d-none d-md-block">
-                      <h5 class="fw-bold">Latest Technology</h5>
-                      <p>
-                        Stay ahead with cutting-edge electronics and smart
-                        devices.
-                      </p>
-                    </div>
-                  </div>
-                  <div class="carousel-item">
-                    <img
-                      src="https://images.pexels.com/photos/1488463/pexels-photo-1488463.jpeg?auto=compress&cs=tinysrgb&w=800"
-                      class="d-block w-100 carousel-image"
-                      alt="Fashion & Style"
-                      loading="lazy"
-                    />
-                    <div class="carousel-caption d-none d-md-block">
-                      <h5 class="fw-bold">Fashion & Style</h5>
-                      <p>Express yourself with our curated fashion collection.</p>
-                    </div>
-                  </div>
-                </div>
+    <!-- Hero Section -->
+    <section id="home" class="hero-section text-white py-5">
+      <video class="hero-video-bg" autoplay loop playsinline muted controls>
+        <source src="./assets/video/postore.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <div class="hero-overlay"></div>
+      <div class="container">
+        <div class="row align-items-center min-vh-50">
+          <div class="col-lg-6">
+            <h1 class="display-4 fw-bold mb-4">Discover Premium Products</h1>
+            <p class="lead mb-4">
+              Shop the latest trends with our curated collection of high-quality
+              products at unbeatable prices.
+            </p>
+            <a
+              href="#products"
+              class="btn btn-light btn-lg"
+              style="position: relative; z-index: 10"
+            >
+              Shop Now <i class="bi bi-arrow-right ms-2"></i>
+            </a>
+          </div>
+          <div class="col-lg-6 text-center">
+            <div
+              id="heroCarousel"
+              data-bs-interval="3000"
+              class="carousel slide"
+              data-bs-ride="carousel"
+            >
+              <div class="carousel-indicators">
                 <button
-                  class="carousel-control-prev"
                   type="button"
                   data-bs-target="#heroCarousel"
-                  data-bs-slide="prev"
-                >
-                  <span class="carousel-control-prev-icon"></span>
-                  <span class="visually-hidden">Previous</span>
-                </button>
+                  data-bs-slide-to="0"
+                  class="active"
+                ></button>
                 <button
-                  class="carousel-control-next"
                   type="button"
                   data-bs-target="#heroCarousel"
-                  data-bs-slide="next"
-                >
-                  <span class="carousel-control-next-icon"></span>
-                  <span class="visually-hidden">Next</span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Small Search Section -->
-      <section id="products" class="pb-2 bg-light">
-        <div class="container search-small d-lg-none">
-          <div class="row align-items-center">
-            <div class="col-md-6">
-              <h4 class="display-8 fw-bold mb-3">Search Products</h4>
-              <p class="lead text-muted mb-4">
-                Find exactly what you're looking for with our powerful search
-                feature.
-              </p>
-            </div>
-            <div class="col-md-6">
-              <div class="input-group mb-3">
-                <input
-                  type="text"
-                  class="form-control"
-                  placeholder="Search for products..."
-                  id="searchInputSmall"
-                />
-                <button class="btn btn-primary" type="button" id="searchBtnSmall">
-                  <i class="bi bi-search"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Filters Section -->
-      <section class="pb-2 bg-light">
-        <div class="container">
-          <div class="row align-items-center">
-            <div class="col-md-6">
-              <div class="d-flex gap-2 flex-wrap" id="categoryButtons">
+                  data-bs-slide-to="1"
+                ></button>
                 <button
-                  class="btn btn-outline-primary active"
-                  data-category="all"
-                >
-                  All Products
-                </button>
-                <!-- Category buttons will be dynamically loaded here -->
+                  type="button"
+                  data-bs-target="#heroCarousel"
+                  data-bs-slide-to="2"
+                ></button>
               </div>
-            </div>
-            <div class="col-md-6 text-end">
-              <select class="form-select d-inline-block w-auto" id="sortSelect">
-                <option value="default">Sort by</option>
-                <option value="price-low">Price: Low to High</option>
-                <option value="price-high">Price: High to Low</option>
-                <option value="name">Name A-Z</option>
-              </select>
+              <div class="carousel-inner rounded shadow-lg">
+                <div class="carousel-item active">
+                  <img
+                    src="https://images.pexels.com/photos/5632402/pexels-photo-5632402.jpeg?auto=compress&cs=tinysrgb&w=800"
+                    class="d-block w-100 carousel-image"
+                    alt="Premium Shopping Experience"
+                    loading="lazy"
+                  />
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5 class="fw-bold">Premium Shopping Experience</h5>
+                    <p>
+                      Discover luxury products with exceptional quality and
+                      service.
+                    </p>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <img
+                    src="https://images.pexels.com/photos/1005638/pexels-photo-1005638.jpeg?auto=compress&cs=tinysrgb&w=800"
+                    class="d-block w-100 carousel-image"
+                    alt="Latest Technology"
+                    loading="lazy"
+                  />
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5 class="fw-bold">Latest Technology</h5>
+                    <p>
+                      Stay ahead with cutting-edge electronics and smart
+                      devices.
+                    </p>
+                  </div>
+                </div>
+                <div class="carousel-item">
+                  <img
+                    src="https://images.pexels.com/photos/1488463/pexels-photo-1488463.jpeg?auto=compress&cs=tinysrgb&w=800"
+                    class="d-block w-100 carousel-image"
+                    alt="Fashion & Style"
+                    loading="lazy"
+                  />
+                  <div class="carousel-caption d-none d-md-block">
+                    <h5 class="fw-bold">Fashion & Style</h5>
+                    <p>Express yourself with our curated fashion collection.</p>
+                  </div>
+                </div>
+              </div>
+              <button
+                class="carousel-control-prev"
+                type="button"
+                data-bs-target="#heroCarousel"
+                data-bs-slide="prev"
+              >
+                <span class="carousel-control-prev-icon"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button
+                class="carousel-control-next"
+                type="button"
+                data-bs-target="#heroCarousel"
+                data-bs-slide="next"
+              >
+                <span class="carousel-control-next-icon"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <!-- Products Section -->
-      <section class="py-5">
-        <div class="container">
-          <div class="text-center mb-5">
-            <h2 class="display-5 fw-bold mb-3">Featured Products</h2>
-            <p class="lead text-muted">
-              Discover our handpicked selection of premium items
+    <!-- Small Search Section -->
+    <section id="products" class="pb-2 bg-light">
+      <div class="container search-small d-lg-none">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <h4 class="display-8 fw-bold mb-3">Search Products</h4>
+            <p class="lead text-muted mb-4">
+              Find exactly what you're looking for with our powerful search
+              feature.
             </p>
           </div>
-
-          <div class="row" id="productsContainer">
-            <!-- Products will be dynamically loaded here -->
-          </div>
-        </div>
-      </section>
-
-      <!-- Shopping Cart Offcanvas -->
-      <div class="offcanvas offcanvas-end" tabindex="-1" id="cartOffcanvas">
-        <div class="offcanvas-header border-bottom">
-          <h5 class="offcanvas-title">Shopping Cart</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="offcanvas"
-          ></button>
-        </div>
-        <div class="offcanvas-body">
-          <div id="cartItems">
-            <div class="text-center text-muted py-5">
-              <i class="bi bi-cart-x display-1"></i>
-              <p class="mt-3">Your cart is empty</p>
+          <div class="col-md-6">
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Search for products..."
+                id="searchInputSmall"
+              />
+              <button class="btn btn-primary" type="button" id="searchBtnSmall">
+                <i class="bi bi-search"></i>
+              </button>
             </div>
           </div>
         </div>
-        <div class="offcanvas-footer border-top p-3">
-          <div class="d-flex justify-content-between mb-3">
-            <strong>Total: $<span id="cartTotal">0.00</span></strong>
-          </div>
-          <button class="btn btn-primary w-100" id="checkoutBtn" disabled>
-            Proceed to Checkout
-          </button>
-        </div>
       </div>
+    </section>
 
-      <!-- Wishlist Offcanvas -->
-      <div class="offcanvas offcanvas-end" tabindex="-1" id="wishlistOffcanvas">
-        <div class="offcanvas-header border-bottom">
-          <h5 class="offcanvas-title">Wishlist</h5>
-          <button
-            type="button"
-            class="btn-close"
-            data-bs-dismiss="offcanvas"
-          ></button>
-        </div>
-        <div class="offcanvas-body">
-          <div id="wishlistItems">
-            <div class="text-center text-muted py-5">
-              <i class="bi bi-heart display-1"></i>
-              <p class="mt-3">Your wishlist is empty</p>
-            </div>
-          </div>
-        </div>
-        <div class="offcanvas-footer border-top p-3">
-          <button class="btn btn-outline-danger w-100" id="clearWishlistBtn">
-            Clear Wishlist
-          </button>
-        </div>
-      </div>
-
-      <!-- Product Detail Modal -->
-      <div class="modal fade" id="productModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modalProductName"></h5>
+    <!-- Filters Section -->
+    <section class="pb-2 bg-light">
+      <div class="container">
+        <div class="row align-items-center">
+          <div class="col-md-6">
+            <div class="d-flex gap-2 flex-wrap" id="categoryButtons">
               <button
-                type="button"
-                class="btn-close"
-                data-bs-dismiss="modal"
-              ></button>
+                class="btn btn-outline-primary active"
+                data-category="all"
+              >
+                All Products
+              </button>
+              <!-- Category buttons will be dynamically loaded here -->
             </div>
-            <div class="modal-body">
-              <div class="row">
-                <div class="col-md-6">
-                  <img
-                    id="modalProductImage"
-                    src=""
-                    alt=""
-                    class="img-fluid rounded"
-                  />
-                </div>
-                <div class="col-md-6">
-                  <p class="text-muted mb-2" id="modalProductCategory"></p>
-                  <h4 class="text-primary mb-3" id="modalProductPrice"></h4>
-                  <p id="modalProductDescription"></p>
-                  <div class="d-flex gap-2 mt-4">
-                    <button class="btn btn-primary" id="modalAddToCart">
-                      <i class="bi bi-cart-plus me-2"></i>Add to Cart
-                    </button>
-                    <button class="btn btn-outline-primary" id="modalWishlistBtn">
-                      <i class="bi bi-heart me-2"></i>Wishlist
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+          </div>
+          <div class="col-md-6 text-end">
+            <select class="form-select d-inline-block w-auto" id="sortSelect">
+              <option value="default">Sort by</option>
+              <option value="price-low">Price: Low to High</option>
+              <option value="price-high">Price: High to Low</option>
+              <option value="name">Name A-Z</option>
+            </select>
           </div>
         </div>
       </div>
-    
+    </section>
+
+    <!-- Products Section -->
+    <section class="py-5">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="display-5 fw-bold mb-3">Featured Products</h2>
+          <p class="lead text-muted">
+            Discover our handpicked selection of premium items
+          </p>
+        </div>
+
+        <div class="row" id="productsContainer">
+          <!-- Products will be dynamically loaded here -->
+        </div>
+      </div>
+    </section>
+
+    <!-- Cart Components Section -->
+    <div id="cartComponentsSection"></div>
+
     <!-- Footer Section -->
     <div id="footerSection"></div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<<<<<<< HEAD
+    <script src="customElements/bottom-scripts.js"></script>
+    <custom-bottom></custom-bottom>
+
+    <script src="js/performance.js"></script>
+=======
+    <script src="../customElements/bottom-scripts.js"></script>
+    <custom-bottom></custom-bottom>
+
+    <script src="../js/performance.js"></script>
+>>>>>>> 69909810df4e092829c5b994532fb1a4a7dc63ca
+
     <!-- Supabase JS -->
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 
-    <!-- Performance Optimization -->
-    <script src="js/performance.js"></script>
-
-    <!-- Custom JS -->
+    <!-- Global State -->
+<<<<<<< HEAD
     <script src="js/globalState.js"></script>
+=======
+    <script src="../js/globalState.js"></script>
+>>>>>>> 69909810df4e092829c5b994532fb1a4a7dc63ca
+    
+    <!-- Custom JS -->
     <script src="js/supabase-config.js"></script>
+    <script src="js/business-data.js"></script>
+
+<<<<<<< HEAD
+=======
     <script src="js/category-buttons.js"></script>
+>>>>>>> 69909810df4e092829c5b994532fb1a4a7dc63ca
     <script src="js/main.js"></script>
+    <script src="js/shared-store.js"></script>
     <script src="js/social-share.js"></script>
     <!-- structured-data.js removed -->
 
@@ -383,15 +313,14 @@
         document.addEventListener("sectionLoaded", function (e) {
           if (e.detail.id === "headerSection") {
             // Add active class to the About nav link
-            document.querySelectorAll(".nav-link").forEach(
-              (link) => {
+            document.querySelectorAll(".nav-link").forEach((link) => {
               /* if (link.getAttribute("href").trim() === "index.html#products") {
                 link.classList.add("active");
               } */
               if (link.getAttribute("href").trim() === "index.html") {
                 link.classList.add("active");
               }
-            })
+            });
             // Give the DOM time to update
             setTimeout(function () {
               setupNavbar();

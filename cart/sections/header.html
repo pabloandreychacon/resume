@@ -1,15 +1,12 @@
 <!-- Floating Home Button -->
-<button
-  id="homePanelBtn"
-  class="btn btn-primary position-fixed"
->
+<button id="homePanelBtn" class="btn btn-primary position-fixed rounded-circle">
   <i class="bi bi-arrow-up"></i>
 </button>
 
 <!-- Left Offcanvas Navigation -->
 <div class="offcanvas offcanvas-start" tabindex="-1" id="navOffcanvas">
   <div class="offcanvas-header">
-    <h5 class="offcanvas-title"><i class="bi bi-shop me-2"></i>POStore</h5>
+    <h5 class="offcanvas-title"><i class="bi bi-shop me-2"></i></h5>
     <button
       type="button"
       class="btn-close"
@@ -22,7 +19,9 @@
       <li class="nav-item">
         <a class="nav-link" href="index.html#products">Products</a>
       </li>
-      <li class="nav-item"><a class="nav-link" href="pages/about.html">About</a></li>
+      <li class="nav-item">
+        <a class="nav-link" href="pages/about.html">About</a>
+      </li>
       <li class="nav-item">
         <a class="nav-link" href="pages/contact.html">Contact</a>
       </li>
@@ -60,6 +59,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" href="index.html#products">Products</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="pages/orders.html">Orders</a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="pages/contact.html">Contact</a>
@@ -119,3 +121,25 @@
     </div>
   </div>
 </nav>
+
+<script>
+  // Set business name after business data is loaded
+  function updateBusinessName() {
+    const businessName = window.globalStore?.state?.BusinessName || "POStore";
+    const titleElement = document.querySelector(
+      "#navOffcanvas .offcanvas-title i"
+    );
+    if (titleElement) {
+      titleElement.parentElement.innerHTML = `<i class="bi bi-shop me-2"></i>${businessName}`;
+    }
+
+    // Also update navbar brand
+    const navbarBrand = document.querySelector(".navbar-brand");
+    if (navbarBrand) {
+      navbarBrand.innerHTML = `<i class="bi bi-shop me-2"></i>${businessName}`;
+    }
+  }
+
+  // Listen for business data loaded event
+  window.addEventListener("businessDataLoaded", updateBusinessName);
+</script>
