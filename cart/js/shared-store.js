@@ -34,6 +34,12 @@ class SharedStore {
     }
   }
 
+  calculatePriceWithTax(product) {
+    const basePrice = parseFloat(product.Price || 0);
+    const taxRate = parseFloat(product.TaxRate || product.taxes || product.Taxes || 0) / 100;
+    return (basePrice * (1 + taxRate)).toFixed(2);
+  }
+
   bindEvents() {
     // Checkout button
     const checkoutBtn = document.getElementById("checkoutBtn");
@@ -66,6 +72,14 @@ class SharedStore {
 
     const item = this.cart.find((item) => (item.Id || item.id) === productId);
     if (item) {
+      // Check stock validation if product manages stock
+      if (item.StockQuantity !== null && item.StockQuantity !== undefined) {
+        if (quantity > item.StockQuantity) {
+          alert(`Cannot set quantity to ${quantity}. Only ${item.StockQuantity} available in stock`);
+          return;
+        }
+      }
+      
       item.quantity = quantity;
       this.updateCartUI();
       this.saveToStorage("postore_cart", this.cart);
@@ -84,7 +98,7 @@ class SharedStore {
 
     const totalItems = this.cart.reduce((sum, item) => sum + item.quantity, 0);
     const totalPrice = this.cart.reduce(
-      (sum, item) => sum + (item.Price || item.price) * item.quantity,
+      (sum, item) => sum + parseFloat(this.calculatePriceWithTax(item)) * item.quantity,
       0
     );
 
@@ -114,31 +128,29 @@ class SharedStore {
                 <div class="col-6">
                   <div class="cart-item-info">
                     <h6>${item.Name || item.name}</h6>
-                    <p class="cart-item-price mb-0">$${(
-                      item.Price || item.price
-                    ).toFixed(2)}</p>
+                    <p class="cart-item-price mb-0">$${this.calculatePriceWithTax(item)}</p>
                   </div>
                 </div>
                 <div class="col-3">
                   <div class="quantity-controls d-flex align-items-center">
-                    <button class="btn-sm" onclick="store.updateQuantity(${
+                    <button class="btn btn-sm btn-outline-secondary" onclick="(window.store || window.productStore).updateQuantity(${
                       item.Id || item.id
                     }, ${item.quantity - 1})">
                       <i class="bi bi-dash"></i>
                     </button>
                     <input type="number" value="${
                       item.quantity
-                    }" min="1" class="mx-1" 
-                           onchange="store.updateQuantity(${
+                    }" min="1" class="form-control mx-1 text-center" style="width: 60px;" 
+                           onchange="(window.store || window.productStore).updateQuantity(${
                              item.Id || item.id
                            }, parseInt(this.value))">
-                    <button class="btn-sm" onclick="store.updateQuantity(${
+                    <button class="btn btn-sm btn-outline-secondary" onclick="(window.store || window.productStore).updateQuantity(${
                       item.Id || item.id
                     }, ${item.quantity + 1})">
                       <i class="bi bi-plus"></i>
                     </button>
                   </div>
-                  <button class="btn btn-sm btn-outline-danger mt-1" onclick="store.removeFromCart(${
+                  <button class="btn btn-sm btn-outline-danger mt-1" onclick="(window.store || window.productStore).removeFromCart(${
                     item.Id || item.id
                   })">
                     <i class="bi bi-trash"></i>
@@ -175,15 +187,14 @@ class SharedStore {
                   <div class="col-6">
                     <div class="cart-item-info">
                       <h6>${item.Name || item.name}</h6>
-                      <p class="cart-item-price mb-0">$${(
-                        item.Price || item.price
-                      ).toFixed(2)}</p>
+                      <p class="cart-item-price mb-0">$${this.calculatePriceWithTax(item)}</p>
                     </div>
                   </div>
                   <div class="col-3">
-                    <button class="btn btn-sm btn-outline-danger w-100" onclick="store.toggleWishlist(store.wishlist.find(p => (p.Id || p.id) === ${
-                      item.Id || item.id
-                    }))">
+                    <button class="btn btn-sm btn-primary mb-1 w-100" onclick="(window.store || window.productStore).addToCartFromWishlist(${item.Id || item.id})">
+                      <i class="bi bi-cart-plus"></i>
+                    </button>
+                    <button class="btn btn-sm btn-outline-danger w-100" onclick="(window.store || window.productStore).toggleWishlist({...${JSON.stringify(item).replace(/"/g, '&quot;')}, Id: ${item.Id || item.id}})">
                       <i class="bi bi-trash"></i>
                     </button>
                   </div>
@@ -217,22 +228,50 @@ class SharedStore {
     this.saveToStorage("postore_wishlist", this.wishlist);
   }
 
-  addToCart(product) {
+  addToCart(product, quantity = 1) {
+    // Check stock validation if product manages stock
+    if (product.StockQuantity !== null && product.StockQuantity !== undefined) {
+      const existingItem = this.cart.find((item) => item.Id === product.Id);
+      const currentQuantityInCart = existingItem ? existingItem.quantity : 0;
+      
+      if (currentQuantityInCart + quantity > product.StockQuantity) {
+        const availableToAdd = product.StockQuantity - currentQuantityInCart;
+        if (availableToAdd <= 0) {
+          alert(`Cannot add more ${product.Name}. Stock limit reached (${product.StockQuantity} available)`);
+          return false;
+        } else {
+          alert(`Only ${availableToAdd} more can be added. Stock limit: ${product.StockQuantity}`);
+          return false;
+        }
+      }
+    }
+
     const existingItem = this.cart.find(
       (item) => (item.Id || item.id) === (product.Id || product.id)
     );
 
     if (existingItem) {
-      existingItem.quantity += 1;
+      existingItem.quantity += quantity;
     } else {
       this.cart.push({
         ...product,
-        quantity: 1,
+        quantity: quantity,
       });
     }
 
     this.updateCartUI();
     this.saveToStorage("postore_cart", this.cart);
+    return true;
+  }
+
+  addToCartFromWishlist(productId) {
+    const wishlistItem = this.wishlist.find((item) => (item.Id || item.id) === productId);
+    if (wishlistItem) {
+      const success = this.addToCart(wishlistItem, 1);
+      if (success) {
+        this.toggleWishlist(wishlistItem);
+      }
+    }
   }
 
   checkout() {

@@ -37,9 +37,7 @@ function loadCartItems() {
               </div>
               <div>
                 <h6 class="mb-0">${item.Name || item.name}</h6>
-                <p class="text-muted mb-0">$${(
-                  item.Price || item.price
-                ).toFixed(2)}</p>
+                <p class="text-muted mb-0">$${calculatePriceWithTax(item).toFixed(2)}</p>
               </div>
             </div>
             <div class="d-flex align-items-center">
@@ -80,8 +78,8 @@ function loadOrderSummary() {
   let itemsHtml = "";
 
   cart.forEach((item) => {
-    const itemPrice = item.Price || item.price;
-    const itemTotal = itemPrice * item.quantity;
+    const itemPriceWithTax = calculatePriceWithTax(item);
+    const itemTotal = itemPriceWithTax * item.quantity;
     subtotal += itemTotal;
 
     itemsHtml += `
@@ -99,6 +97,12 @@ function loadOrderSummary() {
   updateTotals(subtotal);
 }
 
+function calculatePriceWithTax(item) {
+  const basePrice = parseFloat(item.Price || item.price || 0);
+  const taxRate = parseFloat(item.TaxRate || item.taxes || item.Taxes || 0) / 100;
+  return basePrice * (1 + taxRate);
+}
+
 function updateTotals(subtotal) {
   // Get selected shipping method
   const shippingMethod = document.querySelector(
@@ -106,9 +110,8 @@ function updateTotals(subtotal) {
   );
   const shippingCost = shippingMethod ? parseFloat(shippingMethod.value) : 0;
 
-  // Calculate tax (example: 8%)
-  const taxRate = 0.0;
-  const tax = subtotal * taxRate;
+  // Tax is already included in subtotal since we're using prices with tax
+  const tax = 0;
 
   // Calculate total
   const total = subtotal + shippingCost + tax;

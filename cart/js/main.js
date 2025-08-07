@@ -264,7 +264,7 @@ class EcommerceStore {
                       this.categories[product.CategoryId] || "uncategorized"
                     }</p>
                     <h5 class="product-title">${product.Name}</h5>
-                    <p class="product-price">$${product.Price}</p>
+                    <p class="product-price">$${this.calculatePriceWithTax(product)}</p>
                     ${
                       product.StockQuantity !== undefined &&
                       product.StockQuantity !== null
@@ -529,7 +529,7 @@ class EcommerceStore {
 
     const totalItems = this.cart.reduce((sum, item) => sum + item.quantity, 0);
     const totalPrice = this.cart.reduce(
-      (sum, item) => sum + (item.Price || item.price) * item.quantity,
+      (sum, item) => sum + this.calculatePriceWithTax(item) * item.quantity,
       0
     );
 
@@ -559,9 +559,7 @@ class EcommerceStore {
                         <div class="col-6">
                             <div class="cart-item-info">
                                 <h6>${item.Name || item.name}</h6>
-                                <p class="cart-item-price mb-0">$${
-                                  item.Price || item.price
-                                }</p>
+                                <p class="cart-item-price mb-0">$${this.calculatePriceWithTax(item)}</p>
                             </div>
                         </div>
                         <div class="col-3">
@@ -619,9 +617,7 @@ class EcommerceStore {
                         <div class="col-6">
                             <div class="cart-item-info">
                                 <h6>${item.Name || item.name}</h6>
-                                <p class="cart-item-price mb-0">$${
-                                  item.Price || item.price
-                                }</p>
+                                <p class="cart-item-price mb-0">$${this.calculatePriceWithTax(item)}</p>
                             </div>
                         </div>
                         <div class="col-3">
@@ -764,6 +760,30 @@ class EcommerceStore {
 
       container.appendChild(button);
     });
+  }
+
+  calculatePriceWithTax(product) {
+    const basePrice = parseFloat(product.Price || 0);
+    const taxRate = parseFloat(product.TaxRate || product.taxes || product.Taxes || 0) / 100;
+    return (basePrice * (1 + taxRate)).toFixed(2);
+  }
+
+  applySorting(products) {
+    switch (this.currentSort) {
+      case "price-low":
+        return products.sort((a, b) => this.calculatePriceWithTax(a) - this.calculatePriceWithTax(b));
+      case "price-high":
+        return products.sort((a, b) => this.calculatePriceWithTax(b) - this.calculatePriceWithTax(a));
+      case "name":
+        return products.sort((a, b) => a.Name.localeCompare(b.Name));
+      default:
+        return products;
+    }
+  }
+
+  sortProducts(sortType) {
+    this.currentSort = sortType;
+    this.renderProducts();
   }
 
   filterProducts(category) {

@@ -15,9 +15,13 @@ class ProductDetail {
 
   async loadCategories() {
     try {
+      const businessEmail = window.globalStore?.state?.Email;
+      if (!businessEmail) return;
+
       const { data, error } = await supabase
         .from('Categories')
-        .select('*');
+        .select('*')
+        .eq('BusinessEmail', businessEmail);
       
       if (error) {
         console.error('Error fetching categories:', error);
@@ -43,10 +47,18 @@ class ProductDetail {
     }
 
     try {
+      const businessEmail = window.globalStore?.state?.Email;
+      if (!businessEmail) {
+        console.error('Business email not available');
+        window.location.href = '../index.html';
+        return;
+      }
+
       const { data, error } = await supabase
         .from('Products')
         .select('*')
         .eq('Id', productId)
+        .eq('BusinessEmail', businessEmail)
         .single();
       
       if (error || !data) {
@@ -56,6 +68,7 @@ class ProductDetail {
       }
       
       this.product = data;
+      await this.loadProductMedia();
       this.renderProduct();
     } catch (error) {
       console.error('Error loading product:', error);
@@ -63,13 +76,40 @@ class ProductDetail {
     }
   }
 
+  async loadProductMedia() {
+    try {
+      const businessEmail = window.globalStore?.state?.Email;
+      if (!businessEmail) {
+        this.productMedia = [];
+        return;
+      }
+
+      const { data, error } = await supabase
+        .from('ProductMedia')
+        .select('*')
+        .eq('ProductId', this.product.Id)
+        .eq('BusinessEmail', businessEmail)
+        .order('DisplayOrder', { ascending: true });
+      
+      if (error) {
+        console.error('Error fetching product media:', error);
+        this.productMedia = [];
+        return;
+      }
+      
+      this.productMedia = data || [];
+    } catch (error) {
+      console.error('Error loading product media:', error);
+      this.productMedia = [];
+    }
+  }
+
   renderProduct() {
     if (!this.product) return;
 
     document.getElementById('productName').textContent = this.product.Name;
-    document.getElementById('productImage').src = `${this.product.ImageUrl}?t=${Date.now()}`;
-    document.getElementById('productImage').alt = this.product.Name;
-    document.getElementById('productPrice').textContent = `$${this.product.Price}`;
+    this.renderMediaGallery();
+    document.getElementById('productPrice').textContent = `$${this.calculatePriceWithTax(this.product)}`;
     document.getElementById('productDescription').textContent = this.product.Description || 'No description available.';
     document.getElementById('productCategory').textContent = this.categories[this.product.CategoryId] || 'Uncategorized';
     document.getElementById('productBreadcrumb').textContent = this.product.Name;
@@ -149,10 +189,14 @@ class ProductDetail {
     if (!this.product) return;
 
     try {
+      const businessEmail = window.globalStore?.state?.Email;
+      if (!businessEmail) return;
+
       const { data, error } = await supabase
         .from('Products')
         .select('*')
         .eq('CategoryId', this.product.CategoryId)
+        .eq('BusinessEmail', businessEmail)
         .neq('Id', this.product.Id)
         .limit(4);
       
@@ -187,6 +231,66 @@ class ProductDetail {
         </div>
       </div>
     `).join('');
+  }
+
+  renderMediaGallery() {
+    const container = document.querySelector('.product-image-container');
+    const allMedia = [{ MediaType: 'image', MediaUrl: this.product.ImageUrl }, ...(this.productMedia || [])];
+    
+    if (allMedia.length <= 1) {
+      container.innerHTML = `<img id="productImage" src="${this.product.ImageUrl}?t=${Date.now()}" alt="${this.product.Name}" class="img-fluid rounded shadow">`;
+      return;
+    }
+    
+    const carouselId = 'productMediaCarousel';
+    container.innerHTML = `
+      <div id="${carouselId}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
+        <div class="carousel-inner">
+          ${allMedia.map((media, index) => `
+            <div class="carousel-item ${index === 0 ? 'active' : ''}">
+              ${media.MediaType === 'video' ? 
+                `<video class="d-block w-100 rounded" controls style="max-height: 400px; object-fit: contain;">
+                   <source src="${media.MediaUrl}" type="video/mp4">
+                 </video>` :
+                `<img src="${media.MediaUrl}?t=${Date.now()}" class="d-block w-100 rounded" alt="${this.product.Name}" style="max-height: 400px; object-fit: contain;">`
+              }
+            </div>
+          `).join('')}
+        </div>
+        <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev" style="width: 5%;">
+          <span class="carousel-control-prev-icon"></span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next" style="width: 5%;">
+          <span class="carousel-control-next-icon"></span>
+        </button>
+      </div>
+    `;
+    
+    // Initialize carousel with autoplay
+    setTimeout(() => {
+      const carouselEl = document.getElementById(carouselId);
+      const carousel = new bootstrap.Carousel(carouselEl, {
+        interval: 3000,
+        ride: 'carousel'
+      });
+      
+      // Pause carousel when video plays
+      carouselEl.addEventListener('slide.bs.carousel', (e) => {
+        const activeSlide = e.relatedTarget;
+        const video = activeSlide.querySelector('video');
+        if (video) {
+          carousel.pause();
+          video.addEventListener('ended', () => carousel.cycle());
+          video.addEventListener('pause', () => carousel.cycle());
+        }
+      });
+    }, 100);
+  }
+
+  calculatePriceWithTax(product) {
+    const basePrice = parseFloat(product.Price || 0);
+    const taxRate = parseFloat(product.TaxRate || product.taxes || product.Taxes || 0) / 100;
+    return (basePrice * (1 + taxRate)).toFixed(2);
   }
 
   updateWishlistButton() {

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="../customElements/head-element.js"></script>
+    <custom-head
+      page-title="Admin Panel - POStore"
+      description="Admin panel for managing products and orders"
+      keywords="admin, management, POStore"
+      author="POStore Team"
+      favicon-url="../assets/favicon.ico"
+      stylesheets="../css/style.css"
+    ></custom-head>
+</head>
+<body class="bg-light">
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-primary" href="../index.html">
+                <i class="bi bi-shield-lock me-2"></i>Admin Panel
+            </a>
+            <div class="d-flex align-items-center">
+                <span id="businessEmail" class="text-muted me-3"></span>
+                <a href="../index.html" class="btn btn-outline-primary">
+                    <i class="bi bi-arrow-left me-2"></i>Back to Store
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Admin Content -->
+    <div class="container mt-4 mb-5">
+        <!-- Auth Section -->
+        <div id="authSection" class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow">
+                    <div class="card-body p-4">
+                        <h3 class="text-center mb-4">Admin Access</h3>
+                        <div class="mb-3">
+                            <label for="adminPassword" class="form-label">Password:</label>
+                            <input type="password" class="form-control" id="adminPassword" placeholder="Enter admin password">
+                        </div>
+                        <button class="btn btn-primary w-100" onclick="authenticate()">Access Admin Panel</button>
+                        <div id="authError" class="text-danger mt-2 d-none"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Admin Panel -->
+        <div id="adminPanel" class="d-none">
+            <!-- Tabs -->
+            <ul class="nav nav-tabs mb-4" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#mediaTab">Product Media</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#ordersTab">Orders</button>
+                </li>
+            </ul>
+
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Media Upload Tab -->
+                <div class="tab-pane fade show active" id="mediaTab">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <h5 class="mb-0">Upload Product Media</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="mb-3">
+                                        <label for="productSelect" class="form-label">Select Product:</label>
+                                        <select class="form-select" id="productSelect">
+                                            <option value="">Loading products...</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="mediaFile" class="form-label">Select File:</label>
+                                        <input type="file" class="form-control" id="mediaFile" accept="image/*">
+                                    </div>
+                                    <button class="btn btn-primary" onclick="adminPanel.uploadMedia()">
+                                        <i class="bi bi-upload me-2"></i>Upload Media
+                                    </button>
+                                </div>
+                                <div class="col-md-6">
+                                    <div id="uploadStatus" class="alert d-none"></div>
+                                    <div id="existingMedia"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Orders Tab -->
+                <div class="tab-pane fade" id="ordersTab">
+                    <div class="card shadow">
+                        <div class="card-header">
+                            <h5 class="mb-0">Manage Orders</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Order ID</th>
+                                            <th>Customer</th>
+                                            <th>Total</th>
+                                            <th>Status</th>
+                                            <th>Date</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="ordersTable">
+                                        <tr><td colspan="6" class="text-center">Loading orders...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../customElements/bottom-scripts.js"></script>
+    <custom-bottom></custom-bottom>
+    <script src="../js/globalState.js"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/business-data.js"></script>
+    <script src="../js/admin.js"></script>
+</body>
+</html>
