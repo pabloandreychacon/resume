@@ -265,13 +265,7 @@ class SharedStore {
   }
 
   addToCartFromWishlist(productId) {
-    const wishlistItem = this.wishlist.find((item) => (item.Id || item.id) === productId);
-    if (wishlistItem) {
-      const success = this.addToCart(wishlistItem, 1);
-      if (success) {
-        this.toggleWishlist(wishlistItem);
-      }
-    }
+    StoreFunctions.addToCartFromWishlist(this, productId);
   }
 
   checkout() {

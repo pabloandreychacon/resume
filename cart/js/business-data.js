@@ -55,22 +55,24 @@ class BusinessDataLoader {
     let email = urlParams.get("email");
     
     if (email) {
-      console.log('Loading business data from URL parameter:', email);
+      // Si pasa correo en url: clean localStorage, save localStorage, load to globalStore using url email
+      console.log('Email from URL parameter:', email);
+      localStorage.clear(); // Clean all localStorage including cart and wishlist
+      localStorage.setItem("postore_email", JSON.stringify(email)); // Save new email
       await BusinessDataLoader.loadBusinessData(email);
     } else {
-      // Get from storage
+      // Si no, busque localStorage y use
       const storedEmail = localStorage.getItem("postore_email");
       if (storedEmail) {
         email = JSON.parse(storedEmail);
-        console.log('Loading business data from storage:', email);
+        console.log('Email from localStorage:', email);
         await BusinessDataLoader.loadBusinessData(email);
       } else {
-        // Use default from globalStore (which is now set correctly)
-        const currentEmail = window.globalStore.state.Email;
-        if (currentEmail && currentEmail !== '') {
-          console.log('Using default business email:', currentEmail);
-          await BusinessDataLoader.loadBusinessData(currentEmail);
-        }
+        // Si no hay localStorage entonces use default
+        const defaultEmail = "pabloandreychacon@hotmail.com";
+        console.log('Using default email:', defaultEmail);
+        localStorage.setItem("postore_email", JSON.stringify(defaultEmail));
+        await BusinessDataLoader.loadBusinessData(defaultEmail);
       }
     }
   }
