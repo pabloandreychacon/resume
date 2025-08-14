@@ -318,14 +318,20 @@
                                 emailjs.init("L7o6hZUmFJQ_Jbqu0");
 
                                 // Get shipping method and calculate delivery date
-                                const shippingMethodElement = document.querySelector('input[name="shipping"]:checked');
-                                const shippingMethod = shippingMethodElement.nextElementSibling.textContent.trim();
-                                const shippingValue = parseFloat(shippingMethodElement.value);
-                                
+                                const shippingMethodElement =
+                                  document.querySelector(
+                                    'input[name="shipping"]:checked'
+                                  );
+                                const shippingMethod =
+                                  shippingMethodElement.nextElementSibling.textContent.trim();
+                                const shippingValue = parseFloat(
+                                  shippingMethodElement.value
+                                );
+
                                 // Calculate estimated delivery date based on shipping method
                                 const today = new Date();
                                 let deliveryDays = 0;
-                                
+
                                 if (shippingValue === 0) {
                                   deliveryDays = 0; // Pickup at Store (Available Today)
                                 } else if (shippingValue === 5.99) {
@@ -335,9 +341,11 @@
                                 } else if (shippingValue === 24.99) {
                                   deliveryDays = 1; // Overnight Shipping (1 business day)
                                 }
-                                
+
                                 const estimatedDeliveryDate = new Date(today);
-                                estimatedDeliveryDate.setDate(today.getDate() + deliveryDays);
+                                estimatedDeliveryDate.setDate(
+                                  today.getDate() + deliveryDays
+                                );
 
                                 // Use cart items captured before clearing
                                 let itemsList = "";
@@ -384,52 +392,75 @@
 
                                 // Save to Supabase first
                                 try {
-                                  const { data: orderData, error: orderError } = await supabase
-                                    .from("Orders")
-                                    .insert({
-                                      TotalAmount: parseFloat(total),
-                                      StatusId: 1,
-                                      PaymentOrderId: orderNumber,
-                                      Currency: "USD",
-                                      ShippingAddress: addressStr,
-                                      ShippingMethod: shippingMethod,
-                                      TrackingNumber: null,
-                                      EstimatedDeliveryDate: estimatedDeliveryDate,
-                                      CreatedAt: new Date(),
-                                      UpdatedAt: new Date(),
-                                      BuyerEmail: customerEmail,
-                                      BusinessEmail: window.globalStore.state.Email,
-                                    })
-                                    .select();
+                                  const { data: orderData, error: orderError } =
+                                    await supabase
+                                      .from("Orders")
+                                      .insert({
+                                        TotalAmount: parseFloat(total),
+                                        StatusId: 1,
+                                        PaymentOrderId: orderNumber,
+                                        Currency: "USD",
+                                        ShippingAddress: addressStr,
+                                        ShippingMethod: shippingMethod,
+                                        TrackingNumber: null,
+                                        EstimatedDeliveryDate:
+                                          estimatedDeliveryDate,
+                                        CreatedAt: new Date(),
+                                        UpdatedAt: new Date(),
+                                        BuyerEmail: customerEmail,
+                                        BusinessEmail:
+                                          window.globalStore.state.Email,
+                                      })
+                                      .select();
 
                                   if (orderError) {
-                                    console.error('Error inserting order:', orderError);
-                                    alert('Error saving order. Please contact support.');
+                                    console.error(
+                                      "Error inserting order:",
+                                      orderError
+                                    );
+                                    alert(
+                                      "Error saving order. Please contact support."
+                                    );
                                     return;
                                   }
 
-                                  console.log('Order saved successfully:', orderData);
+                                  console.log(
+                                    "Order saved successfully:",
+                                    orderData
+                                  );
 
                                   // Insert order items
                                   if (cart && cart.length > 0) {
-                                    const orderItemsPromises = cart.map(item => 
-                                      supabase.from("OrderItems").insert({
-                                        OrderId: orderNumber,
-                                        ProductId: item.Id,
-                                        ProductName: item.Name,
-                                        Quantity: item.quantity,
-                                        Price: item.Price,
-                                        ItemTotal: parseFloat(item.Price * item.quantity).toFixed(2),
-                                        CreatedAt: new Date(),
-                                      })
+                                    const orderItemsPromises = cart.map(
+                                      (item) =>
+                                        supabase.from("OrderItems").insert({
+                                          OrderId: orderNumber,
+                                          ProductId: item.ProductId,
+                                          ProductName: item.Name,
+                                          Quantity: item.quantity,
+                                          Price: item.Price,
+                                          ItemTotal: parseFloat(
+                                            item.Price * item.quantity
+                                          ).toFixed(2),
+                                          CreatedAt: new Date(),
+                                        })
                                     );
 
-                                    const orderItemsResults = await Promise.all(orderItemsPromises);
-                                    const hasOrderItemsError = orderItemsResults.some(result => result.error);
-                                    
+                                    const orderItemsResults = await Promise.all(
+                                      orderItemsPromises
+                                    );
+                                    const hasOrderItemsError =
+                                      orderItemsResults.some(
+                                        (result) => result.error
+                                      );
+
                                     if (hasOrderItemsError) {
-                                      console.error('Error inserting order items');
-                                      alert('Error saving order items. Please contact support.');
+                                      console.error(
+                                        "Error inserting order items"
+                                      );
+                                      alert(
+                                        "Error saving order items. Please contact support."
+                                      );
                                       return;
                                     }
                                   }
@@ -448,25 +479,45 @@
                                       Shipping Method: ${shippingMethod}\n
                                       Shipping Address: ${addressStr}\n\n
                                       Items:\n${itemsList}\n
-                                      Subtotal: ${document.getElementById("subtotal").textContent}\n
-                                      Shipping: ${document.getElementById("shippingCost").textContent}\n
-                                      Tax: ${document.getElementById("tax").textContent}\n
-                                      Total: ${document.getElementById("total").textContent}
+                                      Subtotal: ${
+                                        document.getElementById("subtotal")
+                                          .textContent
+                                      }\n
+                                      Shipping: ${
+                                        document.getElementById("shippingCost")
+                                          .textContent
+                                      }\n
+                                      Tax: ${
+                                        document.getElementById("tax")
+                                          .textContent
+                                      }\n
+                                      Total: ${
+                                        document.getElementById("total")
+                                          .textContent
+                                      }
                                     `,
                                     }
                                   );
 
                                   // Show success modal and clear cart only after everything succeeds
-                                  document.getElementById("orderNumber").textContent = orderNumber;
-                                  const modal = new bootstrap.Modal(document.getElementById("successModal"));
+                                  document.getElementById(
+                                    "orderNumber"
+                                  ).textContent = orderNumber;
+                                  const modal = new bootstrap.Modal(
+                                    document.getElementById("successModal")
+                                  );
                                   modal.show();
-                                  
+
                                   // Clear cart
                                   localStorage.removeItem("postore_cart");
-                                  
                                 } catch (error) {
-                                  console.error('Error processing order:', error);
-                                  alert('Error processing order. Please try again or contact support.');
+                                  console.error(
+                                    "Error processing order:",
+                                    error
+                                  );
+                                  alert(
+                                    "Error processing order. Please try again or contact support."
+                                  );
                                   return;
                                 }
                               };
