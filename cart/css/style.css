@@ -28,7 +28,31 @@ body {
 
 /* Add padding to body to prevent content from being hidden under fixed navbar */
 body {
-  padding-top: 76px; /* Adjust based on your navbar height */
+  padding-top: 120px; /* Increased for two-row navbar */
+}
+
+/* Amazon-style navbar adjustments */
+@media (max-width: 991.98px) {
+  body {
+    padding-top: 76px; /* Single row on mobile */
+  }
+}
+
+/* Navigation links styling */
+.nav-link {
+  color: #6c757d !important;
+  font-weight: 500;
+  padding: 0.5rem 1rem !important;
+  transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+  color: var(--primary-color) !important;
+}
+
+.nav-link.active {
+  color: var(--primary-color) !important;
+  font-weight: 600;
 }
 
 /* Hero Section */
