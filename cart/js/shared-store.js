@@ -36,7 +36,8 @@ class SharedStore {
 
   calculatePriceWithTax(product) {
     const basePrice = parseFloat(product.Price || 0);
-    const taxRate = parseFloat(product.TaxRate || product.taxes || product.Taxes || 0) / 100;
+    const taxRate =
+      parseFloat(product.TaxRate || product.taxes || product.Taxes || 0) / 100;
     return (basePrice * (1 + taxRate)).toFixed(2);
   }
 
@@ -75,11 +76,13 @@ class SharedStore {
       // Check stock validation if product manages stock
       if (item.StockQuantity !== null && item.StockQuantity !== undefined) {
         if (quantity > item.StockQuantity) {
-          alert(`Cannot set quantity to ${quantity}. Only ${item.StockQuantity} available in stock`);
+          alert(
+            `Cannot set quantity to ${quantity}. Only ${item.StockQuantity} available in stock`
+          );
           return;
         }
       }
-      
+
       item.quantity = quantity;
       this.updateCartUI();
       this.saveToStorage("postore_cart", this.cart);
@@ -98,7 +101,8 @@ class SharedStore {
 
     const totalItems = this.cart.reduce((sum, item) => sum + item.quantity, 0);
     const totalPrice = this.cart.reduce(
-      (sum, item) => sum + parseFloat(this.calculatePriceWithTax(item)) * item.quantity,
+      (sum, item) =>
+        sum + parseFloat(this.calculatePriceWithTax(item)) * item.quantity,
       0
     );
 
@@ -120,18 +124,20 @@ class SharedStore {
           (item) => `
             <div class="cart-item">
               <div class="row align-items-center">
-                <div class="col-3">
+                <div class="col-sm-2">
                   <img src="${item.ImageUrl || item.imageUrl}" alt="${
             item.Name || item.name
           }" class="cart-item-image">
                 </div>
-                <div class="col-6">
+                <div class="col-sm-6">
                   <div class="cart-item-info">
                     <h6>${item.Name || item.name}</h6>
-                    <p class="cart-item-price mb-0">$${this.calculatePriceWithTax(item)}</p>
+                    <p class="cart-item-price mb-0">$${this.calculatePriceWithTax(
+                      item
+                    )}</p>
                   </div>
                 </div>
-                <div class="col-3">
+                <div class="col">
                   <div class="quantity-controls d-flex align-items-center">
                     <button class="btn btn-sm btn-outline-secondary" onclick="(window.store || window.productStore).updateQuantity(${
                       item.Id || item.id
@@ -187,14 +193,20 @@ class SharedStore {
                   <div class="col-6">
                     <div class="cart-item-info">
                       <h6>${item.Name || item.name}</h6>
-                      <p class="cart-item-price mb-0">$${this.calculatePriceWithTax(item)}</p>
+                      <p class="cart-item-price mb-0">$${this.calculatePriceWithTax(
+                        item
+                      )}</p>
                     </div>
                   </div>
                   <div class="col-3">
-                    <button class="btn btn-sm btn-primary mb-1 w-100" onclick="(window.store || window.productStore).addToCartFromWishlist(${item.Id || item.id})">
+                    <button class="btn btn-sm btn-primary mb-1 w-100" onclick="(window.store || window.productStore).addToCartFromWishlist(${
+                      item.Id || item.id
+                    })">
                       <i class="bi bi-cart-plus"></i>
                     </button>
-                    <button class="btn btn-sm btn-outline-danger w-100" onclick="(window.store || window.productStore).toggleWishlist({...${JSON.stringify(item).replace(/"/g, '&quot;')}, Id: ${item.Id || item.id}})">
+                    <button class="btn btn-sm btn-outline-danger w-100" onclick="(window.store || window.productStore).toggleWishlist({...${JSON.stringify(
+                      item
+                    ).replace(/"/g, "&quot;")}, Id: ${item.Id || item.id}})">
                       <i class="bi bi-trash"></i>
                     </button>
                   </div>
@@ -233,14 +245,18 @@ class SharedStore {
     if (product.StockQuantity !== null && product.StockQuantity !== undefined) {
       const existingItem = this.cart.find((item) => item.Id === product.Id);
       const currentQuantityInCart = existingItem ? existingItem.quantity : 0;
-      
+
       if (currentQuantityInCart + quantity > product.StockQuantity) {
         const availableToAdd = product.StockQuantity - currentQuantityInCart;
         if (availableToAdd <= 0) {
-          alert(`Cannot add more ${product.Name}. Stock limit reached (${product.StockQuantity} available)`);
+          alert(
+            `Cannot add more ${product.Name}. Stock limit reached (${product.StockQuantity} available)`
+          );
           return false;
         } else {
-          alert(`Only ${availableToAdd} more can be added. Stock limit: ${product.StockQuantity}`);
+          alert(
+            `Only ${availableToAdd} more can be added. Stock limit: ${product.StockQuantity}`
+          );
           return false;
         }
       }

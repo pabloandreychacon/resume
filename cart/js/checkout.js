@@ -23,8 +23,8 @@ function loadCartItems() {
     itemsHtml += `
       <div class="card mb-3 cart-item" data-index="${index}">
         <div class="card-body">
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="d-flex align-items-center">
+          <div class="row d-flex justify-content-between align-items-center">
+            <div class="col d-flex align-items-center">
               <div class="me-3">
                 <img src="${
                   item.ImageUrl ||
@@ -37,10 +37,12 @@ function loadCartItems() {
               </div>
               <div>
                 <h6 class="mb-0">${item.Name || item.name}</h6>
-                <p class="text-muted mb-0">$${calculatePriceWithTax(item).toFixed(2)}</p>
+                <p class="text-muted mb-0">$${calculatePriceWithTax(
+                  item
+                ).toFixed(2)}</p>
               </div>
             </div>
-            <div class="d-flex align-items-center">
+            <div class="col d-flex align-items-center">
               <div class="input-group input-group-sm" style="width: 120px;">
                 <button class="btn btn-outline-secondary decrease-qty" type="button">-</button>
                 <input type="text" class="form-control text-center item-qty" value="${
@@ -99,7 +101,8 @@ function loadOrderSummary() {
 
 function calculatePriceWithTax(item) {
   const basePrice = parseFloat(item.Price || item.price || 0);
-  const taxRate = parseFloat(item.TaxRate || item.taxes || item.Taxes || 0) / 100;
+  const taxRate =
+    parseFloat(item.TaxRate || item.taxes || item.Taxes || 0) / 100;
   return basePrice * (1 + taxRate);
 }
 
@@ -157,20 +160,25 @@ function updateQuantity(cartItemEl, change) {
   if (cart[index]) {
     const newQuantity = Math.max(1, cart[index].quantity + change);
     const item = cart[index];
-    
+
     // Check stock validation if product manages stock
     if (item.StockQuantity !== null && item.StockQuantity !== undefined) {
       if (newQuantity > item.StockQuantity) {
         // Show toast notification if available
         if (window.store && window.store.showToast) {
-          window.store.showToast(`Cannot increase quantity. Only ${item.StockQuantity} available in stock`, "warning");
+          window.store.showToast(
+            `Cannot increase quantity. Only ${item.StockQuantity} available in stock`,
+            "warning"
+          );
         } else {
-          alert(`Cannot increase quantity. Only ${item.StockQuantity} available in stock`);
+          alert(
+            `Cannot increase quantity. Only ${item.StockQuantity} available in stock`
+          );
         }
         return;
       }
     }
-    
+
     cart[index].quantity = newQuantity;
     localStorage.setItem("postore_cart", JSON.stringify(cart));
 
