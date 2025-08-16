@@ -228,8 +228,7 @@
                 >
                   <div class="accordion-body">
                     You can contact our customer service team through multiple
-                    channels: by email at support@postore.com, by phone at +1
-                    (800) 123-4567 (Monday-Friday, 9am-6pm EST), or by filling
+                    channels: by email at <span id="faq-business-email">support@postore.com</span>, by phone at <span id="faq-business-phone">+1 (800) 123-4567</span> (Monday-Friday, 9am-6pm EST), or by filling
                     out the contact form on our
                     <a href="contact.html">Contact page</a>.
                   </div>
@@ -632,6 +631,13 @@
             clearInterval(checkHeader);
           }
         }, 100);
+
+        // Update business contact info in FAQ
+        const businessPhone = window.globalStore?.state?.Phone || "+1 (800) 123-4567";
+        const businessEmail = window.globalStore?.state?.Email || "support@postore.com";
+        
+        document.getElementById("faq-business-phone").textContent = businessPhone;
+        document.getElementById("faq-business-email").textContent = businessEmail;
       });
     </script>
   </body>
