@@ -22,6 +22,7 @@
           "cartComponentsSection",
           "../sections/cart-components.html"
         );
+
       });
     </script>
   </head>
@@ -236,8 +237,95 @@
 
     <!-- Custom JS -->
     <script src="../js/globalState.js"></script>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="../js/supabase-config.js"></script>
+    <script src="../js/business-data.js"></script>
+    <script src="../js/form-utils.js"></script>
     <script src="../js/store-functions.js"></script>
+    <script src="../js/main.js"></script>
     <script src="../js/shared-store.js"></script>
-    <script src="../js/contact.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        // Wait for sections to load
+        document.addEventListener("sectionLoaded", function (e) {
+          if (e.detail.id === "headerSection") {
+            // Add active class to the Contact nav link
+            document.querySelectorAll(".nav-link").forEach((link) => {
+              if (link.getAttribute("href").includes("contact")) {
+                link.classList.add("active");
+              }
+            });
+          }
+        });
+
+        // Handle form submission with EmailJS
+        document
+          .getElementById("contactForm")
+          .addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            // Get and sanitize form data
+            const formData = {
+              name: document.getElementById("name").value,
+              email: document.getElementById("email").value,
+              subject: document.getElementById("subject").value,
+              message: document.getElementById("message").value
+            };
+
+            const sanitizedData = FormUtils.sanitizeFormData(formData);
+
+            // Validate email
+            if (!FormUtils.isValidEmail(sanitizedData.email)) {
+              alert('Please enter a valid email address');
+              return;
+            }
+
+            // Show loading state
+            FormUtils.toggleLoadingState('submitBtn', 'loadingBtn', true);
+
+            // Load EmailJS dynamically
+            var script = document.createElement("script");
+            script.src = "https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js";
+            script.onload = function () {
+              // Initialize EmailJS
+              emailjs.init("L7o6hZUmFJQ_Jbqu0");
+
+              // Send the email
+              emailjs
+                .send("service_s481rtv", "template_771ecr6", {
+                  to_email: window.globalStore.state.Email || "pabloandreychacon@gmail.com",
+                  from_name: sanitizedData.name,
+                  from_email: sanitizedData.email,
+                  subject: `Contact Form: ${sanitizedData.subject}`,
+                  message: `From: ${sanitizedData.name} (${sanitizedData.email})\n\nSubject: ${sanitizedData.subject}\n\nMessage:\n${sanitizedData.message}`
+                })
+                .then(
+                  function () {
+                    // Show success message
+                    document.getElementById("formSuccess").classList.remove("d-none");
+                    document.getElementById("contactForm").reset();
+                    FormUtils.toggleLoadingState('submitBtn', 'loadingBtn', false);
+                  },
+                  function (error) {
+                    console.error("Email sending failed:", error);
+                    alert("Failed to send message. Please try again later.");
+                    FormUtils.toggleLoadingState('submitBtn', 'loadingBtn', false);
+                  }
+                );
+            };
+            document.head.appendChild(script);
+          });
+
+        // Update business info
+        const businessPhone = window.globalStore?.state?.Phone || "+1 (800) 123-4567";
+        const businessEmail = window.globalStore?.state?.Email || "support@postore.com";
+        const businessAddress = window.globalStore?.state?.Address || "123 Commerce Street";
+        
+        document.getElementById("business-phone").textContent = businessPhone;
+        document.getElementById("business-email").textContent = businessEmail;
+        document.getElementById("business-address").textContent = businessAddress;
+      });
+    </script>
   </body>
 </html>

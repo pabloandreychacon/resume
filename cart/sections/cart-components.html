@@ -91,3 +91,26 @@
     </div>
   </div>
 </div>
+
+<!-- Required Scripts -->
+<script>
+  // Load scripts dynamically with correct paths
+  const basePath = window.location.pathname.includes('/pages/') ? '../js/' : 'js/';
+  const scripts = [
+    'https://unpkg.com/@supabase/supabase-js@2',
+    basePath + 'supabase-config.js',
+    basePath + 'business-data.js', 
+    basePath + 'form-utils.js',
+    basePath + 'store-functions.js',
+    basePath + 'main.js',
+    basePath + 'shared-store.js'
+  ];
+  
+  scripts.forEach(src => {
+    if (!document.querySelector(`script[src="${src}"]`)) {
+      const script = document.createElement('script');
+      script.src = src;
+      document.head.appendChild(script);
+    }
+  });
+</script>

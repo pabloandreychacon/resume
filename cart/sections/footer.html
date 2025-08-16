@@ -116,7 +116,14 @@
                 return;
               }
 
-              var email = document.getElementById("newsletterEmail").value;
+              var email = FormUtils.sanitizeInput(document.getElementById("newsletterEmail").value);
+              
+              // Validate email
+              if (!FormUtils.isValidEmail(email)) {
+                document.getElementById("newsletterError").classList.remove("d-none");
+                document.getElementById("newsletterSuccess").classList.add("d-none");
+                return;
+              }
 
               // Mostrar mensaje de éxito
               document

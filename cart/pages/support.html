@@ -115,130 +115,245 @@
             Quick solutions to frequently encountered problems
           </p>
         </div>
-        <div class="row g-4">
-          <div class="col-md-6">
-            <div class="card border-0 shadow-sm">
-              <div class="card-body p-4">
-                <h3 class="h5 mb-3">
-                  <i class="bi bi-box me-2 text-primary"></i>Order Issues
-                </h3>
-                <ul class="list-unstyled">
-                  <li class="mb-2">
-                    <a href="#" class="text-decoration-none"
-                      >How to track my order</a
-                    >
-                  </li>
-                  <li class="mb-2">
-                    <a href="#" class="text-decoration-none"
-                      >My order is delayed</a
-                    >
-                  </li>
-                  <li class="mb-2">
-                    <a href="#" class="text-decoration-none"
-                      >I received the wrong item</a
-                    >
-                  </li>
-                  <li class="mb-2">
-                    <a href="#" class="text-decoration-none"
-                      >Item arrived damaged</a
-                    >
-                  </li>
-                </ul>
+        <div class="row">
+          <div class="col-12">
+            <ul class="nav nav-pills mb-4 justify-content-center" id="issuesTab" role="tablist">
+              <li class="nav-item mx-2" role="presentation">
+                <button class="active btn btn-primary" id="orders-tab" data-bs-toggle="pill" data-bs-target="#orders" type="button" role="tab">
+                  Order Issues
+                </button>
+              </li>
+              <li class="nav-item mx-2" role="presentation">
+                <button class="btn btn-primary" id="returns-tab" data-bs-toggle="pill" data-bs-target="#returns" type="button" role="tab">
+                  Returns & Refunds
+                </button>
+              </li>
+              <li class="nav-item mx-2" role="presentation">
+                <button class="btn btn-primary" id="payment-tab" data-bs-toggle="pill" data-bs-target="#payment" type="button" role="tab">
+                  Payment Issues
+                </button>
+              </li>
+              <li class="nav-item mx-2" role="presentation">
+                <button class="btn btn-primary" id="account-tab" data-bs-toggle="pill" data-bs-target="#account" type="button" role="tab">
+                  Account Help
+                </button>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="tab-content" id="issuesTabContent">
+          <!-- Order Issues -->
+          <div class="tab-pane fade show active" id="orders" role="tabpanel">
+            <div class="accordion" id="accordionOrders">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#orderOne">
+                    How to track my order
+                  </button>
+                </h2>
+                <div id="orderOne" class="accordion-collapse collapse show" data-bs-parent="#accordionOrders">
+                  <div class="accordion-body">
+                    Once your order ships, you'll receive a confirmation email with a tracking number. You can use this number to track your package on our website under "Order History" in your account, or directly through the carrier's website.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#orderTwo">
+                    My order is delayed
+                  </button>
+                </h2>
+                <div id="orderTwo" class="accordion-collapse collapse" data-bs-parent="#accordionOrders">
+                  <div class="accordion-body">
+                    Order delays can occur due to high demand, weather conditions, or carrier issues. Please check your tracking information for the most up-to-date status. If your order is significantly delayed, contact our support team.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#orderThree">
+                    I received the wrong item
+                  </button>
+                </h2>
+                <div id="orderThree" class="accordion-collapse collapse" data-bs-parent="#accordionOrders">
+                  <div class="accordion-body">
+                    We apologize for the error. Please contact our support team immediately with your order number and photos of the incorrect item. We'll arrange for a return and send you the correct item at no additional cost.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#orderFour">
+                    Item arrived damaged
+                  </button>
+                </h2>
+                <div id="orderFour" class="accordion-collapse collapse" data-bs-parent="#accordionOrders">
+                  <div class="accordion-body">
+                    If your item arrived damaged, please take photos of the damage and packaging, then contact our support team within 48 hours. We'll process a replacement or refund immediately.
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="card border-0 shadow-sm">
-              <div class="card-body p-4">
-                <h3 class="h5 mb-3">
-                  <i class="bi bi-arrow-return-left me-2 text-primary"></i
-                  >Returns & Refunds
-                </h3>
-                <ul class="list-unstyled">
-                  <li class="mb-2">
-                    <a href="#" class="text-decoration-none"
-                      >How to return an item</a
-                    >
-                  </li>
-                  <li class="mb-2">
-                    <a href="#" class="text-decoration-none"
-                      >Return policy information</a
-                    >
-                  </li>
-                  <li class="mb-2">
-                    <a href="#" class="text-decoration-none"
-                      >Check refund status</a
-                    >
-                  </li>
-                  <li class="mb-2">
-                    <a href="#" class="text-decoration-none"
-                      >Exchange an item</a
-                    >
-                  </li>
-                </ul>
+
+          <!-- Returns & Refunds -->
+          <div class="tab-pane fade" id="returns" role="tabpanel">
+            <div class="accordion" id="accordionReturns">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#returnOne">
+                    How to return an item
+                  </button>
+                </h2>
+                <div id="returnOne" class="accordion-collapse collapse show" data-bs-parent="#accordionReturns">
+                  <div class="accordion-body">
+                    To initiate a return, log into your account and go to "Order History." Select the order containing the item(s) you wish to return and follow the return instructions. You'll receive a return shipping label and instructions for packaging your return.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#returnTwo">
+                    Return policy information
+                  </button>
+                </h2>
+                <div id="returnTwo" class="accordion-collapse collapse" data-bs-parent="#accordionReturns">
+                  <div class="accordion-body">
+                    We offer a 30-day return policy for most items. Products must be in their original condition with all packaging and tags intact. Some categories like electronics may have a 15-day return window. Personalized items and certain hygiene products cannot be returned.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#returnThree">
+                    Check refund status
+                  </button>
+                </h2>
+                <div id="returnThree" class="accordion-collapse collapse" data-bs-parent="#accordionReturns">
+                  <div class="accordion-body">
+                    Once we receive and inspect your return, refunds are typically processed within 3-5 business days. The time it takes for the refund to appear in your account depends on your payment method and financial institution, usually 5-10 business days.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#returnFour">
+                    Exchange an item
+                  </button>
+                </h2>
+                <div id="returnFour" class="accordion-collapse collapse" data-bs-parent="#accordionReturns">
+                  <div class="accordion-body">
+                    To exchange an item for a different size or color, please initiate a return for the original item and place a new order for the desired item. This ensures faster processing and availability.
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="card border-0 shadow-sm">
-              <div class="card-body p-4">
-                <h3 class="h5 mb-3">
-                  <i class="bi bi-credit-card me-2 text-primary"></i>Payment
-                  Issues
-                </h3>
-                <ul class="list-unstyled">
-                  <li class="mb-2">
-                    <a href="#" class="text-decoration-none"
-                      >Payment methods accepted</a
-                    >
-                  </li>
-                  <li class="mb-2">
-                    <a href="#" class="text-decoration-none"
-                      >My payment was declined</a
-                    >
-                  </li>
-                  <li class="mb-2">
-                    <a href="#" class="text-decoration-none"
-                      >I was charged twice</a
-                    >
-                  </li>
-                  <li class="mb-2">
-                    <a href="#" class="text-decoration-none"
-                      >Update payment information</a
-                    >
-                  </li>
-                </ul>
+
+          <!-- Payment Issues -->
+          <div class="tab-pane fade" id="payment" role="tabpanel">
+            <div class="accordion" id="accordionPayment">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#paymentOne">
+                    Payment methods accepted
+                  </button>
+                </h2>
+                <div id="paymentOne" class="accordion-collapse collapse show" data-bs-parent="#accordionPayment">
+                  <div class="accordion-body">
+                    We accept all major credit cards (Visa, Mastercard, American Express, Discover), PayPal, Apple Pay, Google Pay, and Shop Pay. For select high-value purchases, we also offer financing options through Affirm.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#paymentTwo">
+                    My payment was declined
+                  </button>
+                </h2>
+                <div id="paymentTwo" class="accordion-collapse collapse" data-bs-parent="#accordionPayment">
+                  <div class="accordion-body">
+                    Payment declines can occur due to insufficient funds, incorrect billing information, or bank security measures. Please verify your payment details and try again. If the issue persists, contact your bank or try a different payment method.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#paymentThree">
+                    I was charged twice
+                  </button>
+                </h2>
+                <div id="paymentThree" class="accordion-collapse collapse" data-bs-parent="#accordionPayment">
+                  <div class="accordion-body">
+                    Double charges can occur due to technical issues or multiple submission attempts. Please contact our support team with your order details, and we'll investigate and process a refund for any duplicate charges within 24 hours.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#paymentFour">
+                    Update payment information
+                  </button>
+                </h2>
+                <div id="paymentFour" class="accordion-collapse collapse" data-bs-parent="#accordionPayment">
+                  <div class="accordion-body">
+                    You can update your payment information in your account settings under "Payment Methods." For security reasons, we don't store full credit card details, so you'll need to re-enter your card information completely.
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="card border-0 shadow-sm">
-              <div class="card-body p-4">
-                <h3 class="h5 mb-3">
-                  <i class="bi bi-person me-2 text-primary"></i>Account Help
-                </h3>
-                <ul class="list-unstyled">
-                  <li class="mb-2">
-                    <a href="#" class="text-decoration-none"
-                      >Reset my password</a
-                    >
-                  </li>
-                  <li class="mb-2">
-                    <a href="#" class="text-decoration-none"
-                      >Update account information</a
-                    >
-                  </li>
-                  <li class="mb-2">
-                    <a href="#" class="text-decoration-none"
-                      >Manage email preferences</a
-                    >
-                  </li>
-                  <li class="mb-2">
-                    <a href="#" class="text-decoration-none"
-                      >Delete my account</a
-                    >
-                  </li>
-                </ul>
+
+          <!-- Account Help -->
+          <div class="tab-pane fade" id="account" role="tabpanel">
+            <div class="accordion" id="accordionAccount">
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#accountOne">
+                    Reset my password
+                  </button>
+                </h2>
+                <div id="accountOne" class="accordion-collapse collapse show" data-bs-parent="#accordionAccount">
+                  <div class="accordion-body">
+                    To reset your password, click "Forgot Password" on the login page and enter your email address. You'll receive a password reset link within a few minutes. If you don't see the email, check your spam folder.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accountTwo">
+                    Update account information
+                  </button>
+                </h2>
+                <div id="accountTwo" class="accordion-collapse collapse" data-bs-parent="#accordionAccount">
+                  <div class="accordion-body">
+                    You can update your account information by logging in and going to "Account Settings." Here you can change your name, email address, phone number, and shipping addresses.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accountThree">
+                    Manage email preferences
+                  </button>
+                </h2>
+                <div id="accountThree" class="accordion-collapse collapse" data-bs-parent="#accordionAccount">
+                  <div class="accordion-body">
+                    You can manage your email preferences in your account settings under "Communication Preferences." Choose which types of emails you'd like to receive, including promotional offers, order updates, and newsletters.
+                  </div>
+                </div>
+              </div>
+              <div class="accordion-item">
+                <h2 class="accordion-header">
+                  <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#accountFour">
+                    Delete my account
+                  </button>
+                </h2>
+                <div id="accountFour" class="accordion-collapse collapse" data-bs-parent="#accordionAccount">
+                  <div class="accordion-body">
+                    To delete your account, please contact our support team. For security reasons, account deletion requests must be verified. Note that deleting your account will remove your order history and saved information permanently.
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -389,11 +504,14 @@
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
     <script src="../js/business-data.js"></script>
+    <script src="../js/form-utils.js"></script>
     <script src="../js/store-functions.js"></script>
     <script src="../js/main.js"></script>
     <script src="../js/shared-store.js"></script>
 
     <script>
+
+
       document.addEventListener("DOMContentLoaded", function () {
         // Wait for sections to load
         document.addEventListener("sectionLoaded", function (e) {
@@ -413,17 +531,26 @@
           .addEventListener("submit", function (e) {
             e.preventDefault();
 
-            // Show loading button, hide submit button
-            document.getElementById("submitBtn").classList.add("d-none");
-            document.getElementById("loadingBtn").classList.remove("d-none");
+            // Show loading state
+            FormUtils.toggleLoadingState('submitBtn', 'loadingBtn', true);
 
-            // Get form data
-            const name = document.getElementById("name").value;
-            const email = document.getElementById("email").value;
-            const orderNumber = document.getElementById("orderNumber").value;
-            const issueType = document.getElementById("issueType").value;
-            const subject = document.getElementById("subject").value;
-            const message = document.getElementById("message").value;
+            // Get and sanitize form data
+            const formData = {
+              name: document.getElementById("name").value,
+              email: document.getElementById("email").value,
+              orderNumber: document.getElementById("orderNumber").value,
+              issueType: document.getElementById("issueType").value,
+              subject: document.getElementById("subject").value,
+              message: document.getElementById("message").value
+            };
+
+            const sanitizedData = FormUtils.sanitizeFormData(formData);
+
+            // Validate email
+            if (!FormUtils.isValidEmail(sanitizedData.email)) {
+              alert('Please enter a valid email address');
+              return;
+            }
 
             // Load EmailJS dynamically
             var script = document.createElement("script");
@@ -439,12 +566,12 @@
                   to_email:
                     window.globalStore.state.Email ||
                     "pabloandreychacon@gmail.com",
-                  from_name: name,
-                  from_email: email,
-                  subject: `Support Ticket: ${issueType} - ${subject}`,
-                  message: `Subject: ${subject}\nFrom: ${email}\nOrder Number: ${
-                    orderNumber || "N/A"
-                  }\nIssue Type: ${issueType}\n\n${message}`,
+                  from_name: sanitizedData.name,
+                  from_email: sanitizedData.email,
+                  subject: `Support Ticket: ${sanitizedData.issueType} - ${sanitizedData.subject}`,
+                  message: `Subject: ${sanitizedData.subject}\nFrom: ${sanitizedData.email}\nOrder Number: ${
+                    sanitizedData.orderNumber || "N/A"
+                  }\nIssue Type: ${sanitizedData.issueType}\n\n${sanitizedData.message}`,
                 })
                 .then(
                   function () {
@@ -453,28 +580,14 @@
                       .getElementById("formSuccess")
                       .classList.remove("d-none");
                     document.getElementById("supportForm").reset();
-
-                    // Hide loading button, show submit button
-                    document
-                      .getElementById("loadingBtn")
-                      .classList.add("d-none");
-                    document
-                      .getElementById("submitBtn")
-                      .classList.remove("d-none");
+                    FormUtils.toggleLoadingState('submitBtn', 'loadingBtn', false);
                   },
                   function (error) {
                     console.error("Email sending failed:", error);
                     alert(
                       "Failed to submit support ticket. Please try again later."
                     );
-
-                    // Hide loading button, show submit button
-                    document
-                      .getElementById("loadingBtn")
-                      .classList.add("d-none");
-                    document
-                      .getElementById("submitBtn")
-                      .classList.remove("d-none");
+                    FormUtils.toggleLoadingState('submitBtn', 'loadingBtn', false);
                   }
                 );
             };
