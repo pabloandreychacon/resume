@@ -242,49 +242,83 @@ class ProductDetail {
       return;
     }
     
-    const carouselId = 'productMediaCarousel';
+    // Amazon-style image gallery
     container.innerHTML = `
-      <div id="${carouselId}" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-        <div class="carousel-inner">
-          ${allMedia.map((media, index) => `
-            <div class="carousel-item ${index === 0 ? 'active' : ''}">
-              ${media.MediaType === 'video' ? 
-                `<video class="d-block w-100 rounded" controls style="max-height: 400px; object-fit: contain;">
-                   <source src="${media.MediaUrl}" type="video/mp4">
-                 </video>` :
-                `<img src="${media.MediaUrl}?t=${Date.now()}" class="d-block w-100 rounded" alt="${this.product.Name}" style="max-height: 400px; object-fit: contain;">`
-              }
-            </div>
-          `).join('')}
+      <div class="row">
+        <!-- Thumbnail Column -->
+        <div class="col-2">
+          <div class="d-flex flex-column gap-2">
+            ${allMedia.map((media, index) => `
+              <img 
+                src="${media.MediaUrl}?t=${Date.now()}" 
+                alt="${this.product.Name}" 
+                class="img-thumbnail product-thumbnail ${index === 0 ? 'active' : ''}" 
+                style="cursor: pointer; height: 60px; object-fit: cover; border: 2px solid ${index === 0 ? '#007bff' : '#dee2e6'};"
+                data-index="${index}"
+                onclick="productDetail.selectImage(${index})"
+              >
+            `).join('')}
+          </div>
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#${carouselId}" data-bs-slide="prev" style="width: 5%;">
-          <span class="carousel-control-prev-icon"></span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#${carouselId}" data-bs-slide="next" style="width: 5%;">
-          <span class="carousel-control-next-icon"></span>
-        </button>
+        <!-- Main Image -->
+        <div class="col-10">
+          <img 
+            id="mainProductImage" 
+            src="${allMedia[0].MediaUrl}?t=${Date.now()}" 
+            alt="${this.product.Name}" 
+            class="img-fluid rounded shadow" 
+            style="max-height: 500px; object-fit: contain; width: 100%; cursor: pointer;"
+            onclick="productDetail.openImageModal()"
+          >
+        </div>
+      </div>
+    `;
+  }
+
+  selectImage(index) {
+    const allMedia = [{ MediaType: 'image', MediaUrl: this.product.ImageUrl }, ...(this.productMedia || [])];
+    const mainImage = document.getElementById('mainProductImage');
+    const thumbnails = document.querySelectorAll('.product-thumbnail');
+    
+    // Update main image
+    mainImage.src = `${allMedia[index].MediaUrl}?t=${Date.now()}`;
+    
+    // Update active thumbnail
+    thumbnails.forEach((thumb, i) => {
+      thumb.classList.toggle('active', i === index);
+      thumb.style.border = i === index ? '2px solid #007bff' : '2px solid #dee2e6';
+    });
+  }
+
+  openImageModal() {
+    const mainImage = document.getElementById('mainProductImage');
+    const imageSrc = mainImage.src;
+    
+    // Create modal HTML
+    const modalHtml = `
+      <div class="modal fade" id="imageModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">${this.product.Name}</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center">
+              <img src="${imageSrc}" alt="${this.product.Name}" class="img-fluid" style="max-height: 80vh;">
+            </div>
+          </div>
+        </div>
       </div>
     `;
     
-    // Initialize carousel with autoplay
-    setTimeout(() => {
-      const carouselEl = document.getElementById(carouselId);
-      const carousel = new bootstrap.Carousel(carouselEl, {
-        interval: 3000,
-        ride: 'carousel'
-      });
-      
-      // Pause carousel when video plays
-      carouselEl.addEventListener('slide.bs.carousel', (e) => {
-        const activeSlide = e.relatedTarget;
-        const video = activeSlide.querySelector('video');
-        if (video) {
-          carousel.pause();
-          video.addEventListener('ended', () => carousel.cycle());
-          video.addEventListener('pause', () => carousel.cycle());
-        }
-      });
-    }, 100);
+    // Remove existing modal
+    const existingModal = document.getElementById('imageModal');
+    if (existingModal) existingModal.remove();
+    
+    // Add new modal
+    document.body.insertAdjacentHTML('beforeend', modalHtml);
+    const modal = new bootstrap.Modal(document.getElementById('imageModal'));
+    modal.show();
   }
 
   calculatePriceWithTax(product) {
@@ -343,6 +377,8 @@ class ProductDetail {
 }
 
 // Initialize when DOM is ready
+let productDetail;
 document.addEventListener('DOMContentLoaded', function() {
-  new ProductDetail();
+  productDetail = new ProductDetail();
+  window.productDetail = productDetail; // Make it globally available
 });
