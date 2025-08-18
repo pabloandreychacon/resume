@@ -34,13 +34,20 @@ class AdminPanel {
 
   async loadProducts() {
     try {
-      const businessEmail = window.globalStore?.state?.Email;
-      if (!businessEmail) return;
+      // Get email from authentication or fall back to globalStore
+      const adminEmail = document.getElementById("adminEmail")?.value;
+      const businessEmail = adminEmail || window.globalStore?.state?.Email;
+      console.log("Loading products for business email:", businessEmail);
+      if (!businessEmail) {
+        console.warn("No business email available for loading products");
+        return;
+      }
 
       const { data, error } = await supabase
         .from("Products")
         .select("*")
         .eq("BusinessEmail", businessEmail)
+        .eq("Active", true)
         .order("Name");
 
       if (error) throw error;
@@ -135,7 +142,9 @@ class AdminPanel {
     }
 
     // Check existing media count
-    const businessEmail = window.globalStore?.state?.Email;
+    // Get email from authentication or fall back to globalStore
+    const adminEmail = document.getElementById("adminEmail")?.value;
+    const businessEmail = adminEmail || window.globalStore?.state?.Email;
     const { data: existingMedia } = await supabase
       .from("ProductMedia")
       .select("Id")
@@ -206,7 +215,9 @@ class AdminPanel {
     if (!confirm("Delete this media file?")) return;
 
     try {
-      const businessEmail = window.globalStore?.state?.Email;
+      // Get email from authentication or fall back to globalStore
+      const adminEmail = document.getElementById("adminEmail")?.value;
+      const businessEmail = adminEmail || window.globalStore?.state?.Email;
       const { error } = await supabase
         .from("ProductMedia")
         .delete()
@@ -226,8 +237,14 @@ class AdminPanel {
 
   async loadOrders() {
     try {
-      const businessEmail = window.globalStore?.state?.Email;
-      if (!businessEmail) return;
+      // Get email from authentication or fall back to globalStore
+      const adminEmail = document.getElementById("adminEmail")?.value;
+      const businessEmail = adminEmail || window.globalStore?.state?.Email;
+      console.log("Loading orders for business email:", businessEmail);
+      if (!businessEmail) {
+        console.warn("No business email available for loading orders");
+        return;
+      }
 
       const { data, error } = await supabase
         .from("Orders")
@@ -286,6 +303,9 @@ class AdminPanel {
 
   async updateOrderStatus(orderId, statusId) {
     try {
+      // Get email from authentication or fall back to globalStore
+      const adminEmail = document.getElementById("adminEmail")?.value;
+      const businessEmail = adminEmail || window.globalStore?.state?.Email;
       const { error } = await supabase
         .from("Orders")
         .update({ StatusId: parseInt(statusId), UpdatedAt: new Date() })
@@ -503,19 +523,6 @@ class AdminPanel {
 }
 
 // Authentication
-function authenticate() {
-  const password = document.getElementById("adminPassword").value;
-  const correctPassword = "admin123"; // Change this to your desired password
-
-  if (password === correctPassword) {
-    sessionStorage.setItem("adminAuth", "true");
-    adminPanel.showAdminPanel();
-  } else {
-    const error = document.getElementById("authError");
-    error.textContent = "Invalid password";
-    error.classList.remove("d-none");
-  }
-}
 
 // Initialize
 let adminPanel;

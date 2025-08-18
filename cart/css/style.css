@@ -358,11 +358,6 @@ footer a:hover {
   .search-small {
     display: block !important;
   }
-
-  /* Hide navbar search on mobile */
-  .navbar .input-group {
-    display: none !important;
-  }
 }
 
 /* Smooth Scrolling */
@@ -623,6 +618,13 @@ html {
 /* Lazy Loading Images */
 img[loading="lazy"] {
   transition: opacity 0.3s ease-in-out;
+}
+
+/* Add to your CSS */
+.product-image-container img:hover {
+  transform: scale(1.5);
+  transition: transform 0.2s;
+  z-index: 10;
 }
 
 /* Rest of your CSS file remains unchanged */

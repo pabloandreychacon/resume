@@ -76,7 +76,7 @@
     <div id="headerSection"></div>
 
     <!-- Hero Section -->
-    <section id="home" class="hero-section text-white py-5">
+    <section id="home" class="hero-section text-white py-5 mt-5 mt-sm-0">
       <video class="hero-video-bg" autoplay loop playsinline muted controls>
         <source src="./assets/video/postore.mp4" type="video/mp4" />
         Your browser does not support the video tag.
@@ -92,7 +92,7 @@
             </p>
             <a
               href="#products"
-              class="btn btn-light btn-lg"
+              class="btn btn-light btn-lg mb-4 mb-sm-0"
               style="position: relative; z-index: 10"
             >
               Shop Now <i class="bi bi-arrow-right ms-2"></i>
@@ -191,36 +191,8 @@
       </div>
     </section>
 
-    <!-- Small Search Section -->
-    <section id="products" class="pb-2 bg-light">
-      <div class="container search-small d-lg-none">
-        <div class="row align-items-center">
-          <div class="col-md-6">
-            <h4 class="display-8 fw-bold mb-3">Search Products</h4>
-            <p class="lead text-muted mb-4">
-              Find exactly what you're looking for with our powerful search
-              feature.
-            </p>
-          </div>
-          <div class="col-md-6">
-            <div class="input-group mb-3">
-              <input
-                type="text"
-                class="form-control"
-                placeholder="Search for products..."
-                id="searchInputSmall"
-              />
-              <button class="btn btn-primary" type="button" id="searchBtnSmall">
-                <i class="bi bi-search"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
     <!-- Filters Section -->
-    <section class="pb-2 bg-light">
+    <section id="products" class="pb-2 bg-light">
       <div class="container">
         <div class="row align-items-center">
           <div class="col-md-6">
@@ -234,7 +206,7 @@
               <!-- Category buttons will be dynamically loaded here -->
             </div>
           </div>
-          <div class="col-md-6 text-end">
+          <div class="col-md-6 text-end my-3">
             <select class="form-select d-inline-block w-auto" id="sortSelect">
               <option value="default">Sort by</option>
               <option value="price-low">Price: Low to High</option>
@@ -355,16 +327,60 @@
           });
         });
 
-        // Set up search functionality
-        if (searchBtn && searchInput) {
-          // Search button click
-          searchBtn.addEventListener("click", function () {
+        // Set up search functionality - handled by header.html now
+        // Desktop search
+        const searchBtnDesktop = document.getElementById("searchBtnDesktop");
+        const searchInputDesktop =
+          document.getElementById("searchInputDesktop");
+
+        if (searchBtnDesktop && searchInputDesktop) {
+          searchBtnDesktop.addEventListener("click", function () {
+            const query = searchInputDesktop.value;
+            if (window.store) {
+              if (query.trim()) {
+                window.store.searchProducts(query);
+              } else {
+                window.store.renderProducts();
+              }
+            }
             scrollToProducts();
           });
+          searchInputDesktop.addEventListener("keydown", function (e) {
+            if (e.key === "Enter") {
+              const query = searchInputDesktop.value;
+              if (window.store) {
+                if (query.trim()) {
+                  window.store.searchProducts(query);
+                } else {
+                  window.store.renderProducts();
+                }
+              }
+              scrollToProducts();
+            }
+          });
+          searchInputDesktop.addEventListener("input", function () {
+            const query = searchInputDesktop.value;
+            if (window.store) {
+              window.store.searchProducts(query);
+            }
+          });
+        }
 
-          // Enter key in search input
+        // Mobile search
+        if (searchBtn && searchInput) {
+          searchBtn.addEventListener("click", function () {
+            const query = searchInput.value;
+            if (window.store && query.trim()) {
+              window.store.searchProducts(query);
+            }
+            scrollToProducts();
+          });
           searchInput.addEventListener("keydown", function (e) {
             if (e.key === "Enter") {
+              const query = searchInput.value;
+              if (window.store && query.trim()) {
+                window.store.searchProducts(query);
+              }
               scrollToProducts();
             }
           });

@@ -774,7 +774,7 @@
               emailjs
                 .send("service_s481rtv", "template_771ecr6", {
                   to_email:
-                    window.globalStore.state.Email ||
+                    window.globalStore?.state?.Email ||
                     "pabloandreychacon@gmail.com",
                   from_name: sanitizedData.name,
                   from_email: sanitizedData.email,
@@ -816,19 +816,32 @@
             document.head.appendChild(script);
           });
 
-        // Set business phone number
-        const businessPhone =
-          window.globalStore.state.Phone || "+1 (800) 123-4567";
-        // Update phone link and text
-        document.getElementById("business-phone").textContent = businessPhone;
-        document.getElementById(
-          "business-phone"
-        ).href = `tel:${businessPhone.replace(/\D/g, "")}`;
-
-        // Set business email
-        const businessEmail = window.globalStore.state.Email || "";
-        // Update email text
-        document.getElementById("business-email").textContent = businessEmail;
+        // Update business contact info when data is ready
+        function updateBusinessContactInfo() {
+          const businessPhone = window.globalStore?.state?.Phone || "+1 (800) 123-4567";
+          const businessEmail = window.globalStore?.state?.Email || "support@postore.com";
+          
+          // Update phone
+          const phoneElement = document.getElementById("business-phone");
+          if (phoneElement) {
+            phoneElement.textContent = businessPhone;
+            phoneElement.href = `tel:${businessPhone.replace(/\D/g, "")}`;
+          }
+          
+          // Update email
+          const emailElement = document.getElementById("business-email");
+          if (emailElement) {
+            emailElement.textContent = businessEmail;
+          }
+        }
+        
+        // Listen for business data loaded event
+        window.addEventListener('businessDataLoaded', updateBusinessContactInfo);
+        
+        // Also check if business data is already loaded
+        if (window.businessDataReady && window.globalStore?.state) {
+          updateBusinessContactInfo();
+        }
       });
     </script>
   </body>

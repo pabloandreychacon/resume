@@ -632,12 +632,25 @@
           }
         }, 100);
 
-        // Update business contact info in FAQ
-        const businessPhone = window.globalStore?.state?.Phone || "+1 (800) 123-4567";
-        const businessEmail = window.globalStore?.state?.Email || "support@postore.com";
+        // Update business contact info when data is ready
+        function updateFAQBusinessInfo() {
+          const businessPhone = window.globalStore?.state?.Phone || "+1 (800) 123-4567";
+          const businessEmail = window.globalStore?.state?.Email || "support@postore.com";
+          
+          const phoneElement = document.getElementById("faq-business-phone");
+          const emailElement = document.getElementById("faq-business-email");
+          
+          if (phoneElement) phoneElement.textContent = businessPhone;
+          if (emailElement) emailElement.textContent = businessEmail;
+        }
         
-        document.getElementById("faq-business-phone").textContent = businessPhone;
-        document.getElementById("faq-business-email").textContent = businessEmail;
+        // Listen for business data loaded event
+        window.addEventListener('businessDataLoaded', updateFAQBusinessInfo);
+        
+        // Also check if business data is already loaded
+        if (window.businessDataReady && window.globalStore?.state) {
+          updateFAQBusinessInfo();
+        }
       });
     </script>
   </body>

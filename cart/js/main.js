@@ -27,10 +27,12 @@ class EcommerceStore {
       setTimeout(() => this.init(), 100);
       return;
     }
-    
+
     const businessEmail = window.globalStore?.state?.Email;
     if (!businessEmail || businessEmail.trim() === "") {
-      console.error("Business email still not available after business data loaded");
+      console.error(
+        "Business email still not available after business data loaded"
+      );
       window.globalStore.setState({
         ...window.globalStore.state,
         Email: "pabloandreychacon@hotmail.com",
@@ -78,14 +80,15 @@ class EcommerceStore {
       console.error("Business email not set in globalStore");
       return;
     }
-    
-    console.log('Loading categories for business email:', businessEmail);
-    
+
+    console.log("Loading categories for business email:", businessEmail);
+
     try {
       const { data, error } = await supabase
         .from("Categories")
         .select("*")
-        .eq("BusinessEmail", businessEmail);
+        .eq("BusinessEmail", businessEmail)
+        .eq("Active", true); // Only active categories
 
       if (error) {
         console.error("Error fetching categories from Supabase:", error);
@@ -120,7 +123,8 @@ class EcommerceStore {
       const { data, error } = await supabase
         .from("Products")
         .select("*")
-        .eq("BusinessEmail", businessEmail);
+        .eq("BusinessEmail", businessEmail)
+        .eq("Active", true);
 
       if (error) {
         console.error("Error fetching products from Supabase:", error);
@@ -212,7 +216,7 @@ class EcommerceStore {
   renderProducts(products) {
     const container = document.getElementById("productsContainer");
     if (!container) return; // Exit if container doesn't exist (not on main page)
-    
+
     container.innerHTML = "";
 
     let filteredProducts = products || this.products;
@@ -264,7 +268,9 @@ class EcommerceStore {
                       this.categories[product.CategoryId] || "uncategorized"
                     }</p>
                     <h5 class="product-title">${product.Name}</h5>
-                    <p class="product-price">$${this.calculatePriceWithTax(product)}</p>
+                    <p class="product-price">$${this.calculatePriceWithTax(
+                      product
+                    )}</p>
                     ${
                       product.StockQuantity !== undefined &&
                       product.StockQuantity !== null
@@ -451,14 +457,20 @@ class EcommerceStore {
     if (product.StockQuantity !== null && product.StockQuantity !== undefined) {
       const existingItem = this.cart.find((item) => item.Id === product.Id);
       const currentQuantityInCart = existingItem ? existingItem.quantity : 0;
-      
+
       if (currentQuantityInCart + quantity > product.StockQuantity) {
         const availableToAdd = product.StockQuantity - currentQuantityInCart;
         if (availableToAdd <= 0) {
-          this.showToast(`Cannot add more ${product.Name}. Stock limit reached (${product.StockQuantity} available)`, "warning");
+          this.showToast(
+            `Cannot add more ${product.Name}. Stock limit reached (${product.StockQuantity} available)`,
+            "warning"
+          );
           return false;
         } else {
-          this.showToast(`Only ${availableToAdd} more can be added. Stock limit: ${product.StockQuantity}`, "warning");
+          this.showToast(
+            `Only ${availableToAdd} more can be added. Stock limit: ${product.StockQuantity}`,
+            "warning"
+          );
           return false;
         }
       }
@@ -502,11 +514,14 @@ class EcommerceStore {
       // Check stock validation if product manages stock
       if (item.StockQuantity !== null && item.StockQuantity !== undefined) {
         if (quantity > item.StockQuantity) {
-          this.showToast(`Cannot set quantity to ${quantity}. Only ${item.StockQuantity} available in stock`, "warning");
+          this.showToast(
+            `Cannot set quantity to ${quantity}. Only ${item.StockQuantity} available in stock`,
+            "warning"
+          );
           return;
         }
       }
-      
+
       item.quantity = quantity;
       this.updateCartUI();
       this.saveToStorage("postore_cart", this.cart);
@@ -553,7 +568,9 @@ class EcommerceStore {
                         <div class="col-6">
                             <div class="cart-item-info">
                                 <h6>${item.Name || item.name}</h6>
-                                <p class="cart-item-price mb-0">$${this.calculatePriceWithTax(item)}</p>
+                                <p class="cart-item-price mb-0">$${this.calculatePriceWithTax(
+                                  item
+                                )}</p>
                             </div>
                         </div>
                         <div class="col-3">
@@ -611,14 +628,22 @@ class EcommerceStore {
                         <div class="col-6">
                             <div class="cart-item-info">
                                 <h6>${item.Name || item.name}</h6>
-                                <p class="cart-item-price mb-0">$${this.calculatePriceWithTax(item)}</p>
+                                <p class="cart-item-price mb-0">$${this.calculatePriceWithTax(
+                                  item
+                                )}</p>
                             </div>
                         </div>
                         <div class="col-3">
-                            <button class="btn btn-sm btn-primary mb-1 w-100" onclick="(window.store || window.productStore).addToCartFromWishlist(${item.Id || item.id})">
+                            <button class="btn btn-sm btn-primary mb-1 w-100" onclick="(window.store || window.productStore).addToCartFromWishlist(${
+                              item.Id || item.id
+                            })">
                                 <i class="bi bi-cart-plus"></i>
                             </button>
-                            <button class="btn btn-sm btn-outline-danger w-100" onclick="(window.store || window.productStore).toggleWishlist({...${JSON.stringify(item).replace(/"/g, '&quot;')}, Id: ${item.Id || item.id}})">
+                            <button class="btn btn-sm btn-outline-danger w-100" onclick="(window.store || window.productStore).toggleWishlist({...${JSON.stringify(
+                              item
+                            ).replace(/"/g, "&quot;")}, Id: ${
+            item.Id || item.id
+          }})">
                                 <i class="bi bi-trash"></i>
                             </button>
                         </div>
@@ -673,7 +698,7 @@ class EcommerceStore {
 
     // Redirect to checkout page - handle different page contexts
     const currentPath = window.location.pathname;
-    if (currentPath.includes('/pages/')) {
+    if (currentPath.includes("/pages/")) {
       // Already in pages folder, use relative path
       window.location.href = "checkout.html";
     } else {
@@ -722,7 +747,11 @@ class EcommerceStore {
   }
 
   searchProducts(query) {
-    // Example: filter products by name
+    if (!query.trim()) {
+      this.currentFilter = "all";
+      this.renderProducts();
+      return;
+    }
     const filtered = this.products.filter((product) =>
       (product.Name || product.name).toLowerCase().includes(query.toLowerCase())
     );
@@ -758,16 +787,23 @@ class EcommerceStore {
 
   calculatePriceWithTax(product) {
     const basePrice = parseFloat(product.Price || 0);
-    const taxRate = parseFloat(product.TaxRate || product.taxes || product.Taxes || 0) / 100;
+    const taxRate =
+      parseFloat(product.TaxRate || product.taxes || product.Taxes || 0) / 100;
     return (basePrice * (1 + taxRate)).toFixed(2);
   }
 
   applySorting(products) {
     switch (this.currentSort) {
       case "price-low":
-        return products.sort((a, b) => this.calculatePriceWithTax(a) - this.calculatePriceWithTax(b));
+        return products.sort(
+          (a, b) =>
+            this.calculatePriceWithTax(a) - this.calculatePriceWithTax(b)
+        );
       case "price-high":
-        return products.sort((a, b) => this.calculatePriceWithTax(b) - this.calculatePriceWithTax(a));
+        return products.sort(
+          (a, b) =>
+            this.calculatePriceWithTax(b) - this.calculatePriceWithTax(a)
+        );
       case "name":
         return products.sort((a, b) => a.Name.localeCompare(b.Name));
       default:

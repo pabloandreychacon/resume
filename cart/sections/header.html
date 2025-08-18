@@ -20,10 +20,22 @@
         <a class="nav-link" href="index.html#products">Products</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="pages/about.html">About</a>
+        <a class="nav-link" href="pages/orders.html">Orders</a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="pages/contact.html">Contact</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="pages/faq.html">FAQs</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="pages/support.html">Support</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="pages/admin.html">Admin</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="pages/about.html">About</a>
       </li>
     </ul>
   </div>
@@ -31,36 +43,82 @@
 
 <!-- Navigation -->
 <nav id="mainNavbar" class="navbar navbar-light bg-white shadow-sm fixed-top">
-  <!-- Top Row: Brand, Search, Cart, Wishlist -->
+  <!-- Brand Row (xs only) -->
+  <div class="container d-sm-none">
+    <div class="d-flex justify-content-center py-2">
+      <a
+        class="navbar-brand fw-bold text-primary"
+        href="index.html"
+        style="font-size: 1.5rem"
+      >
+        <i class="bi bi-shop me-2"></i>POStore
+      </a>
+    </div>
+  </div>
+
+  <!-- Main Row -->
   <div class="container">
     <div class="d-flex align-items-center justify-content-between w-100">
-      <!-- Brand -->
-      <a class="navbar-brand fw-bold text-primary" href="index.html" style="font-size: 1.5rem">
+      <!-- Brand (sm+ only) -->
+      <a
+        class="navbar-brand fw-bold text-primary d-none d-sm-block"
+        href="index.html"
+        style="font-size: 1.5rem"
+      >
         <i class="bi bi-shop me-2"></i>POStore
       </a>
 
-      <!-- Search Bar (always visible) -->
-      <div class="flex-grow-1 mx-3">
-        <div class="input-group" style="max-width: 500px; margin: 0 auto;">
-          <input type="text" class="form-control" placeholder="Search products..." id="searchInput" />
-          <button class="btn btn-outline-primary" type="button" id="searchBtn">
+      <!-- Right side: Search + Cart + Wishlist (sm+ only) -->
+      <div class="d-sm-flex align-items-center">
+        <!-- Search Bar -->
+        <div class="input-group me-3 mb-2" style="max-width: 300px">
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Search products..."
+            id="searchInputDesktop"
+          />
+          <button
+            class="btn btn-outline-primary"
+            type="button"
+            id="searchBtnDesktop"
+          >
             <i class="bi bi-search"></i>
           </button>
         </div>
-      </div>
 
-      <!-- Cart and Wishlist (always visible) -->
-      <div class="d-flex align-items-center">
-        <button class="btn btn-primary position-relative me-2" data-bs-toggle="offcanvas" data-bs-target="#cartOffcanvas">
+        <!-- Cart and Wishlist -->
+        <button
+          class="btn btn-primary position-relative me-2 mb-2"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#cartOffcanvas"
+        >
           <i class="bi bi-cart3"></i>
-          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="cartCount">0</span>
+          <span
+            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            id="cartCount"
+            >0</span
+          >
         </button>
-        <button class="btn btn-outline-primary position-relative me-2" data-bs-toggle="offcanvas" data-bs-target="#wishlistOffcanvas">
+        <button
+          class="btn btn-outline-primary position-relative me-2 mb-2"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#wishlistOffcanvas"
+        >
           <i class="bi bi-heart"></i>
-          <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="wishlistCount">0</span>
+          <span
+            class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            id="wishlistCount"
+            >0</span
+          >
         </button>
         <!-- Hamburger Menu for Navigation Links -->
-        <button class="btn btn-outline-secondary d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#navOffcanvas">
+        <button
+          class="btn btn-outline-secondary d-lg-none"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#navOffcanvas"
+        >
           <i class="bi bi-list"></i>
         </button>
       </div>
@@ -72,12 +130,27 @@
     <div class="container">
       <ul class="nav py-2">
         <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-        <li class="nav-item"><a class="nav-link" href="index.html#products">Products</a></li>
-        <li class="nav-item"><a class="nav-link" href="pages/orders.html">Orders</a></li>
-        <li class="nav-item"><a class="nav-link" href="pages/contact.html">Contact</a></li>
-        <li class="nav-item"><a class="nav-link" href="pages/faq.html">FAQs</a></li>
-        <li class="nav-item"><a class="nav-link" href="pages/support.html">Support</a></li>
-        <li class="nav-item"><a class="nav-link" href="pages/about.html">About</a></li>
+        <li class="nav-item">
+          <a class="nav-link" href="index.html#products">Products</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="pages/orders.html">Orders</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="pages/contact.html">Contact</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="pages/faq.html">FAQs</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="pages/support.html">Support</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="pages/admin.html">Admin</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="pages/about.html">About</a>
+        </li>
       </ul>
     </div>
   </div>
@@ -94,13 +167,20 @@
       titleElement.parentElement.innerHTML = `<i class="bi bi-shop me-2"></i>${businessName}`;
     }
 
-    // Also update navbar brand
-    const navbarBrand = document.querySelector(".navbar-brand");
-    if (navbarBrand) {
-      navbarBrand.innerHTML = `<i class="bi bi-shop me-2"></i>${businessName}`;
-    }
+    // Update all navbar brand elements
+    const navbarBrands = document.querySelectorAll(".navbar-brand");
+    navbarBrands.forEach((brand) => {
+      brand.innerHTML = `<i class="bi bi-shop me-2"></i>${businessName}`;
+    });
   }
 
   // Listen for business data loaded event
   window.addEventListener("businessDataLoaded", updateBusinessName);
+
+  // Also check if business data is already loaded
+  document.addEventListener("DOMContentLoaded", function () {
+    if (window.businessDataReady && window.globalStore?.state?.BusinessName) {
+      updateBusinessName();
+    }
+  });
 </script>

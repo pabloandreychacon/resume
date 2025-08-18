@@ -70,7 +70,7 @@
           href="../index.html"
           style="font-size: 1.5rem"
         >
-          <i class="bi bi-shop me-2"></i>Home
+          <i class="bi bi-shop me-2"></i><span id="business-name">POStore</span>
         </a>
 
         <div class="d-flex align-items-center">
@@ -409,7 +409,7 @@
                                         UpdatedAt: new Date(),
                                         BuyerEmail: customerEmail,
                                         BusinessEmail:
-                                          window.globalStore.state.Email,
+                                          window.globalStore?.state?.Email,
                                       })
                                       .select();
 
@@ -470,7 +470,7 @@
                                     "service_s481rtv",
                                     "template_771ecr6",
                                     {
-                                      to_email: "pabloandreychacon@gmail.com",
+                                      to_email: window.globalStore?.state?.Email || "pabloandreychacon@gmail.com",
                                       from_email: customerEmail,
                                       message: `
                                       Order Number: ${orderNumber}\n\n
@@ -571,5 +571,26 @@
     <custom-bottom></custom-bottom>
     <!-- Checkout JS -->
     <script src="../js/checkout.js"></script>
+    
+    <script>
+      // Update business name when data is ready
+      function updateCheckoutBusinessInfo() {
+        const businessName = window.globalStore?.state?.BusinessName || "POStore";
+        const businessNameElement = document.getElementById("business-name");
+        if (businessNameElement) {
+          businessNameElement.textContent = businessName;
+        }
+      }
+      
+      // Listen for business data loaded event
+      window.addEventListener('businessDataLoaded', updateCheckoutBusinessInfo);
+      
+      // Also check if business data is already loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        if (window.businessDataReady && window.globalStore?.state) {
+          updateCheckoutBusinessInfo();
+        }
+      });
+    </script>
   </body>
 </html>

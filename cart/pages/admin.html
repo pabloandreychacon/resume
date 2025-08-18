@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <script src="../customElements/head-element.js"></script>
     <custom-head
       page-title="Admin Panel - POStore"
@@ -10,117 +10,523 @@
       favicon-url="../assets/favicon.ico"
       stylesheets="../css/style.css"
     ></custom-head>
-</head>
-<body class="bg-light">
+  </head>
+  <body class="bg-light">
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-        <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="../index.html">
-                <i class="bi bi-shield-lock me-2"></i>Admin Panel
-            </a>
-            <div class="d-flex align-items-center">
-                <span id="businessEmail" class="text-muted me-3"></span>
-                <a href="../index.html" class="btn btn-outline-primary">
-                    <i class="bi bi-arrow-left me-2"></i>Back to Store
-                </a>
-            </div>
+      <div class="container">
+        <a class="navbar-brand fw-bold text-primary" href="../index.html">
+          <i class="bi bi-shield-lock me-2"></i>Home
+        </a>
+        <div class="d-flex align-items-center">
+          <span id="businessEmail" class="text-muted me-3"></span>
+          <a href="../index.html" class="btn btn-outline-primary">
+            <i class="bi bi-arrow-left me-2"></i>Back to Store
+          </a>
         </div>
+      </div>
     </nav>
 
     <!-- Admin Content -->
     <div class="container mt-4 mb-5">
-        <!-- Auth Section -->
-        <div id="authSection" class="row justify-content-center">
-            <div class="col-md-6">
-                <div class="card shadow">
-                    <div class="card-body p-4">
-                        <h3 class="text-center mb-4">Admin Access</h3>
-                        <div class="mb-3">
-                            <label for="adminPassword" class="form-label">Password:</label>
-                            <input type="password" class="form-control" id="adminPassword" placeholder="Enter admin password">
-                        </div>
-                        <button class="btn btn-primary w-100" onclick="authenticate()">Access Admin Panel</button>
-                        <div id="authError" class="text-danger mt-2 d-none"></div>
-                    </div>
-                </div>
+      <!-- Auth Section -->
+      <div id="authSection" class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card shadow">
+            <div class="card-body p-4">
+              <h3 class="text-center mb-4">Admin Access</h3>
+              <div class="mb-3">
+                <label for="adminEmail" class="form-label">Email:</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  id="adminEmail"
+                  placeholder="Enter admin email"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="adminPassword" class="form-label">Password:</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="adminPassword"
+                  placeholder="Enter admin password"
+                />
+              </div>
+              <button class="btn btn-primary w-100" onclick="authenticate()">
+                Access Admin Panel
+              </button>
+              <div id="authError" class="text-danger mt-2 d-none"></div>
+              <!-- Place this after the Access Admin Panel button in #authSection -->
+              <a
+                href="#"
+                class="d-block mt-3 text-center"
+                onclick="showRegistrationForm()"
+                >Register New Business</a
+              >
             </div>
+          </div>
+        </div>
+      </div>
+      <div id="registerSection" class="row justify-content-center d-none">
+        <div class="col-md-6">
+          <div class="card shadow">
+            <div class="card-body p-4">
+              <h3 class="text-center mb-4">Register New Business</h3>
+              <form id="registerForm" onsubmit="registerBusiness(event)">
+                <div class="mb-3">
+                  <label for="regEmail" class="form-label">Email:</label>
+                  <input
+                    type="email"
+                    class="form-control"
+                    id="regEmail"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="regPassword" class="form-label">Password:</label>
+                  <input
+                    type="password"
+                    class="form-control"
+                    id="regPassword"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="regBusinessName" class="form-label"
+                    >Business Name:</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="regBusinessName"
+                    required
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="regPhone" class="form-label">Phone:</label>
+                  <input type="text" class="form-control" id="regPhone" />
+                </div>
+                <div class="mb-3">
+                  <label for="regAddress" class="form-label">Address:</label>
+                  <input type="text" class="form-control" id="regAddress" />
+                </div>
+                <div class="mb-3">
+                  <label for="regMapLocation" class="form-label"
+                    >Map Location:</label
+                  >
+                  <input type="text" class="form-control" id="regMapLocation" />
+                </div>
+                <div class="mb-3">
+                  <label for="regPaypalClientId" class="form-label"
+                    >Paypal Client ID:</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="regPaypalClientId"
+                  />
+                </div>
+                <button type="submit" class="btn btn-success w-100">
+                  Register
+                </button>
+                <div id="registerStatus" class="text-danger mt-2"></div>
+              </form>
+              <a
+                href="#"
+                class="d-block mt-3 text-center"
+                onclick="hideRegistrationForm()"
+                >Back to Sign In</a
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Panel -->
+      <div id="adminPanel" class="d-none">
+        <!-- Tabs -->
+        <ul class="nav nav-tabs mb-4" role="tablist">
+          <li class="nav-item">
+            <button
+              class="nav-link active"
+              id="settingsTabBtn"
+              data-bs-toggle="tab"
+              data-bs-target="#settingsTab"
+            >
+              Settings
+            </button>
+          </li>
+          <li class="nav-item">
+            <button
+              class="nav-link"
+              id="categoriesTabBtn"
+              data-bs-toggle="tab"
+              data-bs-target="#categoriesTab"
+            >
+              Categories
+            </button>
+          </li>
+          <li class="nav-item">
+            <button
+              class="nav-link"
+              id="productsTabBtn"
+              data-bs-toggle="tab"
+              data-bs-target="#productsTab"
+            >
+              Products
+            </button>
+          </li>
+          <li class="nav-item">
+            <button
+              class="nav-link"
+              data-bs-toggle="tab"
+              data-bs-target="#mediaTab"
+            >
+              Product Media
+            </button>
+          </li>
+          <li class="nav-item">
+            <button
+              class="nav-link"
+              data-bs-toggle="tab"
+              data-bs-target="#ordersTab"
+            >
+              Orders
+            </button>
+          </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content">
+          <!-- Settings Tab -->
+          <div class="tab-pane fade show active" id="settingsTab">
+            <div class="card shadow mb-4">
+              <div class="card-header">
+                <h5 class="mb-0">Business Settings</h5>
+              </div>
+              <div class="card-body">
+                <form id="settingsForm" onsubmit="saveSettings(event)">
+                  <div class="mb-3">
+                    <label for="settingsEmail" class="form-label">Email</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="settingsEmail"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="settingsPassword" class="form-label"
+                      >Online Password</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="settingsPassword"
+                      required
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="settingsPhone" class="form-label">Phone</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="settingsPhone"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="settingsAddress" class="form-label"
+                      >Address</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="settingsAddress"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="settingsMapLocation" class="form-label"
+                      >Map Location</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="settingsMapLocation"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="settingsBusinessName" class="form-label"
+                      >Business Name</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="settingsBusinessName"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="settingsPaypalClientId" class="form-label"
+                      >Paypal Client ID</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="settingsPaypalClientId"
+                    />
+                  </div>
+                  <button type="submit" class="btn btn-primary">
+                    Save Settings
+                  </button>
+
+                  <div id="settingsStatus" class="mt-2"></div>
+                </form>
+                <!-- Place after the Save Settings button in the Business Settings form -->
+                <button
+                  type="button"
+                  class="btn btn-outline-primary mt-2"
+                  onclick="goToStoreWithEmail()"
+                >
+                  Go to Store for this Business
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Categories Tab -->
+          <div class="tab-pane fade" id="categoriesTab">
+            <div class="card shadow mb-4">
+              <div class="card-header">
+                <h5 class="mb-0">Manage Categories</h5>
+              </div>
+              <div class="card-body">
+                <form
+                  id="addCategoryForm"
+                  class="mb-4"
+                  onsubmit="addCategory(event)"
+                >
+                  <div class="row g-2">
+                    <div class="col-md-4">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="categoryName"
+                        placeholder="Name"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-4">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="categoryDisplayName"
+                        placeholder="DisplayName (one word)"
+                        pattern="^\w+$"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-2">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="categoryId"
+                        placeholder="CategoryId"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-2">
+                      <button type="submit" class="btn btn-primary w-100">
+                        Add Category
+                      </button>
+                    </div>
+                  </div>
+                  <div id="categoryStatus" class="mt-2"></div>
+                </form>
+                <div id="categoriesList"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Product Media Tab -->
+          <div class="tab-pane fade" id="mediaTab">
+            <div class="card shadow">
+              <div class="card-header">
+                <h5 class="mb-0">Upload Product Media</h5>
+              </div>
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="mb-3">
+                      <label for="productSelect" class="form-label"
+                        >Select Product:</label
+                      >
+                      <select class="form-select" id="productSelect">
+                        <option value="">Loading products...</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="mediaFile" class="form-label"
+                        >Select File:</label
+                      >
+                      <input
+                        type="file"
+                        class="form-control"
+                        id="mediaFile"
+                        accept="image/*"
+                      />
+                    </div>
+                    <button
+                      class="btn btn-primary"
+                      onclick="adminPanel.uploadMedia()"
+                    >
+                      <i class="bi bi-upload me-2"></i>Upload Media
+                    </button>
+                  </div>
+                  <div class="col-md-6">
+                    <div id="uploadStatus" class="alert d-none"></div>
+                    <div id="existingMedia"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Orders Tab -->
+          <div class="tab-pane fade" id="ordersTab">
+            <div class="card shadow">
+              <div class="card-header">
+                <h5 class="mb-0">Manage Orders</h5>
+              </div>
+              <div class="card-body">
+                <div class="table-responsive">
+                  <table class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody id="ordersTable">
+                      <tr>
+                        <td colspan="6" class="text-center">
+                          Loading orders...
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Products Tab -->
+          <div class="tab-pane fade" id="productsTab">
+            <div class="card shadow mb-4">
+              <div class="card-header">
+                <h5 class="mb-0">Manage Products</h5>
+              </div>
+              <div class="card-body">
+                <form
+                  id="addProductForm"
+                  class="mb-4"
+                  onsubmit="addProduct(event)"
+                >
+                  <div class="row g-2">
+                    <div class="col-md-3">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="productName"
+                        placeholder="Name"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-2">
+                      <select
+                        class="form-select"
+                        id="productCategoryId"
+                        required
+                      >
+                        <option value="">Select Category</option>
+                      </select>
+                    </div>
+                    <div class="col-md-2">
+                      <input
+                        type="number"
+                        step="0.01"
+                        class="form-control"
+                        id="productPrice"
+                        placeholder="Price"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-2">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="productStockQuantity"
+                        placeholder="Stock Qty"
+                      />
+                    </div>
+                    <div class="col-md-3">
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="productId"
+                        placeholder="ProductId"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div class="row g-2 mt-2">
+                    <div class="col-md-6">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="productDescription"
+                        placeholder="Description"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-4">
+                      <input
+                        type="number"
+                        step="0.01"
+                        class="form-control"
+                        id="productTaxes"
+                        placeholder="Taxes (default 0)"
+                      />
+                    </div>
+                    <div class="col-md-2">
+                      <input
+                        type="file"
+                        class="form-control"
+                        id="productImageFile"
+                        accept="image/*"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-primary mt-3">
+                    Add Product
+                  </button>
+                  <div id="productStatus" class="mt-2"></div>
+                </form>
+                <div id="productsList"></div>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <!-- Admin Panel -->
-        <div id="adminPanel" class="d-none">
-            <!-- Tabs -->
-            <ul class="nav nav-tabs mb-4" role="tablist">
-                <li class="nav-item">
-                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#mediaTab">Product Media</button>
-                </li>
-                <li class="nav-item">
-                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#ordersTab">Orders</button>
-                </li>
-            </ul>
-
-            <!-- Tab Content -->
-            <div class="tab-content">
-                <!-- Media Upload Tab -->
-                <div class="tab-pane fade show active" id="mediaTab">
-                    <div class="card shadow">
-                        <div class="card-header">
-                            <h5 class="mb-0">Upload Product Media</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <div class="mb-3">
-                                        <label for="productSelect" class="form-label">Select Product:</label>
-                                        <select class="form-select" id="productSelect">
-                                            <option value="">Loading products...</option>
-                                        </select>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="mediaFile" class="form-label">Select File:</label>
-                                        <input type="file" class="form-control" id="mediaFile" accept="image/*">
-                                    </div>
-                                    <button class="btn btn-primary" onclick="adminPanel.uploadMedia()">
-                                        <i class="bi bi-upload me-2"></i>Upload Media
-                                    </button>
-                                </div>
-                                <div class="col-md-6">
-                                    <div id="uploadStatus" class="alert d-none"></div>
-                                    <div id="existingMedia"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Orders Tab -->
-                <div class="tab-pane fade" id="ordersTab">
-                    <div class="card shadow">
-                        <div class="card-header">
-                            <h5 class="mb-0">Manage Orders</h5>
-                        </div>
-                        <div class="card-body">
-                            <div class="table-responsive">
-                                <table class="table table-striped">
-                                    <thead>
-                                        <tr>
-                                            <th>Order ID</th>
-                                            <th>Customer</th>
-                                            <th>Total</th>
-                                            <th>Status</th>
-                                            <th>Date</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="ordersTable">
-                                        <tr><td colspan="6" class="text-center">Loading orders...</td></tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Logout Button -->
+        <button class="btn btn-outline-danger mb-3" onclick="logoutAdmin()">
+          Logout
+        </button>
+      </div>
     </div>
 
     <script src="../customElements/bottom-scripts.js"></script>
@@ -130,5 +536,594 @@
     <script src="../js/supabase-config.js"></script>
     <script src="../js/business-data.js"></script>
     <script src="../js/admin.js"></script>
-</body>
+
+    <script>
+      sessionStorage.removeItem("adminAuth"); // Always show login form for testing
+
+      // On page load, always hide admin panel unless authenticated
+      document.addEventListener("DOMContentLoaded", function () {
+        const isAuth = sessionStorage.getItem("adminAuth") === "true";
+        document
+          .getElementById("adminPanel")
+          .classList.toggle("d-none", !isAuth);
+        document
+          .getElementById("authSection")
+          .classList.toggle("d-none", isAuth);
+
+        if (window.businessDataReady && window.globalStore?.state) {
+          updateAdminEmail();
+        }
+      });
+
+      // Listen for business data loaded event
+      window.addEventListener("businessDataLoaded", updateAdminEmail);
+
+      // Add this function to avoid ReferenceError
+      function updateAdminEmail() {
+        const businessEmail = window.globalStore?.state?.Email || "";
+        const emailInput = document.getElementById("adminEmail");
+        if (emailInput && businessEmail) {
+          emailInput.value = businessEmail;
+        }
+        const emailSpan = document.getElementById("businessEmail");
+        if (emailSpan && businessEmail) {
+          emailSpan.textContent = businessEmail;
+        }
+      }
+
+      // Update authenticate function to use Supabase Settings table
+      async function authenticate() {
+        const email = document.getElementById("adminEmail").value;
+        const password = document.getElementById("adminPassword").value;
+        const errorDiv = document.getElementById("authError");
+        const btn = document.querySelector('button[onclick="authenticate()"]');
+        btn.disabled = true;
+
+        if (!email || !password) {
+          errorDiv.textContent = "Please enter both email and password";
+          errorDiv.classList.remove("d-none");
+          btn.disabled = false;
+          return;
+        }
+
+        try {
+          const { data, error } = await supabase
+            .from("Settings")
+            .select("Email, OnlinePassword")
+            .eq("Email", email)
+            .single();
+
+          if (error || !data || data.OnlinePassword !== password) {
+            errorDiv.textContent = "Invalid email or password";
+            errorDiv.classList.remove("d-none");
+            btn.disabled = false;
+            return;
+          }
+
+          // Authentication successful
+          errorDiv.classList.add("d-none");
+          document.getElementById("authSection").classList.add("d-none");
+          document.getElementById("adminPanel").classList.remove("d-none");
+
+          if (window.globalStore) {
+            window.globalStore.setState({ Email: email });
+            console.log("Updated globalStore with authenticated email:", email);
+          }
+
+          if (typeof adminPanel !== "undefined") {
+            adminPanel.loadProducts();
+            adminPanel.loadOrders();
+          }
+          await loadSettings();
+          sessionStorage.setItem("adminAuth", "true");
+        } catch (error) {
+          console.error("Authentication error:", error);
+          errorDiv.textContent = "Authentication failed. Please try again.";
+          errorDiv.classList.remove("d-none");
+        }
+        btn.disabled = false;
+      }
+
+      async function loadSettings() {
+        const email = window.globalStore?.state?.Email;
+        if (!email) return;
+        const { data, error } = await supabase
+          .from("Settings")
+          .select("*")
+          .eq("Email", email)
+          .single();
+        if (data) {
+          document.getElementById("settingsEmail").value = data.Email || "";
+          document.getElementById("settingsPassword").value =
+            data.OnlinePassword || "";
+          document.getElementById("settingsPhone").value = data.Phone || "";
+          document.getElementById("settingsAddress").value = data.Address || "";
+          document.getElementById("settingsMapLocation").value =
+            data.MapLocation || "";
+          document.getElementById("settingsBusinessName").value =
+            data.BusinessName || "";
+          document.getElementById("settingsPaypalClientId").value =
+            data.PaypalClientId || "";
+        }
+      }
+
+      async function saveSettings(event) {
+        event.preventDefault();
+        const email = document.getElementById("settingsEmail").value;
+        const payload = {
+          Email: email,
+          OnlinePassword: document.getElementById("settingsPassword").value,
+          Phone: document.getElementById("settingsPhone").value,
+          Address: document.getElementById("settingsAddress").value,
+          MapLocation: document.getElementById("settingsMapLocation").value,
+          BusinessName: document.getElementById("settingsBusinessName").value,
+          PaypalClientId: document.getElementById("settingsPaypalClientId")
+            .value,
+        };
+        const { error } = await supabase
+          .from("Settings")
+          .update(payload)
+          .eq("Email", email);
+        const statusDiv = document.getElementById("settingsStatus");
+        if (error) {
+          statusDiv.textContent = "Error saving settings.";
+          statusDiv.className = "text-danger";
+        } else {
+          statusDiv.textContent = "Settings saved successfully.";
+          statusDiv.className = "text-success";
+        }
+      }
+
+      async function loadCategories() {
+        const email = window.globalStore?.state?.Email;
+        if (!email) return;
+        const { data, error } = await supabase
+          .from("Categories")
+          .select("*")
+          .eq("BusinessEmail", email)
+          .order("CategoryId", { ascending: true });
+        const listDiv = document.getElementById("categoriesList");
+        if (error || !data) {
+          listDiv.innerHTML =
+            "<div class='text-danger'>Error loading categories.</div>";
+          return;
+        }
+        let html = `<table class="table table-bordered"><thead><tr>
+          <th>Name</th><th>DisplayName</th><th>CategoryId</th><th>Active</th><th>Actions</th></tr></thead><tbody>`;
+        data.forEach((cat) => {
+          html += `<tr>
+            <td><input type="text" class="form-control" value="${
+              cat.Name
+            }" id="name-${cat.CategoryId}" /></td>
+            <td><input type="text" class="form-control" value="${
+              cat.DisplayName
+            }" id="display-${cat.CategoryId}" pattern="^\\w+$" /></td>
+            <td>${cat.CategoryId}</td>
+            <td>
+              <input type="checkbox" id="active-${cat.CategoryId}" ${
+            cat.Active ? "checked" : ""
+          } />
+            </td>
+            <td>
+              <button class="btn btn-sm btn-success" onclick="updateCategory(${
+                cat.CategoryId
+              })">Update</button>
+            </td>
+          </tr>`;
+        });
+        html += "</tbody></table>";
+        listDiv.innerHTML = html;
+      }
+
+      async function addCategory(event) {
+        event.preventDefault();
+        const email = window.globalStore?.state?.Email;
+        const name = document.getElementById("categoryName").value.trim();
+        const displayName = document
+          .getElementById("categoryDisplayName")
+          .value.trim();
+        const categoryId = parseInt(
+          document.getElementById("categoryId").value,
+          10
+        );
+        const statusDiv = document.getElementById("categoryStatus");
+        if (!/^\w+$/.test(displayName)) {
+          statusDiv.textContent = "DisplayName must be one word.";
+          statusDiv.className = "text-danger";
+          return;
+        }
+        // Check for duplicate CategoryId
+        const { data: existing, error: checkError } = await supabase
+          .from("Categories")
+          .select("CategoryId")
+          .eq("BusinessEmail", email)
+          .eq("CategoryId", categoryId)
+          .single();
+        if (existing) {
+          statusDiv.textContent =
+            "CategoryId already exists for this business.";
+          statusDiv.className = "text-danger";
+          return;
+        }
+        const { error } = await supabase.from("Categories").insert([
+          {
+            Name: name,
+            DisplayName: displayName,
+            CategoryId: categoryId,
+            BusinessEmail: email,
+          },
+        ]);
+        if (error) {
+          statusDiv.textContent = "Error adding category.";
+          statusDiv.className = "text-danger";
+        } else {
+          statusDiv.textContent = "Category added.";
+          statusDiv.className = "text-success";
+          document.getElementById("addCategoryForm").reset();
+          loadCategories();
+        }
+      }
+
+      async function updateCategory(categoryId) {
+        const email = window.globalStore?.state?.Email;
+        const name = document.getElementById(`name-${categoryId}`).value.trim();
+        const displayName = document
+          .getElementById(`display-${categoryId}`)
+          .value.trim();
+        const active = document.getElementById(`active-${categoryId}`).checked;
+        if (!/^\w+$/.test(displayName)) {
+          alert("DisplayName must be one word.");
+          return;
+        }
+        const { error } = await supabase
+          .from("Categories")
+          .update({ Name: name, DisplayName: displayName, Active: active })
+          .eq("CategoryId", categoryId)
+          .eq("BusinessEmail", email);
+        if (error) {
+          alert("Error updating category.");
+        } else {
+          loadCategories();
+        }
+      }
+
+      async function deleteCategory(categoryId) {
+        if (!confirm("Delete this category?")) return;
+        const { error } = await supabase
+          .from("Categories")
+          .delete()
+          .eq("CategoryId", categoryId);
+        if (error) {
+          alert("Error deleting category.");
+        } else {
+          loadCategories();
+        }
+      }
+
+      async function loadProductCategories() {
+        const email = window.globalStore?.state?.Email;
+        if (!email) return;
+        const { data, error } = await supabase
+          .from("Categories")
+          .select("CategoryId, Name")
+          .eq("BusinessEmail", email)
+          .order("CategoryId", { ascending: true });
+        const select = document.getElementById("productCategoryId");
+        select.innerHTML = `<option value="">Select Category</option>`;
+        if (data) {
+          data.forEach((cat) => {
+            select.innerHTML += `<option value="${cat.CategoryId}">${cat.Name}</option>`;
+          });
+        }
+      }
+
+      async function loadProducts() {
+        const email = window.globalStore?.state?.Email;
+        if (!email) return;
+
+        // Get active categories for mapping
+        const { data: categories } = await supabase
+          .from("Categories")
+          .select("CategoryId, Name")
+          .eq("BusinessEmail", email);
+
+        // Get only active products
+        const { data, error } = await supabase
+          .from("Products")
+          .select("*")
+          .eq("BusinessEmail", email)
+          .order("ProductId", { ascending: true });
+
+        const listDiv = document.getElementById("productsList");
+        if (error || !data) {
+          listDiv.innerHTML =
+            "<div class='text-danger'>Error loading products.</div>";
+          return;
+        }
+
+        // Create a mapping from CategoryId to Name
+        const categoryMap = {};
+        if (categories) {
+          categories.forEach((cat) => {
+            categoryMap[cat.CategoryId] = cat.Name;
+          });
+        }
+
+        let html = `<table class="table table-bordered"><thead><tr>
+          <th>Name</th><th>Category</th><th>Price</th><th>Stock</th><th>ProductId</th><th>Taxes</th><th>Image</th><th>Description</th><th>Active</th><th>Actions</th></tr></thead><tbody>`;
+        data.forEach((prod) => {
+          const categoryName = categoryMap[prod.CategoryId] || prod.CategoryId;
+          html += `<tr>
+            <td><input type="text" class="form-control" value="${
+              prod.Name
+            }" id="prodName-${prod.ProductId}" /></td>
+            <td>${categoryName}</td>
+            <td><input type="number" step="0.01" class="form-control" value="${
+              prod.Price
+            }" id="prodPrice-${prod.ProductId}" /></td>
+            <td><input type="number" class="form-control" value="${
+              prod.StockQuantity || ""
+            }" id="prodStock-${prod.ProductId}" /></td>
+            <td>${prod.ProductId}</td>
+            <td><input type="number" step="0.01" class="form-control" value="${
+              prod.Taxes || 0
+            }" id="prodTaxes-${prod.ProductId}" /></td>
+            <td><img src="${
+              prod.ImageUrl
+            }" alt="Image" style="max-width:60px;max-height:60px;" /></td>
+            <td><input type="text" class="form-control" value="${
+              prod.Description
+            }" id="prodDesc-${prod.ProductId}" /></td>
+            <td>
+              <input type="checkbox" id="prodActive-${prod.ProductId}" ${
+            prod.Active ? "checked" : ""
+          } />
+            </td>
+            <td>
+              <button class="btn btn-sm btn-success" onclick="updateProduct(${
+                prod.ProductId
+              })">Update</button>
+            </td>
+          </tr>`;
+        });
+        html += "</tbody></table>";
+        listDiv.innerHTML = html;
+      }
+
+      async function addProduct(event) {
+        event.preventDefault();
+        const email = window.globalStore?.state?.Email;
+        if (!email) return;
+        const name = document.getElementById("productName").value.trim();
+        const categoryId = parseInt(
+          document.getElementById("productCategoryId").value,
+          10
+        );
+        const price = parseFloat(document.getElementById("productPrice").value);
+        const stockQuantity = document.getElementById("productStockQuantity")
+          .value
+          ? parseInt(document.getElementById("productStockQuantity").value, 10)
+          : null;
+        const productId = parseInt(
+          document.getElementById("productId").value,
+          10
+        );
+        const description = document
+          .getElementById("productDescription")
+          .value.trim();
+        const taxes = document.getElementById("productTaxes").value
+          ? parseFloat(document.getElementById("productTaxes").value)
+          : 0;
+        const imageFile = document.getElementById("productImageFile").files[0];
+        const statusDiv = document.getElementById("productStatus");
+
+        // Check for duplicate ProductId
+        const { data: existing } = await supabase
+          .from("Products")
+          .select("ProductId")
+          .eq("BusinessEmail", email)
+          .eq("ProductId", productId)
+          .single();
+        if (existing) {
+          statusDiv.textContent = "ProductId already exists for this business.";
+          statusDiv.className = "text-danger";
+          return;
+        }
+
+        // Upload image to Supabase Storage
+        let imageUrl = "";
+        if (imageFile) {
+          const folder = email.split("@")[0];
+          const filePath = `${folder}/${Date.now()}_${imageFile.name}`;
+          const { data: uploadData, error: uploadError } =
+            await supabase.storage
+              .from("postore")
+              .upload(filePath, imageFile, { upsert: false });
+          if (uploadError) {
+            statusDiv.textContent = "Error uploading image.";
+            statusDiv.className = "text-danger";
+            return;
+          }
+          imageUrl = supabase.storage.from("postore").getPublicUrl(filePath)
+            .data.publicUrl;
+        }
+
+        const { error } = await supabase.from("Products").insert([
+          {
+            Name: name,
+            CategoryId: categoryId,
+            Price: price,
+            ImageUrl: imageUrl,
+            Description: description,
+            StockQuantity: stockQuantity,
+            ProductId: productId,
+            Taxes: taxes,
+            BusinessEmail: email,
+          },
+        ]);
+        if (error) {
+          statusDiv.textContent = "Error adding product.";
+          statusDiv.className = "text-danger";
+        } else {
+          statusDiv.textContent = "Product added.";
+          statusDiv.className = "text-success";
+          document.getElementById("addProductForm").reset();
+          loadProducts();
+        }
+      }
+
+      async function updateProduct(productId) {
+        const email = window.globalStore?.state?.Email;
+        const name = document
+          .getElementById(`prodName-${productId}`)
+          .value.trim();
+        const price = parseFloat(
+          document.getElementById(`prodPrice-${productId}`).value
+        );
+        const stockQuantity = document.getElementById(`prodStock-${productId}`)
+          .value
+          ? parseInt(
+              document.getElementById(`prodStock-${productId}`).value,
+              10
+            )
+          : null;
+        const taxes = document.getElementById(`prodTaxes-${productId}`).value
+          ? parseFloat(document.getElementById(`prodTaxes-${productId}`).value)
+          : 0;
+        const description = document
+          .getElementById(`prodDesc-${productId}`)
+          .value.trim();
+        const active = document.getElementById(
+          `prodActive-${productId}`
+        ).checked;
+        const { error } = await supabase
+          .from("Products")
+          .update({
+            Name: name,
+            Price: price,
+            StockQuantity: stockQuantity,
+            Taxes: taxes,
+            Description: description,
+            Active: active,
+          })
+          .eq("ProductId", productId)
+          .eq("BusinessEmail", email);
+        if (error) {
+          alert("Error updating product.");
+        } else {
+          loadProducts();
+        }
+      }
+
+      async function deleteProduct(productId) {
+        const email = window.globalStore?.state?.Email;
+        if (!confirm("Delete this product?")) return;
+        const { error } = await supabase
+          .from("Products")
+          .delete()
+          .eq("ProductId", productId)
+          .eq("BusinessEmail", email)
+          .eq("Active", true);
+        if (error) {
+          alert("Error deleting product.");
+        } else {
+          loadProducts();
+        }
+      }
+
+      // Load settings when Settings tab is shown
+      document
+        .getElementById("settingsTabBtn")
+        .addEventListener("shown.bs.tab", loadSettings);
+
+      // Load categories when Categories tab is shown
+      document
+        .getElementById("categoriesTabBtn")
+        .addEventListener("shown.bs.tab", loadCategories);
+
+      // Load products and categories when Products tab is shown
+      document
+        .getElementById("productsTabBtn")
+        .addEventListener("shown.bs.tab", () => {
+          loadProductCategories();
+          loadProducts();
+        });
+
+      function logoutAdmin() {
+        sessionStorage.removeItem("adminAuth");
+        document.getElementById("adminPanel").classList.add("d-none");
+        document.getElementById("authSection").classList.remove("d-none");
+      }
+
+      function showRegistrationForm() {
+        document.getElementById("authSection").classList.add("d-none");
+        document.getElementById("registerSection").classList.remove("d-none");
+        document.getElementById("registerStatus").textContent = "";
+      }
+
+      function hideRegistrationForm() {
+        document.getElementById("registerSection").classList.add("d-none");
+        document.getElementById("authSection").classList.remove("d-none");
+      }
+
+      async function registerBusiness(event) {
+        event.preventDefault();
+        const email = document.getElementById("regEmail").value.trim();
+        const password = document.getElementById("regPassword").value;
+        const businessName = document
+          .getElementById("regBusinessName")
+          .value.trim();
+        const phone = document.getElementById("regPhone").value.trim();
+        const address = document.getElementById("regAddress").value.trim();
+        const mapLocation = document
+          .getElementById("regMapLocation")
+          .value.trim();
+        const paypalClientId = document
+          .getElementById("regPaypalClientId")
+          .value.trim();
+        const statusDiv = document.getElementById("registerStatus");
+
+        // Check for duplicate email
+        const { data: existing } = await supabase
+          .from("Settings")
+          .select("Email")
+          .eq("Email", email)
+          .single();
+        if (existing) {
+          statusDiv.textContent = "Email already registered.";
+          return;
+        }
+
+        const { error } = await supabase.from("Settings").insert([
+          {
+            Email: email,
+            OnlinePassword: password,
+            BusinessName: businessName,
+            Phone: phone,
+            Address: address,
+            MapLocation: mapLocation,
+            PaypalClientId: paypalClientId,
+          },
+        ]);
+        if (error) {
+          statusDiv.textContent = "Error registering business.";
+        } else {
+          statusDiv.className = "text-success mt-2";
+          statusDiv.textContent = "Business registered! You can now sign in.";
+          setTimeout(hideRegistrationForm, 2000);
+        }
+      }
+
+      function goToStoreWithEmail() {
+        const email = document.getElementById("settingsEmail").value.trim();
+        if (!email) {
+          alert("Please enter a valid email.");
+          return;
+        }
+        window.location.href = `../index.html?email=${encodeURIComponent(
+          email
+        )}`;
+      }
+    </script>
+  </body>
 </html>

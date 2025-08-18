@@ -294,7 +294,7 @@
               // Send the email
               emailjs
                 .send("service_s481rtv", "template_771ecr6", {
-                  to_email: window.globalStore.state.Email || "pabloandreychacon@gmail.com",
+                  to_email: window.globalStore?.state?.Email || "pabloandreychacon@gmail.com",
                   from_name: sanitizedData.name,
                   from_email: sanitizedData.email,
                   subject: `Contact Form: ${sanitizedData.subject}`,
@@ -317,14 +317,31 @@
             document.head.appendChild(script);
           });
 
-        // Update business info
-        const businessPhone = window.globalStore?.state?.Phone || "+1 (800) 123-4567";
-        const businessEmail = window.globalStore?.state?.Email || "support@postore.com";
-        const businessAddress = window.globalStore?.state?.Address || "123 Commerce Street";
+        // Update business contact info when data is ready
+        function updateContactBusinessInfo() {
+          const businessPhone = window.globalStore?.state?.Phone || "+1 (800) 123-4567";
+          const businessEmail = window.globalStore?.state?.Email || "support@postore.com";
+          const businessAddress = window.globalStore?.state?.Address || "123 Commerce Street";
+          const mapLocation = window.globalStore?.state?.MapLocation || "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d171.12713250416522!2d-73.72860815528284!3d40.68220458419986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNueva%20York%2C%20EE.%20UU.!5e1!3m2!1ses-419!2scr!4v1753604260812!5m2!1ses-419!2scr";
+          
+          const phoneElement = document.getElementById("business-phone");
+          const emailElement = document.getElementById("business-email");
+          const addressElement = document.getElementById("business-address");
+          const mapElement = document.getElementById("business-location");
+          
+          if (phoneElement) phoneElement.textContent = businessPhone;
+          if (emailElement) emailElement.textContent = businessEmail;
+          if (addressElement) addressElement.textContent = businessAddress;
+          if (mapElement) mapElement.src = mapLocation;
+        }
         
-        document.getElementById("business-phone").textContent = businessPhone;
-        document.getElementById("business-email").textContent = businessEmail;
-        document.getElementById("business-address").textContent = businessAddress;
+        // Listen for business data loaded event
+        window.addEventListener('businessDataLoaded', updateContactBusinessInfo);
+        
+        // Also check if business data is already loaded
+        if (window.businessDataReady && window.globalStore?.state) {
+          updateContactBusinessInfo();
+        }
       });
     </script>
   </body>

@@ -19,7 +19,21 @@
           "cartComponentsSection",
           "../sections/cart-components.html"
         );
+
+        // Ensure zoomModal exists before assigning onclick
+        var zoomModal = document.getElementById("zoomModal");
+        if (zoomModal) {
+          zoomModal.onclick = function () {
+            this.style.display = "none";
+          };
+        }
       });
+
+      // Add this JS to your page
+      function showZoomModal(src) {
+        document.getElementById("zoomedImg").src = src;
+        document.getElementById("zoomModal").style.display = "flex";
+      }
     </script>
   </head>
   <body>
@@ -44,12 +58,15 @@
 
         <div class="row">
           <div class="col-lg-6">
+            <!-- Thumbnail image -->
             <div class="product-image-container">
               <img
                 id="productImage"
                 src=""
                 alt=""
                 class="img-fluid rounded shadow"
+                style="cursor: zoom-in"
+                onclick="showZoomModal(this.src)"
               />
             </div>
           </div>
@@ -164,6 +181,29 @@
 
     <!-- Footer Section -->
     <div id="footerSection"></div>
+
+    <!-- Modal for zoomed image -->
+    <div
+      id="zoomModal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+      "
+    >
+      <img
+        id="zoomedImg"
+        src=""
+        style="max-width: 90vw; max-height: 90vh; border-radius: 8px"
+      />
+    </div>
 
     <script src="../customElements/bottom-scripts.js"></script>
     <custom-bottom></custom-bottom>
