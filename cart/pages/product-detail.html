@@ -20,20 +20,75 @@
           "../sections/cart-components.html"
         );
 
-        // Ensure zoomModal exists before assigning onclick
         var zoomModal = document.getElementById("zoomModal");
         if (zoomModal) {
           zoomModal.onclick = function () {
             this.style.display = "none";
           };
         }
-      });
 
-      // Add this JS to your page
-      function showZoomModal(src) {
-        document.getElementById("zoomedImg").src = src;
-        document.getElementById("zoomModal").style.display = "flex";
-      }
+        /* var productImage = document.getElementById("productImage");
+        if (productImage) {
+          productImage.onclick = function () {
+            const productImages = window.currentProductImages || [this.src];
+            showImageModal(productImages, 0);
+          };
+        } */
+
+        function showZoomModal(src) {
+          document.getElementById("zoomedImg").src = src;
+          document.getElementById("zoomModal").style.display = "flex";
+        }
+
+        // Assign click event to main product image
+        var productImage = document.getElementById("productImage");
+        if (productImage) {
+          productImage.onclick = function () {
+            const productImages = window.currentProductImages || [this.src];
+            showImageModal(productImages, 0);
+          };
+        }
+
+        // Modal gallery logic
+        window.showImageModal = function (images, startIndex = 0) {
+          const modal = document.getElementById("imageModal");
+          const mainImg = document.getElementById("mainModalImg");
+          const thumbs = document.getElementById("modalThumbnails");
+
+          // Set main image
+          mainImg.src = images[startIndex];
+
+          // Render thumbnails
+          thumbs.innerHTML = "";
+          images.forEach((img, idx) => {
+            const thumb = document.createElement("img");
+            thumb.src = img;
+            thumb.style.width = "60px";
+            thumb.style.height = "60px";
+            thumb.style.objectFit = "cover";
+            thumb.style.borderRadius = "6px";
+            thumb.style.cursor = "pointer";
+            thumb.style.border =
+              idx === startIndex
+                ? "2px solid #007bff"
+                : "2px solid transparent";
+            thumb.onclick = () => {
+              mainImg.src = img;
+              Array.from(thumbs.children).forEach(
+                (t) => (t.style.border = "2px solid transparent")
+              );
+              thumb.style.border = "2px solid #007bff";
+            };
+            thumbs.appendChild(thumb);
+          });
+
+          modal.style.display = "flex";
+        };
+
+        window.closeImageModal = function () {
+          document.getElementById("imageModal").style.display = "none";
+        };
+      });
     </script>
   </head>
   <body>
@@ -66,7 +121,7 @@
                 alt=""
                 class="img-fluid rounded shadow"
                 style="cursor: zoom-in"
-                onclick="showZoomModal(this.src)"
+                onclick="showImageModal(window.currentProductImages || [this.src], 0)"
               />
             </div>
           </div>
@@ -203,6 +258,47 @@
         src=""
         style="max-width: 90vw; max-height: 90vh; border-radius: 8px"
       />
+    </div>
+
+    <!-- Modal for image preview and thumbnails -->
+    <div
+      id="imageModal"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 9999;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+      "
+    >
+      <img
+        id="mainModalImg"
+        src=""
+        style="
+          max-width: 95vw;
+          max-height: 95vh;
+          border-radius: 8px;
+          margin-bottom: 24px;
+        "
+      />
+      <div
+        id="modalThumbnails"
+        style="display: flex; gap: 12px; justify-content: center"
+      ></div>
+      <button
+        type="button"
+        class="btn btn-light mt-3"
+        onclick="closeImageModal()"
+        style="position: absolute; top: 24px; right: 24px"
+      >
+        Close
+      </button>
     </div>
 
     <script src="../customElements/bottom-scripts.js"></script>

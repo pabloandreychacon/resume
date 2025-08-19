@@ -3,6 +3,8 @@ class ProductDetail {
   constructor() {
     this.product = null;
     this.categories = {};
+    this.mainImageUrl = "";
+    this.otherImageUrls = [];
     this.init();
   }
 
@@ -10,6 +12,7 @@ class ProductDetail {
     await this.loadCategories();
     await this.loadProduct();
     await this.loadRelatedProducts();
+    window.currentProductImages = [this.mainImageUrl, ...this.otherImageUrls];
     this.bindEvents();
   }
 
@@ -71,6 +74,8 @@ class ProductDetail {
 
       this.product = data;
       await this.loadProductMedia();
+      this.mainImageUrl = data.ImageUrl || ""; // Assuming ImageUrl is the main image URL
+
       this.renderProduct();
     } catch (error) {
       console.error("Error loading product:", error);
@@ -100,6 +105,7 @@ class ProductDetail {
       }
 
       this.productMedia = data || [];
+      this.otherImageUrls = this.productMedia.map((media) => media.MediaUrl);
     } catch (error) {
       console.error("Error loading product media:", error);
       this.productMedia = [];
@@ -278,51 +284,54 @@ class ProductDetail {
     ];
 
     if (allMedia.length <= 1) {
-      container.innerHTML = `<img id="productImage" src="${
-        this.product.ImageUrl
-      }?t=${Date.now()}" alt="${
-        this.product.Name
-      }" class="img-fluid rounded shadow">`;
+      container.innerHTML = `<img
+  id="productImage"
+  src=""
+  alt=""
+  class="img-fluid rounded shadow"
+  style="cursor: zoom-in"
+  onclick="showImageModal(window.currentProductImages || [this.src], 0)"
+/>`;
       return;
     }
 
     // Amazon-style image gallery
     container.innerHTML = `
       <div class="row">
-        <!-- Thumbnail Column -->
-        <div class="col-2">
-          <div class="d-flex flex-column gap-2">
-            ${allMedia
-              .map(
-                (media, index) => `
-              <img 
-                src="${media.MediaUrl}?t=${Date.now()}" 
-                alt="${this.product.Name}" 
-                class="img-thumbnail product-thumbnail ${
-                  index === 0 ? "active" : ""
-                }" 
-                style="cursor: pointer; height: 60px; object-fit: cover; border: 2px solid ${
-                  index === 0 ? "#007bff" : "#dee2e6"
-                };"
-                data-index="${index}"
-                onclick="productDetail.selectImage(${index})"
-              >
-            `
-              )
-              .join("")}
-          </div>
-        </div>
-        <!-- Main Image -->
-        <div class="col-10">
+      <!-- Thumbnail Column -->
+      <div class="col-2">
+        <div class="d-flex flex-column gap-2">
+        ${allMedia
+          .map(
+            (media, index) => `
           <img 
-            id="mainProductImage" 
-            src="${allMedia[0].MediaUrl}?t=${Date.now()}" 
-            alt="${this.product.Name}" 
-            class="img-fluid rounded shadow" 
-            style="max-height: 500px; object-fit: contain; width: 100%; cursor: pointer;"
-            onclick="productDetail.openImageModal()"
+          src="${media.MediaUrl}?t=${Date.now()}" 
+          alt="${this.product.Name}" 
+          class="img-thumbnail product-thumbnail ${
+            index === 0 ? "active" : ""
+          }" 
+          style="cursor: pointer; height: 60px; object-fit: cover; border: 2px solid ${
+            index === 0 ? "#007bff" : "#dee2e6"
+          };"
+          data-index="${index}"
+          onclick="productDetail.selectImage(${index})"
           >
+        `
+          )
+          .join("")}
         </div>
+      </div>
+      <!-- Main Image -->
+      <div class="col-10">
+        <img 
+        id="mainProductImage" 
+        src="${allMedia[0].MediaUrl}?t=${Date.now()}" 
+        alt="${this.product.Name}" 
+        class="img-fluid rounded shadow" 
+        style="max-height: 500px; object-fit: contain; width: 100%; cursor: pointer;"
+        onclick="showImageModal(window.currentProductImages || [this.src])"
+        >
+      </div>
       </div>
     `;
   }
