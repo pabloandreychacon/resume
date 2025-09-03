@@ -66,8 +66,12 @@ if (!window.globalStore) {
 if (window.globalStore) {
   const urlParams = new URLSearchParams(window.location.search);
   const emailParam = urlParams.get("email");
-  
-  if (!emailParam) {
+
+  if (emailParam) {
+    // Si hay un parámetro email en la URL, actualizar el estado global
+    window.globalStore.setState({ Email: emailParam });
+  } else {
+    // Si no hay parámetro email, cargar desde localStorage
     window.globalStore.loadFromStorage();
   }
 }

@@ -9,6 +9,7 @@
       author="POStore Team"
       favicon-url="../assets/favicon.ico"
       stylesheets="../css/style.css"
+      scripts="../js/price-formatter.js"
     ></custom-head>
     <script src="../js/section-loader.js"></script>
     <script defer>
@@ -56,18 +57,26 @@
           const thumbs = document.getElementById("modalThumbnails");
 
           // Set main image
-          mainImg.src = images[startIndex];
+          mainImg.src = images[startIndex] || "";
+          mainImg.onerror = function () {
+            this.onerror = null;
+            this.src = "";
+          };
 
           // Render thumbnails
           thumbs.innerHTML = "";
           images.forEach((img, idx) => {
             const thumb = document.createElement("img");
-            thumb.src = img;
+            thumb.src = img || "";
             thumb.style.width = "60px";
             thumb.style.height = "60px";
             thumb.style.objectFit = "cover";
             thumb.style.borderRadius = "6px";
             thumb.style.cursor = "pointer";
+            thumb.onerror = function () {
+              this.onerror = null;
+              this.src = "";
+            };
             thumb.style.border =
               idx === startIndex
                 ? "2px solid #007bff"
@@ -97,7 +106,7 @@
 
     <!-- Product Detail Section -->
     <section class="py-5 mt-5">
-      <div class="container">
+      <div class="container mt-5">
         <nav aria-label="breadcrumb" class="mb-4">
           <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="../index.html">Home</a></li>
@@ -121,6 +130,7 @@
                 alt=""
                 class="img-fluid rounded shadow"
                 style="cursor: zoom-in"
+                onerror="this.onerror=null; this.src='../assets/img/fallback.png';"
                 onclick="showImageModal(window.currentProductImages || [this.src], 0)"
               />
             </div>
@@ -257,6 +267,7 @@
         id="zoomedImg"
         src=""
         style="max-width: 90vw; max-height: 90vh; border-radius: 8px"
+        onerror="this.onerror=null; this.src='../assets/img/fallback.png';"
       />
     </div>
 
@@ -286,6 +297,7 @@
           border-radius: 8px;
           margin-bottom: 24px;
         "
+        onerror="this.onerror=null; this.src='../assets/img/fallback.png';"
       />
       <div
         id="modalThumbnails"

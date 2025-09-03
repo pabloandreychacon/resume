@@ -9,6 +9,7 @@
       author="POStore Team"
       favicon-url="assets/favicon.ico"
       stylesheets="css/style.css"
+      scripts="js/price-formatter.js"
     ></custom-head>
 
     <!-- Open Graph / Facebook -->
@@ -62,6 +63,8 @@
 
     <!-- Section Loader JS -->
     <script src="js/section-loader.js"></script>
+    <!-- i18n -->
+    <script src="js/i18n.js"></script>
     <script defer>
       // Load sections when the page is ready
       document.addEventListener("DOMContentLoaded", function () {
@@ -85,8 +88,13 @@
       <div class="container">
         <div class="row align-items-center min-vh-50">
           <div class="col-lg-6">
-            <h1 class="display-4 fw-bold mb-4">Discover Premium Products</h1>
-            <p class="lead mb-4">
+            <h1
+              class="display-4 fw-bold mb-4"
+              data-i18n="discover_premium_products"
+            >
+              Discover Premium Products
+            </h1>
+            <p class="lead mb-4" data-i18n="hero_subtitle">
               Shop the latest trends with our curated collection of high-quality
               products at unbeatable prices.
             </p>
@@ -94,6 +102,7 @@
               href="#products"
               class="btn btn-light btn-lg mb-4 mb-sm-0"
               style="position: relative; z-index: 10"
+              data-i18n="shop_now"
             >
               Shop Now <i class="bi bi-arrow-right ms-2"></i>
             </a>
@@ -132,8 +141,10 @@
                     loading="lazy"
                   />
                   <div class="carousel-caption d-none d-md-block">
-                    <h5 class="fw-bold">Premium Shopping Experience</h5>
-                    <p>
+                    <h5 class="fw-bold" data-i18n="premium_shopping_experience">
+                      Premium Shopping Experience
+                    </h5>
+                    <p data-i18n="luxury_products_description">
                       Discover luxury products with exceptional quality and
                       service.
                     </p>
@@ -147,8 +158,10 @@
                     loading="lazy"
                   />
                   <div class="carousel-caption d-none d-md-block">
-                    <h5 class="fw-bold">Latest Technology</h5>
-                    <p>
+                    <h5 class="fw-bold" data-i18n="latest_technology">
+                      Latest Technology
+                    </h5>
+                    <p data-i18n="technology_description">
                       Stay ahead with cutting-edge electronics and smart
                       devices.
                     </p>
@@ -162,8 +175,12 @@
                     loading="lazy"
                   />
                   <div class="carousel-caption d-none d-md-block">
-                    <h5 class="fw-bold">Fashion & Style</h5>
-                    <p>Express yourself with our curated fashion collection.</p>
+                    <h5 class="fw-bold" data-i18n="fashion_style">
+                      Fashion & Style
+                    </h5>
+                    <p data-i18n="fashion_description">
+                      Express yourself with our curated fashion collection.
+                    </p>
                   </div>
                 </div>
               </div>
@@ -201,17 +218,21 @@
                 class="btn btn-outline-primary active"
                 data-category="all"
               >
-                All Products
+                <span data-i18n="all_products">All Products</span>
               </button>
               <!-- Category buttons will be dynamically loaded here -->
             </div>
           </div>
           <div class="col-md-6 text-end my-3">
             <select class="form-select d-inline-block w-auto" id="sortSelect">
-              <option value="default">Sort by</option>
-              <option value="price-low">Price: Low to High</option>
-              <option value="price-high">Price: High to Low</option>
-              <option value="name">Name A-Z</option>
+              <option value="default" data-i18n="sort_by">Sort by</option>
+              <option value="price-low" data-i18n="price_low_high">
+                Price: Low to High
+              </option>
+              <option value="price-high" data-i18n="price_high_low">
+                Price: High to Low
+              </option>
+              <option value="name" data-i18n="name_az">Name A-Z</option>
             </select>
           </div>
         </div>
@@ -222,8 +243,10 @@
     <section class="py-5">
       <div class="container">
         <div class="text-center mb-5">
-          <h2 class="display-5 fw-bold mb-3">Featured Products</h2>
-          <p class="lead text-muted">
+          <h2 class="display-5 fw-bold mb-3" data-i18n="featured_products">
+            Featured Products
+          </h2>
+          <p class="lead text-muted" data-i18n="handpicked_selection">
             Discover our handpicked selection of premium items
           </p>
         </div>
@@ -242,7 +265,6 @@
 
     <script src="customElements/bottom-scripts.js"></script>
     <custom-bottom></custom-bottom>
-
     <script src="js/performance.js"></script>
 
     <!-- Supabase JS -->

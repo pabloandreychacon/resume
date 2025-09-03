@@ -4,6 +4,14 @@ class SharedStore {
     this.cart = this.loadFromStorage("postore_cart") || [];
     this.wishlist = this.loadFromStorage("postore_wishlist") || [];
     this.init();
+
+    // Add event listener to refresh cart when page is shown again
+    window.addEventListener("pageshow", (event) => {
+      // Check if the page is being shown from cache (back/forward navigation)
+      if (event.persisted) {
+        this.refreshCartFromStorage();
+      }
+    });
   }
 
   init() {
@@ -39,6 +47,10 @@ class SharedStore {
     const taxRate =
       parseFloat(product.TaxRate || product.taxes || product.Taxes || 0) / 100;
     return (basePrice * (1 + taxRate)).toFixed(2);
+  }
+
+  formatPrice(price) {
+    return StoreFunctions.formatPrice(price);
   }
 
   bindEvents() {
@@ -122,7 +134,7 @@ class SharedStore {
       cartItems.innerHTML = this.cart
         .map(
           (item) => `
-            <div class="cart-item">
+            <div class="cart-item s">
               <div class="row align-items-center">
                 <div class="col-sm-2">
                   <img src="${item.ImageUrl || item.imageUrl}" alt="${
@@ -132,8 +144,8 @@ class SharedStore {
                 <div class="col-sm-6">
                   <div class="cart-item-info">
                     <h6>${item.Name || item.name}</h6>
-                    <p class="cart-item-price mb-0">$${this.calculatePriceWithTax(
-                      item
+                    <p class="cart-item-price mb-0">${this.formatPrice(
+                      this.calculatePriceWithTax(item)
                     )}</p>
                   </div>
                 </div>
@@ -193,8 +205,8 @@ class SharedStore {
                   <div class="col-6">
                     <div class="cart-item-info">
                       <h6>${item.Name || item.name}</h6>
-                      <p class="cart-item-price mb-0">$${this.calculatePriceWithTax(
-                        item
+                      <p class="cart-item-price mb-0">${this.formatPrice(
+                        this.calculatePriceWithTax(item)
                       )}</p>
                     </div>
                   </div>
@@ -292,6 +304,15 @@ class SharedStore {
     const checkoutPath = isInPages ? "checkout.html" : "pages/checkout.html";
 
     window.location.href = checkoutPath;
+  }
+
+  refreshCartFromStorage() {
+    // Reload cart and wishlist from localStorage
+    this.cart = this.loadFromStorage("postore_cart") || [];
+    this.wishlist = this.loadFromStorage("postore_wishlist") || [];
+
+    // Update UI to reflect new cart data
+    this.updateCartUI();
   }
 }
 

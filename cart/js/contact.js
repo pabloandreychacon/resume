@@ -39,7 +39,8 @@ document.addEventListener("DOMContentLoaded", function () {
         emailjs
           .send("service_s481rtv", "template_771ecr6", {
             to_email:
-              window.globalStore.state.Email || "pabloandreychacon@gmail.com",
+              window.EmailUtils?.getBusinessEmail() ||
+              "pabloandreychacon@gmail.com",
             from_name: name,
             from_email: email,
             subject: subject,
@@ -69,25 +70,61 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
   // Set business phone number
-  const businessPhone = window.globalStore.state.Phone || "+1 (800) 123-4567";
+  const businessPhone = (() => {
+    try {
+      const globalStateStr = localStorage.getItem("globalState");
+      if (globalStateStr) {
+        const globalState = JSON.parse(globalStateStr);
+        if (globalState.Phone) {
+          return globalState.Phone;
+        }
+      }
+    } catch (error) {
+      console.error("Error reading business phone from localStorage:", error);
+    }
+    return "+1 (800) 123-4567";
+  })();
   // Update phone link and text
   document.getElementById("business-phone").textContent = businessPhone;
 
   // Set business email
-  const businessEmail = window.globalStore.state.Email || "";
+  const businessEmail = window.EmailUtils?.getBusinessEmail() || "";
   // Update email text
   document.getElementById("business-email").textContent = businessEmail;
 
   // Set business address
-  const businessAddress =
-    window.globalStore.state.Address || "123 Commerce Street";
+  const businessAddress = (() => {
+    try {
+      const globalStateStr = localStorage.getItem("globalState");
+      if (globalStateStr) {
+        const globalState = JSON.parse(globalStateStr);
+        if (globalState.Address) {
+          return globalState.Address;
+        }
+      }
+    } catch (error) {
+      console.error("Error reading business address from localStorage:", error);
+    }
+    return "123 Commerce Street";
+  })();
   // Update address text
   document.getElementById("business-address").textContent = businessAddress;
 
   // Set business location
-  const businessLocation =
-    window.globalStore.state.MapLocation ||
-    "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d171.12713250416522!2d-73.72860815528284!3d40.68220458419986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNueva%20York%2C%20EE.%20UU.!5e1!3m2!1ses-419!2scr!4v1753604260812!5m2!1ses-419!2scr";
+  const businessLocation = (() => {
+    try {
+      const globalStateStr = localStorage.getItem("globalState");
+      if (globalStateStr) {
+        const globalState = JSON.parse(globalStateStr);
+        if (globalState.MapLocation) {
+          return globalState.MapLocation;
+        }
+      }
+    } catch (error) {
+      console.error("Error reading business location from localStorage:", error);
+    }
+    return "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d171.12713250416522!2d-73.72860815528284!3d40.68220458419986!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNueva%20York%2C%20EE.%20UU.!5e1!3m2!1ses-419!2scr!4v1753604260812!5m2!1ses-419!2scr";
+  })();
   // Update iframe src
   document.getElementById("business-location").src = businessLocation;
 });

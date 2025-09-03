@@ -9,6 +9,7 @@
       author="POStore Team"
       favicon-url="../assets/favicon.ico"
       stylesheets="../css/style.css"
+      scripts="../js/price-formatter.js"
     ></custom-head>
 
     <script src="../js/globalState.js"></script>
@@ -149,70 +150,8 @@
               </h5>
             </div>
             <div class="card-body">
-              <div class="form-check mb-2">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="shipping"
-                  id="pickupShipping"
-                  value="0"
-                  checked
-                />
-                <label
-                  class="form-check-label d-flex justify-content-between w-100"
-                  for="pickupShipping"
-                >
-                  <span>Pickup at Store (Available Today)</span>
-                  <span class="fw-bold text-success">FREE</span>
-                </label>
-              </div>
-              <div class="form-check mb-2">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="shipping"
-                  id="standardShipping"
-                  value="5.99"
-                />
-                <label
-                  class="form-check-label d-flex justify-content-between w-100"
-                  for="standardShipping"
-                >
-                  <span>Standard Shipping (5-7 business days)</span>
-                  <span class="fw-bold">$5.99</span>
-                </label>
-              </div>
-              <div class="form-check mb-2">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="shipping"
-                  id="expressShipping"
-                  value="12.99"
-                />
-                <label
-                  class="form-check-label d-flex justify-content-between w-100"
-                  for="expressShipping"
-                >
-                  <span>Express Shipping (2-3 business days)</span>
-                  <span class="fw-bold">$12.99</span>
-                </label>
-              </div>
-              <div class="form-check">
-                <input
-                  class="form-check-input"
-                  type="radio"
-                  name="shipping"
-                  id="overnightShipping"
-                  value="24.99"
-                />
-                <label
-                  class="form-check-label d-flex justify-content-between w-100"
-                  for="overnightShipping"
-                >
-                  <span>Overnight Shipping (1 business day)</span>
-                  <span class="fw-bold">$24.99</span>
-                </label>
+              <div id="shippingMethodsContainer">
+                <!-- Shipping methods will be populated by JavaScript -->
               </div>
             </div>
           </div>
@@ -235,21 +174,24 @@
 
               <div class="d-flex justify-content-between mb-2">
                 <span>Subtotal:</span>
-                <span id="subtotal">$0.00</span>
+                <span id="subtotal">0.00</span>
               </div>
               <div class="d-flex justify-content-between mb-2">
                 <span>Shipping:</span>
-                <span id="shippingCost">$0.00</span>
+                <span id="shippingCost">0.00</span>
               </div>
               <div class="d-flex justify-content-between mb-2">
                 <span>Tax:</span>
-                <span id="tax">$0.00</span>
+                <span id="tax">0.00</span>
               </div>
               <hr />
               <div class="d-flex justify-content-between fw-bold fs-5">
                 <span>Total:</span>
-                <span id="total">$0.00</span>
+                <span id="total">0.00</span>
               </div>
+
+              <!-- Local Currency Display -->
+              <div id="localCurrencyDisplay"></div>
 
               <div class="mt-4">
                 <!-- PayPal Button Container -->
@@ -265,9 +207,63 @@
                     }
 
                     // Calculate total from cart
-                    const total = document
-                      .getElementById("total")
-                      .innerText.replace("$", "");
+                    const totalElement = document.getElementById("total");
+                    const totalText = totalElement
+                      ? totalElement.innerText
+                      : "0.00";
+                    // Extract numeric value from formatted price
+                    // This function handles various international number formats
+                    function extractNumericValue(formattedString) {
+                      // Remove currency symbols and other non-numeric characters except
+                      // decimal separators (.,) and negative sign (-)
+                      let cleaned = formattedString.replace(/[^\d.,-]/g, "");
+
+                      // Handle negative numbers
+                      const isNegative = cleaned.includes("-");
+                      cleaned = cleaned.replace(/-/g, "");
+
+                      // Handle different decimal separators
+                      // If we have both . and , we need to determine which is the decimal separator
+                      const dotCount = (cleaned.match(/\./g) || []).length;
+                      const commaCount = (cleaned.match(/,/g) || []).length;
+
+                      if (dotCount > 0 && commaCount > 0) {
+                        // If both exist, assume the last one is the decimal separator
+                        // and the other is the thousands separator
+                        if (
+                          cleaned.lastIndexOf(".") > cleaned.lastIndexOf(",")
+                        ) {
+                          // Dot is decimal separator
+                          cleaned = cleaned.replace(/,/g, ""); // Remove thousands separator
+                        } else {
+                          // Comma is decimal separator
+                          cleaned = cleaned.replace(/\./g, ""); // Remove thousands separator
+                          cleaned = cleaned.replace(/,/, "."); // Convert decimal separator to dot
+                        }
+                      } else if (commaCount > 1) {
+                        // Multiple commas, assume they're thousands separators
+                        cleaned = cleaned.replace(/,/g, "");
+                      } else if (dotCount > 1) {
+                        // Multiple dots, assume they're thousands separators
+                        cleaned = cleaned.replace(/\./g, "");
+                      } else if (commaCount === 1) {
+                        // Single comma, check position to determine if it's decimal separator
+                        const parts = cleaned.split(",");
+                        if (parts[1] && parts[1].length === 3) {
+                          // If after comma there are exactly 3 digits, it might be thousands separator
+                          // But we'll treat it as decimal separator for now to avoid complexity
+                          cleaned = cleaned.replace(/,/, ".");
+                        } else {
+                          cleaned = cleaned.replace(/,/, ".");
+                        }
+                      }
+
+                      // Parse the final number
+                      const result = parseFloat(cleaned) || 0;
+                      return isNegative ? -result : result;
+                    }
+
+                    const total = extractNumericValue(totalText) || "0.00";
 
                     paypal
                       .Buttons({
@@ -353,9 +349,9 @@
                                   cart.forEach((item) => {
                                     itemsList += `${
                                       item.Name || "Product"
-                                    } - $${item.Price || "0.00"} x ${
-                                      item.quantity || 1
-                                    }\n`;
+                                    } - ${StoreFunctions.formatPrice(
+                                      item.Price || "0.00"
+                                    )} x ${item.quantity || 1}\n`;
                                   });
                                 } else {
                                   // Fallback to get items from the order summary HTML
@@ -399,7 +395,6 @@
                                         TotalAmount: parseFloat(total),
                                         StatusId: 1,
                                         PaymentOrderId: orderNumber,
-                                        Currency: "USD",
                                         ShippingAddress: addressStr,
                                         ShippingMethod: shippingMethod,
                                         TrackingNumber: null,
@@ -470,7 +465,9 @@
                                     "service_s481rtv",
                                     "template_771ecr6",
                                     {
-                                      to_email: window.globalStore?.state?.Email || "pabloandreychacon@gmail.com",
+                                      to_email:
+                                        window.globalStore?.state?.Email ||
+                                        "pabloandreychacon@gmail.com",
                                       from_email: customerEmail,
                                       message: `
                                       Order Number: ${orderNumber}\n\n
@@ -571,24 +568,85 @@
     <custom-bottom></custom-bottom>
     <!-- Checkout JS -->
     <script src="../js/checkout.js"></script>
-    
+
     <script>
       // Update business name when data is ready
       function updateCheckoutBusinessInfo() {
-        const businessName = window.globalStore?.state?.BusinessName || "POStore";
+        const businessName =
+          window.globalStore?.state?.BusinessName || "POStore";
         const businessNameElement = document.getElementById("business-name");
         if (businessNameElement) {
           businessNameElement.textContent = businessName;
         }
       }
-      
+
       // Listen for business data loaded event
-      window.addEventListener('businessDataLoaded', updateCheckoutBusinessInfo);
-      
+      window.addEventListener("businessDataLoaded", updateCheckoutBusinessInfo);
+
       // Also check if business data is already loaded
-      document.addEventListener('DOMContentLoaded', function() {
+      document.addEventListener("DOMContentLoaded", function () {
         if (window.businessDataReady && window.globalStore?.state) {
           updateCheckoutBusinessInfo();
+        }
+      });
+    </script>
+
+    <script>
+      // Format prices when the page loads
+      document.addEventListener("DOMContentLoaded", function () {
+        // Format shipping prices
+        const standardShippingPrice = document.getElementById(
+          "standardShippingPrice"
+        );
+        if (standardShippingPrice) {
+          standardShippingPrice.textContent = StoreFunctions.formatPrice(5.99);
+        }
+
+        const expressShippingPrice = document.getElementById(
+          "expressShippingPrice"
+        );
+        if (expressShippingPrice) {
+          expressShippingPrice.textContent = StoreFunctions.formatPrice(12.99);
+        }
+
+        const overnightShippingPrice = document.getElementById(
+          "overnightShippingPrice"
+        );
+        if (overnightShippingPrice) {
+          overnightShippingPrice.textContent =
+            StoreFunctions.formatPrice(24.99);
+        }
+
+        // Initialize local currency display
+        const localCurrencyDisplay = document.getElementById(
+          "localCurrencyDisplay"
+        );
+        if (localCurrencyDisplay) {
+          localCurrencyDisplay.innerHTML = "";
+        }
+
+        // Only initialize order summary prices to 0 if cart is empty
+        const cart = JSON.parse(localStorage.getItem("postore_cart")) || [];
+        if (cart.length === 0) {
+          const subtotal = document.getElementById("subtotal");
+          if (subtotal) {
+            subtotal.textContent = StoreFunctions.formatPrice(0);
+          }
+
+          const shippingCost = document.getElementById("shippingCost");
+          if (shippingCost) {
+            shippingCost.textContent = StoreFunctions.formatPrice(0);
+          }
+
+          const tax = document.getElementById("tax");
+          if (tax) {
+            tax.textContent = StoreFunctions.formatPrice(0);
+          }
+
+          const total = document.getElementById("total");
+          if (total) {
+            total.textContent = StoreFunctions.formatPrice(0);
+          }
         }
       });
     </script>

@@ -9,6 +9,7 @@
       author="POStore Team"
       favicon-url="../assets/favicon.ico"
       stylesheets="../css/style.css"
+      scripts="../js/price-formatter.js"
     ></custom-head>
 
     <!-- Section Loader JS -->
@@ -305,9 +306,7 @@
               <div class="card-body">
                 <div class="row">
                   <div class="col-md-6">
-                    <p><strong>Total Amount:</strong> $${order.TotalAmount} ${
-            order.Currency
-          }</p>
+                    <p><strong>Total Amount:</strong> ${StoreFunctions.formatPrice(order.TotalAmount)} </p>
                     <p><strong>Payment Order ID:</strong> ${
                       order.PaymentOrderId || "N/A"
                     }</p>
@@ -457,10 +456,10 @@
                   <span class="badge bg-secondary">Qty: ${item.Quantity}</span>
                 </div>
                 <div class="col-md-2 text-center">
-                  $${parseFloat(item.Price).toFixed(2)}
+                  ${StoreFunctions.formatPrice(parseFloat(item.Price))}
                 </div>
                 <div class="col-md-2 text-end">
-                  <strong>$${parseFloat(item.ItemTotal).toFixed(2)}</strong>
+                  <strong>${StoreFunctions.formatPrice(parseFloat(item.ItemTotal))}</strong>
                 </div>
               </div>
             </div>
@@ -474,7 +473,7 @@
               ${itemsHtml}
               <hr>
               <div class="text-end">
-                <strong>Items Total: $${totalAmount.toFixed(2)}</strong>
+                <strong>Items Total: ${StoreFunctions.formatPrice(totalAmount)}</strong>
               </div>
             </div>
           `;

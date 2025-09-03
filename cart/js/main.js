@@ -9,6 +9,14 @@ class EcommerceStore {
     this.currentSort = "default";
     this.categories = {};
     this.init();
+
+    // Add event listener to refresh cart when page is shown again
+    window.addEventListener("pageshow", (event) => {
+      // Check if the page is being shown from cache (back/forward navigation)
+      if (event.persisted) {
+        this.refreshCartFromStorage();
+      }
+    });
   }
 
   async init() {
@@ -24,31 +32,49 @@ class EcommerceStore {
     // Wait for business data to be ready
     if (!window.businessDataReady) {
       console.log("Waiting for business data to be ready...");
-      setTimeout(() => this.init(), 100);
+      // Listen for businessDataLoaded event only once
+      if (!this.businessDataListenerAdded) {
+        window.addEventListener("businessDataLoaded", () => {
+          this.init();
+        });
+        this.businessDataListenerAdded = true;
+      }
       return;
     }
 
-    const businessEmail = window.globalStore?.state?.Email;
+    const businessEmail =
+      window.EmailUtils?.getBusinessEmail() || window.globalStore.state.Email;
     if (!businessEmail || businessEmail.trim() === "") {
       console.error(
         "Business email still not available after business data loaded"
       );
-      window.globalStore.setState({
-        ...window.globalStore.state,
-        Email: "pabloandreychacon@hotmail.com",
-      });
+      // Set default email using EmailUtils if available
+      if (window.EmailUtils) {
+        window.EmailUtils.setBusinessEmail("pabloandreychacon@hotmail.com");
+      } else {
+        window.globalStore.setState({
+          ...window.globalStore.state,
+          Email: "pabloandreychacon@hotmail.com",
+        });
+      }
     }
 
     // If we have business data but no email, set default email
     if (!businessEmail || businessEmail.trim() === "") {
       console.log("Setting default email since none was found");
-      window.globalStore.setState({
-        ...window.globalStore.state,
-        Email: "pabloandreychacon@hotmail.com",
-      });
+      // Set default email using EmailUtils if available
+      if (window.EmailUtils) {
+        window.EmailUtils.setBusinessEmail("pabloandreychacon@hotmail.com");
+      } else {
+        window.globalStore.setState({
+          ...window.globalStore.state,
+          Email: "pabloandreychacon@hotmail.com",
+        });
+      }
     }
 
-    const finalEmail = window.globalStore.state.Email;
+    const finalEmail =
+      window.EmailUtils?.getBusinessEmail() || window.globalStore.state.Email;
     console.log("Starting to load categories and products for:", finalEmail);
     await this.loadCategories();
     await this.loadProducts();
@@ -74,8 +100,11 @@ class EcommerceStore {
   }
 
   async loadCategories() {
-    // Get current business email from window.globalStore.state.Email
-    const businessEmail = window.globalStore?.state?.Email || "";
+    // Get current business email from EmailUtils or globalStore
+    const businessEmail =
+      window.EmailUtils?.getBusinessEmail() ||
+      window.globalStore.state.Email ||
+      "";
     if (!businessEmail) {
       console.error("Business email not set in globalStore");
       return;
@@ -110,8 +139,11 @@ class EcommerceStore {
 
   async loadProducts() {
     try {
-      // Get current business email from window.globalStore.state.Email
-      const businessEmail = window.globalStore?.state?.Email || "";
+      // Get current business email from EmailUtils or globalStore
+      const businessEmail =
+        window.EmailUtils?.getBusinessEmail() ||
+        window.globalStore.state.Email ||
+        "";
       if (!businessEmail) {
         console.error("Business email not set in globalStore");
         return;
@@ -260,16 +292,16 @@ class EcommerceStore {
             }" data-category="${
       this.categories[product.CategoryId] || "uncategorized"
     }" id="product-${product.Id}">
-                <img src="${product.ImageUrl}?t=${Date.now()}" alt="${
+                <img src="${product.ImageUrl}" alt="${
       product.Name
-    }" class="card-img-top product-image" loading="lazy">
+    }" class="card-img-top product-image" loading="lazy" decoding="async" onerror="this.onerror=null; this.src='../assets/img/fallback.png';">
                 <div class="card-body d-flex flex-column">
                     <p class="product-category mb-1">${
                       this.categories[product.CategoryId] || "uncategorized"
                     }</p>
                     <h5 class="product-title">${product.Name}</h5>
-                    <p class="product-price">$${this.calculatePriceWithTax(
-                      product
+                    <p class="product-price">${this.formatPrice(
+                      this.calculatePriceWithTax(product)
                     )}</p>
                     ${
                       product.StockQuantity !== undefined &&
@@ -372,9 +404,8 @@ class EcommerceStore {
     document.getElementById("modalProductCategory").textContent = (
       this.categories[product.CategoryId] || "uncategorized"
     ).toUpperCase();
-    document.getElementById(
-      "modalProductPrice"
-    ).textContent = `$${product.Price}`;
+    document.getElementById("modalProductPrice").textContent =
+      StoreFunctions.formatPrice(product.Price);
     document.getElementById("modalProductDescription").textContent =
       product.Description;
 
@@ -542,116 +573,124 @@ class EcommerceStore {
       0
     );
 
-    cartCount.textContent = totalItems;
-    cartTotal.textContent = totalPrice.toFixed(2);
-    wishlistCount.textContent = this.wishlist.length;
+    if (cartCount) cartCount.textContent = totalItems;
+    if (cartTotal) cartTotal.textContent = totalPrice.toFixed(2);
+    if (wishlistCount) wishlistCount.textContent = this.wishlist.length;
 
-    if (this.cart.length === 0) {
-      cartItems.innerHTML = `
-                <div class="text-center text-muted py-5">
-                    <i class="bi bi-cart-x display-1"></i>
-                    <p class="mt-3">Your cart is empty</p>
-                </div>
-            `;
-      checkoutBtn.disabled = true;
-    } else {
-      cartItems.innerHTML = this.cart
-        .map(
-          (item) => `
-                <div class="cart-item">
-                    <div class="row align-items-center">
-                        <div class="col-3">
-                            <img src="${item.ImageUrl || item.imageUrl}" alt="${
-            item.Name || item.name
-          }" class="cart-item-image">
-                        </div>
-                        <div class="col-6">
-                            <div class="cart-item-info">
-                                <h6>${item.Name || item.name}</h6>
-                                <p class="cart-item-price mb-0">$${this.calculatePriceWithTax(
-                                  item
-                                )}</p>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="quantity-controls d-flex align-items-center">
-                                <button class="btn btn-sm btn-outline-secondary" onclick="(window.store || window.productStore).updateQuantity(${
-                                  item.Id || item.id
-                                }, ${item.quantity - 1})">
-                                    <i class="bi bi-dash"></i>
-                                </button>
-                                <input type="number" value="${
-                                  item.quantity
-                                }" min="1" class="form-control mx-1 text-center" style="width: 60px;" 
-                                       onchange="(window.store || window.productStore).updateQuantity(${
-                                         item.Id || item.id
-                                       }, parseInt(this.value))">
-                                <button class="btn btn-sm btn-outline-secondary" onclick="(window.store || window.productStore).updateQuantity(${
-                                  item.Id || item.id
-                                }, ${item.quantity + 1})">
-                                    <i class="bi bi-plus"></i>
-                                </button>
-                            </div>
-                            <button class="btn btn-sm btn-outline-danger mt-1" onclick="(window.store || window.productStore).removeFromCart(${
-                              item.Id || item.id
-                            })">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `
-        )
-        .join("");
-      checkoutBtn.disabled = false;
+    if (cartItems) {
+      if (this.cart.length === 0) {
+        cartItems.innerHTML = `
+                  <div class="text-center text-muted py-5">
+                      <i class="bi bi-cart-x display-1"></i>
+                      <p class="mt-3">Your cart is empty</p>
+                  </div>
+              `;
+      } else {
+        cartItems.innerHTML = this.cart
+          .map(
+            (item) => `
+                  <div class="cart-item">
+                      <div class="row align-items-center">
+                          <div class="col-sm-12 col-md-3">
+                              <img src="${
+                                item.ImageUrl || item.imageUrl
+                              }" alt="${
+              item.Name || item.name
+            }" class="cart-item-image">
+                          </div>
+                          <div class="col-sm-12 col-md-6">
+                              <div class="cart-item-info">
+                                  <h6>${item.Name || item.name}</h6>
+                                  <p class="cart-item-price mb-0">${this.formatPrice(
+                                    this.calculatePriceWithTax(item)
+                                  )}</p>
+                              </div>
+                          </div>
+                          <div class="col-3">
+                              <div class="quantity-controls d-flex align-items-center">
+                                  <button class="btn btn-sm btn-outline-secondary" onclick="(window.store || window.productStore).updateQuantity(${
+                                    item.Id || item.id
+                                  }, ${item.quantity - 1})">
+                                      <i class="bi bi-dash"></i>
+                                  </button>
+                                  <input type="number" value="${
+                                    item.quantity
+                                  }" min="1" class="form-control mx-1 text-center" style="width: 60px;" 
+                                         onchange="(window.store || window.productStore).updateQuantity(${
+                                           item.Id || item.id
+                                         }, parseInt(this.value))">
+                                  <button class="btn btn-sm btn-outline-secondary" onclick="(window.store || window.productStore).updateQuantity(${
+                                    item.Id || item.id
+                                  }, ${item.quantity + 1})">
+                                      <i class="bi bi-plus"></i>
+                                  </button>
+                              </div>
+                              <button class="btn btn-sm btn-outline-danger mt-1" onclick="(window.store || window.productStore).removeFromCart(${
+                                item.Id || item.id
+                              })">
+                                  <i class="bi bi-trash"></i>
+                              </button>
+                          </div>
+                      </div>
+                  </div>
+              `
+          )
+          .join("");
+      }
+    }
+
+    if (checkoutBtn) {
+      checkoutBtn.disabled = this.cart.length === 0;
     }
 
     // Update wishlist UI
-    if (this.wishlist.length === 0) {
-      wishlistItems.innerHTML = `
-                <div class="text-center text-muted py-5">
-                    <i class="bi bi-heart display-1"></i>
-                    <p class="mt-3">Your wishlist is empty</p>
-                </div>
-            `;
-    } else {
-      wishlistItems.innerHTML = this.wishlist
-        .map(
-          (item) => `
-                <div class="cart-item">
-                    <div class="row align-items-center">
-                        <div class="col-3">
-                            <img src="${item.ImageUrl || item.imageUrl}" alt="${
-            item.Name || item.name
-          }" class="cart-item-image">
-                        </div>
-                        <div class="col-6">
-                            <div class="cart-item-info">
-                                <h6>${item.Name || item.name}</h6>
-                                <p class="cart-item-price mb-0">$${this.calculatePriceWithTax(
-                                  item
-                                )}</p>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <button class="btn btn-sm btn-primary mb-1 w-100" onclick="(window.store || window.productStore).addToCartFromWishlist(${
-                              item.Id || item.id
-                            })">
-                                <i class="bi bi-cart-plus"></i>
-                            </button>
-                            <button class="btn btn-sm btn-outline-danger w-100" onclick="(window.store || window.productStore).toggleWishlist({...${JSON.stringify(
-                              item
-                            ).replace(/"/g, "&quot;")}, Id: ${
-            item.Id || item.id
-          }})">
-                                <i class="bi bi-trash"></i>
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `
-        )
-        .join("");
+    if (wishlistItems) {
+      if (this.wishlist.length === 0) {
+        wishlistItems.innerHTML = `
+                  <div class="text-center text-muted py-5">
+                      <i class="bi bi-heart display-1"></i>
+                      <p class="mt-3">Your wishlist is empty</p>
+                  </div>
+              `;
+      } else {
+        wishlistItems.innerHTML = this.wishlist
+          .map(
+            (item) => `
+                  <div class="cart-item">
+                      <div class="row align-items-center">
+                          <div class="col-3">
+                              <img src="${
+                                item.ImageUrl || item.imageUrl
+                              }" alt="${
+              item.Name || item.name
+            }" class="cart-item-image">
+                          </div>
+                          <div class="col-6">
+                              <div class="cart-item-info">
+                                  <h6>${item.Name || item.name}</h6>
+                                  <p class="cart-item-price mb-0">${this.formatPrice(
+                                    this.calculatePriceWithTax(item)
+                                  )}</p>
+                              </div>
+                          </div>
+                          <div class="col-3">
+                              <button class="btn btn-sm btn-primary mb-1 w-100" onclick="(window.store || window.productStore).addToCartFromWishlist(${
+                                item.Id || item.id
+                              })">
+                                  <i class="bi bi-cart-plus"></i>
+                              </button>
+                              <button class="btn btn-sm btn-outline-danger w-100" onclick="(window.store || window.productStore).toggleWishlist({Id: ${
+                                item.Id || item.id
+                              }})">
+                                  <i class="bi bi-trash"></i>
+                              </button>
+                          </div>
+                      </div>
+                  </div>
+              `
+          )
+          .join("");
+      }
     }
   }
 
@@ -792,6 +831,10 @@ class EcommerceStore {
     return (basePrice * (1 + taxRate)).toFixed(2);
   }
 
+  formatPrice(price) {
+    return StoreFunctions.formatPrice(price);
+  }
+
   applySorting(products) {
     switch (this.currentSort) {
       case "price-low":
@@ -819,6 +862,15 @@ class EcommerceStore {
   filterProducts(category) {
     this.currentFilter = category;
     this.renderProducts();
+  }
+
+  refreshCartFromStorage() {
+    // Reload cart and wishlist from localStorage
+    this.cart = this.loadFromStorage("postore_cart") || [];
+    this.wishlist = this.loadFromStorage("postore_wishlist") || [];
+
+    // Update UI to reflect new cart data
+    this.updateCartUI();
   }
 }
 

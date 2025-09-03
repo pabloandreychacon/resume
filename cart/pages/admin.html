@@ -127,6 +127,40 @@
                     id="regPaypalClientId"
                   />
                 </div>
+                <div class="mb-3">
+                  <label for="regLanguageFormat" class="form-label"
+                    >Language Format:</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="regLanguageFormat"
+                    placeholder="e.g., en-US"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="regCurrencyCode" class="form-label"
+                    >Currency Format:</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="regCurrencyCode"
+                    placeholder="e.g., USD"
+                  />
+                </div>
+                <div class="mb-3">
+                  <label for="regExchangeRate" class="form-label"
+                    >Exchange Rate (USD to Local Currency):</label
+                  >
+                  <input
+                    type="number"
+                    step="0.01"
+                    class="form-control"
+                    id="regExchangeRate"
+                    placeholder="e.g., 540"
+                  />
+                </div>
                 <button type="submit" class="btn btn-success w-100">
                   Register
                 </button>
@@ -193,6 +227,15 @@
               data-bs-target="#ordersTab"
             >
               Orders
+            </button>
+          </li>
+          <li class="nav-item">
+            <button
+              class="nav-link"
+              data-bs-toggle="tab"
+              data-bs-target="#shippingMethodsTab"
+            >
+              Shipping Methods
             </button>
           </li>
         </ul>
@@ -273,6 +316,40 @@
                       type="text"
                       class="form-control"
                       id="settingsPaypalClientId"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="settingsLanguageFormat" class="form-label"
+                      >Language Format</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="settingsLanguageFormat"
+                      placeholder="e.g., en-US"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="settingsCurrencyCode" class="form-label"
+                      >Currency Format</label
+                    >
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="settingsCurrencyCode"
+                      placeholder="e.g., USD"
+                    />
+                  </div>
+                  <div class="mb-3">
+                    <label for="settingsExchangeRate" class="form-label"
+                      >Exchange Rate (USD to Local Currency)</label
+                    >
+                    <input
+                      type="number"
+                      step="0.01"
+                      class="form-control"
+                      id="settingsExchangeRate"
+                      placeholder="e.g., 540"
                     />
                   </div>
                   <button type="submit" class="btn btn-primary">
@@ -511,12 +588,58 @@
                       />
                     </div>
                   </div>
+
                   <button type="submit" class="btn btn-primary mt-3">
                     Add Product
                   </button>
                   <div id="productStatus" class="mt-2"></div>
                 </form>
                 <div id="productsList"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shipping Methods Tab -->
+          <div class="tab-pane fade" id="shippingMethodsTab">
+            <div class="card shadow mb-4">
+              <div class="card-header">
+                <h5 class="mb-0">Manage Shipping Methods</h5>
+              </div>
+              <div class="card-body">
+                <form
+                  id="addShippingMethodForm"
+                  class="mb-4"
+                  onsubmit="addShippingMethod(event)"
+                >
+                  <div class="row g-2">
+                    <div class="col-md-5">
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="shippingMethodDescription"
+                        placeholder="Description"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-4">
+                      <input
+                        type="number"
+                        step="0.01"
+                        class="form-control"
+                        id="shippingMethodPrice"
+                        placeholder="Price"
+                        required
+                      />
+                    </div>
+                    <div class="col-md-3">
+                      <button type="submit" class="btn btn-primary w-100">
+                        Add Shipping Method
+                      </button>
+                    </div>
+                  </div>
+                  <div id="shippingMethodStatus" class="mt-2"></div>
+                </form>
+                <div id="shippingMethodsList"></div>
               </div>
             </div>
           </div>
@@ -535,6 +658,7 @@
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
     <script src="../js/supabase-config.js"></script>
     <script src="../js/business-data.js"></script>
+    <script src="../js/price-formatter.js"></script>
     <script src="../js/admin.js"></script>
 
     <script>
@@ -644,6 +768,12 @@
             data.BusinessName || "";
           document.getElementById("settingsPaypalClientId").value =
             data.PaypalClientId || "";
+          document.getElementById("settingsLanguageFormat").value =
+            data.LanguageFormat || "";
+          document.getElementById("settingsCurrencyCode").value =
+            data.CurrencyCode || "";
+          document.getElementById("settingsExchangeRate").value =
+            data.ExchangeRate || "";
         }
       }
 
@@ -659,6 +789,12 @@
           BusinessName: document.getElementById("settingsBusinessName").value,
           PaypalClientId: document.getElementById("settingsPaypalClientId")
             .value,
+          LanguageFormat: document.getElementById("settingsLanguageFormat")
+            .value,
+          CurrencyCode: document.getElementById("settingsCurrencyCode").value,
+          ExchangeRate: parseFloat(
+            document.getElementById("settingsExchangeRate").value
+          ),
         };
         const { error } = await supabase
           .from("Settings")
@@ -1081,6 +1217,14 @@
         const paypalClientId = document
           .getElementById("regPaypalClientId")
           .value.trim();
+        const languageFormat = document
+          .getElementById("regLanguageFormat")
+          .value.trim();
+        const CurrencyCode = document
+          .getElementById("regCurrencyCode")
+          .value.trim();
+        const exchangeRate =
+          parseFloat(document.getElementById("regExchangeRate").value) || 540; // Default to 540 if not set
         const statusDiv = document.getElementById("registerStatus");
 
         // Check for duplicate email
@@ -1103,6 +1247,9 @@
             Address: address,
             MapLocation: mapLocation,
             PaypalClientId: paypalClientId,
+            LanguageFormat: languageFormat,
+            CurrencyCode: CurrencyCode,
+            ExchangeRate: exchangeRate,
           },
         ]);
         if (error) {
@@ -1124,6 +1271,129 @@
           email
         )}`;
       }
+
+      // Shipping Methods Functions
+      async function loadShippingMethods() {
+        const email = window.globalStore?.state?.Email;
+        if (!email) return;
+        const { data, error } = await supabase
+          .from("ShippingMethods")
+          .select("*")
+          .eq("BusinessEmail", email)
+          .order("Description", { ascending: true });
+        const listDiv = document.getElementById("shippingMethodsList");
+        if (error || !data) {
+          listDiv.innerHTML =
+            "<div class='text-danger'>Error loading shipping methods.</div>";
+          return;
+        }
+        let html = `<table class="table table-bordered"><thead><tr>
+          <th>Description</th><th>Price</th><th>Active</th><th>Actions</th></tr></thead><tbody>`;
+        data.forEach((method) => {
+          html += `<tr>
+            <td><input type="text" class="form-control" value="${
+              method.Description
+            }" id="desc-${method.Id}" /></td>
+            <td><input type="number" step="0.01" class="form-control" value="${
+              method.Price
+            }" id="price-${method.Id}" /></td>
+            <td>
+              <input type="checkbox" id="active-${method.Id}" ${
+            method.Active ? "checked" : ""
+          } />
+            </td>
+            <td>
+              <button class="btn btn-sm btn-success me-1" onclick="updateShippingMethod(${
+                method.Id
+              })">Update</button>
+              <button class="btn btn-sm btn-danger" onclick="deleteShippingMethod(${
+                method.Id
+              })">Delete</button>
+            </td>
+          </tr>`;
+        });
+        html += "</tbody></table>";
+        listDiv.innerHTML = html;
+      }
+
+      async function addShippingMethod(event) {
+        event.preventDefault();
+        const email = window.globalStore?.state?.Email;
+        const description = document
+          .getElementById("shippingMethodDescription")
+          .value.trim();
+        const price = parseFloat(
+          document.getElementById("shippingMethodPrice").value
+        );
+        const statusDiv = document.getElementById("shippingMethodStatus");
+
+        const { error } = await supabase.from("ShippingMethods").insert([
+          {
+            Description: description,
+            Price: price,
+            BusinessEmail: email,
+            Active: true,
+          },
+        ]);
+        if (error) {
+          statusDiv.textContent = "Error adding shipping method.";
+          statusDiv.className = "text-danger";
+        } else {
+          statusDiv.textContent = "Shipping method added.";
+          statusDiv.className = "text-success";
+          document.getElementById("addShippingMethodForm").reset();
+          loadShippingMethods();
+        }
+      }
+
+      async function updateShippingMethod(methodId) {
+        const email = window.globalStore?.state?.Email;
+        const description = document
+          .getElementById(`desc-${methodId}`)
+          .value.trim();
+        const price = parseFloat(
+          document.getElementById(`price-${methodId}`).value
+        );
+        const active = document.getElementById(`active-${methodId}`).checked;
+        const { error } = await supabase
+          .from("ShippingMethods")
+          .update({ Description: description, Price: price, Active: active })
+          .eq("Id", methodId)
+          .eq("BusinessEmail", email);
+        if (error) {
+          alert("Error updating shipping method.");
+        } else {
+          loadShippingMethods();
+        }
+      }
+
+      async function deleteShippingMethod(methodId) {
+        if (!confirm("Delete this shipping method?")) return;
+        const email = window.globalStore?.state?.Email;
+        const { error } = await supabase
+          .from("ShippingMethods")
+          .delete()
+          .eq("Id", methodId)
+          .eq("BusinessEmail", email);
+        if (error) {
+          alert("Error deleting shipping method.");
+        } else {
+          loadShippingMethods();
+        }
+      }
+
+      // Load shipping methods when Shipping Methods tab is shown
+      document.addEventListener("DOMContentLoaded", function () {
+        const shippingMethodsTabBtn = document.querySelector(
+          '[data-bs-target="#shippingMethodsTab"]'
+        );
+        if (shippingMethodsTabBtn) {
+          shippingMethodsTabBtn.addEventListener(
+            "shown.bs.tab",
+            loadShippingMethods
+          );
+        }
+      });
     </script>
   </body>
 </html>

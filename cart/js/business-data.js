@@ -17,6 +17,10 @@ class BusinessDataLoader {
       if (error) {
         console.error("Error fetching business data from Supabase:", error);
         window.globalStore.setState({ Email: "pabloandreychacon@hotmail.com" });
+        // Also update localStorage for consistency
+        if (window.EmailUtils) {
+          window.EmailUtils.setBusinessEmail("pabloandreychacon@hotmail.com");
+        }
         return;
       }
 
@@ -37,6 +41,10 @@ class BusinessDataLoader {
           "keeping original email"
         );
         window.globalStore.setState({ Email: email });
+        // Also update localStorage for consistency
+        if (window.EmailUtils) {
+          window.EmailUtils.setBusinessEmail(email);
+        }
         window.businessDataReady = true;
         // Dispatch event to notify components
         window.dispatchEvent(new CustomEvent("businessDataLoaded"));
@@ -84,6 +92,10 @@ class BusinessDataLoader {
 
 function setBusinessEmail(email) {
   window.globalStore.setState({ Email: email });
+  // Also update localStorage for consistency
+  if (window.EmailUtils) {
+    window.EmailUtils.setBusinessEmail(email);
+  }
   window.dispatchEvent(new Event("businessDataLoaded"));
 }
 

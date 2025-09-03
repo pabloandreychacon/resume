@@ -14,7 +14,8 @@ class AdminPanel {
       return;
     }
 
-    const businessEmail = window.globalStore?.state?.Email;
+    const businessEmail =
+      window.EmailUtils?.getBusinessEmail() || window.globalStore?.state.Email;
     document.getElementById("businessEmail").textContent =
       businessEmail || "No business email";
 
@@ -34,9 +35,12 @@ class AdminPanel {
 
   async loadProducts() {
     try {
-      // Get email from authentication or fall back to globalStore
+      // Get email from authentication or fall back to EmailUtils/globalStore
       const adminEmail = document.getElementById("adminEmail")?.value;
-      const businessEmail = adminEmail || window.globalStore?.state?.Email;
+      const businessEmail =
+        adminEmail ||
+        window.EmailUtils?.getBusinessEmail() ||
+        window.globalStore?.state.Email;
       console.log("Loading products for business email:", businessEmail);
       if (!businessEmail) {
         console.warn("No business email available for loading products");
@@ -76,7 +80,9 @@ class AdminPanel {
 
   async loadExistingMedia(productId) {
     try {
-      const businessEmail = window.globalStore?.state?.Email;
+      const businessEmail =
+        window.EmailUtils?.getBusinessEmail() ||
+        window.globalStore?.state.Email;
       console.log(
         "Loading media for ProductId:",
         productId,
@@ -142,9 +148,9 @@ class AdminPanel {
     }
 
     // Check existing media count
-    // Get email from authentication or fall back to globalStore
+    // Get email from authentication or fall back to EmailUtils
     const adminEmail = document.getElementById("adminEmail")?.value;
-    const businessEmail = adminEmail || window.globalStore?.state?.Email;
+    const businessEmail = adminEmail || window.EmailUtils?.getBusinessEmail();
     const { data: existingMedia } = await supabase
       .from("ProductMedia")
       .select("Id")
@@ -160,14 +166,27 @@ class AdminPanel {
       this.showStatus("Uploading...", "info");
 
       const mediaType = file.type.startsWith("video/") ? "video" : "image";
-      const businessName =
-        window.globalStore?.state?.BusinessName ||
-        (window.globalStore?.state?.Email
-          ? window.globalStore.state.Email.split("@")[0].replace(
-              /[^a-zA-Z0-9]/g,
-              ""
-            )
-          : "default");
+      const businessName = (() => {
+        // Try to get BusinessName from localStorage
+        try {
+          const globalStateStr = localStorage.getItem("globalState");
+          if (globalStateStr) {
+            const globalState = JSON.parse(globalStateStr);
+            if (globalState.BusinessName) {
+              return globalState.BusinessName;
+            }
+          }
+        } catch (error) {
+          console.error("Error reading BusinessName from localStorage:", error);
+        }
+
+        // Fallback to email-based name or default
+        return window.EmailUtils?.getBusinessEmail()
+          ? window.EmailUtils.getBusinessEmail()
+              .split("@")[0]
+              .replace(/[^a-zA-Z0-9]/g, "")
+          : "default";
+      })();
       const fileName = `${businessName}/${productId}/${Date.now()}_${
         file.name
       }`;
@@ -187,9 +206,8 @@ class AdminPanel {
       } = supabase.storage.from("postore").getPublicUrl(fileName);
 
       // Save to ProductMedia table
-      const businessEmail = window.globalStore?.state?.Email;
+      const businessEmail = window.EmailUtils?.getBusinessEmail();
       console.log("Inserting with BusinessEmail:", businessEmail);
-
       const { error: insertError } = await supabase
         .from("ProductMedia")
         .insert({
@@ -215,9 +233,9 @@ class AdminPanel {
     if (!confirm("Delete this media file?")) return;
 
     try {
-      // Get email from authentication or fall back to globalStore
+      // Get email from authentication or fall back to EmailUtils
       const adminEmail = document.getElementById("adminEmail")?.value;
-      const businessEmail = adminEmail || window.globalStore?.state?.Email;
+      const businessEmail = adminEmail || window.EmailUtils?.getBusinessEmail();
       const { error } = await supabase
         .from("ProductMedia")
         .delete()
@@ -237,9 +255,9 @@ class AdminPanel {
 
   async loadOrders() {
     try {
-      // Get email from authentication or fall back to globalStore
+      // Get email from authentication or fall back to EmailUtils
       const adminEmail = document.getElementById("adminEmail")?.value;
-      const businessEmail = adminEmail || window.globalStore?.state?.Email;
+      const businessEmail = adminEmail || window.EmailUtils?.getBusinessEmail();
       console.log("Loading orders for business email:", businessEmail);
       if (!businessEmail) {
         console.warn("No business email available for loading orders");
@@ -276,7 +294,7 @@ class AdminPanel {
       <tr>
         <td>#${order.Id}</td>
         <td>${order.BuyerEmail}</td>
-        <td>$${order.TotalAmount}</td>
+        <td>${StoreFunctions.formatPrice(order.TotalAmount)}</td>
         <td>
           <span class="badge ${this.getStatusBadgeClass(order.StatusId)}">
             ${this.getStatusText(order.StatusId)}
@@ -303,9 +321,9 @@ class AdminPanel {
 
   async updateOrderStatus(orderId, statusId) {
     try {
-      // Get email from authentication or fall back to globalStore
+      // Get email from authentication or fall back to EmailUtils
       const adminEmail = document.getElementById("adminEmail")?.value;
-      const businessEmail = adminEmail || window.globalStore?.state?.Email;
+      const businessEmail = adminEmail || window.EmailUtils?.getBusinessEmail();
       const { error } = await supabase
         .from("Orders")
         .update({ StatusId: parseInt(statusId), UpdatedAt: new Date() })
@@ -334,7 +352,9 @@ class AdminPanel {
       const itemsHtml = items
         .map(
           (item) =>
-            `<li>${item.ProductName} - Qty: ${item.Quantity} - $${item.ItemTotal}</li>`
+            `<li>${item.ProductName} - Qty: ${
+              item.Quantity
+            } - ${StoreFunctions.formatPrice(item.ItemTotal)}</li>`
         )
         .join("");
 
@@ -362,7 +382,13 @@ class AdminPanel {
                         (item) => `
                   <div class="border-bottom pb-2 mb-2">
                     <strong>${item.ProductName}</strong><br>
-                    <small>Quantity: ${item.Quantity} | Price: $${item.Price} | Total: $${item.ItemTotal}</small>
+                    <small>Quantity: ${
+                      item.Quantity
+                    } | Price: ${StoreFunctions.formatPrice(
+                          item.Price
+                        )} | Total: ${StoreFunctions.formatPrice(
+                          item.ItemTotal
+                        )}</small>
                   </div>
                 `
                       )

@@ -188,7 +188,7 @@ h6 {
   background-color: var(--background-color);
 }
 
-@media (min-width: 1200px) and (max-width: 1600px) {
+/* @media (min-width: 1200px) and (max-width: 1600px) {
   .header ~ main {
     margin-left: 160px;
   }
@@ -197,7 +197,7 @@ h6 {
     margin-left: -160px;
     width: 100vw;
   }
-}
+} */
 
 .header.header-show {
   left: 0;

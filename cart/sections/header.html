@@ -3,6 +3,10 @@
   <i class="bi bi-arrow-up"></i>
 </button>
 
+<script>
+  console.log("Header section loaded");
+</script>
+
 <!-- Left Offcanvas Navigation -->
 <div class="offcanvas offcanvas-start" tabindex="-1" id="navOffcanvas">
   <div class="offcanvas-header">
@@ -15,27 +19,37 @@
   </div>
   <div class="offcanvas-body">
     <ul class="nav flex-column">
-      <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
       <li class="nav-item">
-        <a class="nav-link" href="index.html#products">Products</a>
+        <a class="nav-link" href="index.html" data-i18n="home">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="pages/orders.html">Orders</a>
+        <a class="nav-link" href="index.html#products" data-i18n="products"
+          >Products</a
+        >
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="pages/contact.html">Contact</a>
+        <a class="nav-link" href="pages/orders.html" data-i18n="orders"
+          >Orders</a
+        >
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="pages/faq.html">FAQs</a>
+        <a class="nav-link" href="pages/contact.html" data-i18n="contact"
+          >Contact</a
+        >
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="pages/support.html">Support</a>
+        <a class="nav-link" href="pages/faq.html" data-i18n="faqs">FAQs</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="pages/admin.html">Admin</a>
+        <a class="nav-link" href="pages/support.html" data-i18n="support"
+          >Support</a
+        >
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="pages/about.html">About</a>
+        <a class="nav-link" href="pages/admin.html" data-i18n="admin">Admin</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="pages/about.html" data-i18n="about">About</a>
       </li>
     </ul>
   </div>
@@ -77,6 +91,7 @@
             class="form-control"
             placeholder="Search products..."
             id="searchInputDesktop"
+            data-i18n="search_placeholder"
           />
           <button
             class="btn btn-outline-primary"
@@ -84,6 +99,26 @@
             id="searchBtnDesktop"
           >
             <i class="bi bi-search"></i>
+          </button>
+        </div>
+
+        <!-- Language Switcher -->
+        <div class="btn-group me-3 mb-2" role="group">
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            id="lang-en"
+            data-language="en"
+          >
+            EN
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-secondary"
+            id="lang-es"
+            data-language="es"
+          >
+            ES
           </button>
         </div>
 
@@ -129,27 +164,41 @@
   <div class="container-fluid bg-light border-top d-none d-lg-block">
     <div class="container">
       <ul class="nav py-2">
-        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
         <li class="nav-item">
-          <a class="nav-link" href="index.html#products">Products</a>
+          <a class="nav-link" href="index.html" data-i18n="home">Home</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="pages/orders.html">Orders</a>
+          <a class="nav-link" href="index.html#products" data-i18n="products"
+            >Products</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="pages/contact.html">Contact</a>
+          <a class="nav-link" href="pages/orders.html" data-i18n="orders"
+            >Orders</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="pages/faq.html">FAQs</a>
+          <a class="nav-link" href="pages/contact.html" data-i18n="contact"
+            >Contact</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="pages/support.html">Support</a>
+          <a class="nav-link" href="pages/faq.html" data-i18n="faqs">FAQs</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="pages/admin.html">Admin</a>
+          <a class="nav-link" href="pages/support.html" data-i18n="support"
+            >Support</a
+          >
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="pages/about.html">About</a>
+          <a class="nav-link" href="pages/admin.html" data-i18n="admin"
+            >Admin</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="pages/about.html" data-i18n="about"
+            >About</a
+          >
         </li>
       </ul>
     </div>
@@ -181,6 +230,105 @@
   document.addEventListener("DOMContentLoaded", function () {
     if (window.businessDataReady && window.globalStore?.state?.BusinessName) {
       updateBusinessName();
+    }
+  });
+
+  // Language switching functionality
+  function setupLanguageSwitching() {
+    console.log("setupLanguageSwitching called");
+    const langEnBtn = document.getElementById("lang-en");
+    const langEsBtn = document.getElementById("lang-es");
+    console.log("Language buttons found:", !!langEnBtn, !!langEsBtn);
+    if (!langEnBtn || !langEsBtn) {
+      console.error(
+        "Language buttons not found, exiting setupLanguageSwitching"
+      );
+      return;
+    }
+
+    // Set initial active language button
+    const currentLanguage = localStorage.getItem("language") || "en";
+    console.log("Current language from localStorage:", currentLanguage);
+    if (currentLanguage === "es") {
+      console.log("Setting ES button as active");
+      langEsBtn.classList.remove("btn-outline-secondary");
+      langEsBtn.classList.add("btn-secondary");
+    } else {
+      console.log("Setting EN button as active");
+      langEnBtn.classList.remove("btn-outline-secondary");
+      langEnBtn.classList.add("btn-secondary");
+    }
+
+    // Add event listeners to language buttons
+    langEnBtn.addEventListener("click", function () {
+      console.log("EN button clicked");
+      console.log("Current window.i18n:", typeof window.i18n);
+      // Update button styles
+      console.log("Updating EN button styles");
+      langEnBtn.classList.remove("btn-outline-secondary");
+      langEnBtn.classList.add("btn-secondary");
+      console.log("Updating ES button styles");
+      langEsBtn.classList.remove("btn-secondary");
+      langEsBtn.classList.add("btn-outline-secondary");
+
+      // Change language
+      if (typeof window.i18n !== "undefined") {
+        console.log("Using i18n.changeLanguage");
+        window.i18n.changeLanguage("en");
+      } else {
+        console.log("Using window.dispatchEvent fallback");
+        // Fallback if i18n is not available yet
+        window.dispatchEvent(
+          new CustomEvent("languageChange", { detail: { language: "en" } })
+        );
+      }
+    });
+
+    langEsBtn.addEventListener("click", function () {
+      console.log("ES button clicked");
+      console.log("Current window.i18n:", typeof window.i18n);
+      // Update button styles
+      console.log("Updating ES button styles");
+      langEsBtn.classList.remove("btn-outline-secondary");
+      langEsBtn.classList.add("btn-secondary");
+      console.log("Updating EN button styles");
+      langEnBtn.classList.remove("btn-secondary");
+      langEnBtn.classList.add("btn-outline-secondary");
+
+      // Change language
+      if (typeof window.i18n !== "undefined") {
+        console.log("Using i18n.changeLanguage");
+        window.i18n.changeLanguage("es");
+      } else {
+        console.log("Using window.dispatchEvent fallback");
+        // Fallback if i18n is not available yet
+        window.dispatchEvent(
+          new CustomEvent("languageChange", { detail: { language: "es" } })
+        );
+      }
+    });
+  }
+
+  // Set up language switching when DOM is loaded
+  document.addEventListener("DOMContentLoaded", function () {
+    console.log("DOMContentLoaded event fired for language switching");
+    // Small delay to ensure i18n is initialized
+    console.log("Setting timeout for setupLanguageSwitching");
+    setTimeout(function () {
+      console.log("setTimeout executed, calling setupLanguageSwitching");
+      setupLanguageSwitching();
+    }, 100);
+  });
+
+  // Also set up language switching when section is loaded
+  document.addEventListener("sectionLoaded", function (e) {
+    if (e.detail.id === "headerSection") {
+      console.log("Header section loaded, setting up language switching");
+      // Small delay to ensure i18n is initialized
+      setTimeout(function () {
+        console.log("Calling setupLanguageSwitching for header section");
+        setupLanguageSwitching();
+      }, 100);
     }
   });
 </script>

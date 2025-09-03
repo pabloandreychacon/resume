@@ -9,6 +9,7 @@
       author="POStore Team"
       favicon-url="../assets/favicon.ico"
       stylesheets="../css/style.css"
+      scripts="../js/price-formatter.js"
     ></custom-head>
     <!-- Section Loader JS -->
     <script src="../js/section-loader.js"></script>
@@ -818,26 +819,31 @@
 
         // Update business contact info when data is ready
         function updateBusinessContactInfo() {
-          const businessPhone = window.globalStore?.state?.Phone || "+1 (800) 123-4567";
-          const businessEmail = window.globalStore?.state?.Email || "support@postore.com";
-          
+          const businessPhone =
+            window.globalStore?.state?.Phone || "+1 (800) 123-4567";
+          const businessEmail =
+            window.globalStore?.state?.Email || "support@postore.com";
+
           // Update phone
           const phoneElement = document.getElementById("business-phone");
           if (phoneElement) {
             phoneElement.textContent = businessPhone;
             phoneElement.href = `tel:${businessPhone.replace(/\D/g, "")}`;
           }
-          
+
           // Update email
           const emailElement = document.getElementById("business-email");
           if (emailElement) {
             emailElement.textContent = businessEmail;
           }
         }
-        
+
         // Listen for business data loaded event
-        window.addEventListener('businessDataLoaded', updateBusinessContactInfo);
-        
+        window.addEventListener(
+          "businessDataLoaded",
+          updateBusinessContactInfo
+        );
+
         // Also check if business data is already loaded
         if (window.businessDataReady && window.globalStore?.state) {
           updateBusinessContactInfo();

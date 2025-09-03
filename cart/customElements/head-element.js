@@ -11,6 +11,18 @@ class CustomHead extends HTMLElement {
     metaUTF.setAttribute("name", "charset");
     metaUTF.setAttribute("content", "UTF-8");
     document.head.appendChild(metaUTF);
+    
+    // Add preconnect for Supabase storage
+    const preconnectSupabase = document.createElement("link");
+    preconnectSupabase.setAttribute("rel", "preconnect");
+    preconnectSupabase.setAttribute("href", "https://supabase.co");
+    document.head.appendChild(preconnectSupabase);
+    
+    // Add DNS prefetch for image domains
+    const dnsPrefetch = document.createElement("link");
+    dnsPrefetch.setAttribute("rel", "dns-prefetch");
+    dnsPrefetch.setAttribute("href", "https://supabase.co");
+    document.head.appendChild(dnsPrefetch);
 
     const metaViewport = document.createElement("meta");
     metaViewport.setAttribute("name", "viewport");

@@ -18,7 +18,7 @@
   </div>
   <div class="offcanvas-footer border-top p-3">
     <div class="d-flex justify-content-between mb-3">
-      <strong>Total: $<span id="cartTotal">0.00</span></strong>
+      <strong>Total: <span id="cartTotal">0.00</span></strong>
     </div>
     <button class="btn btn-primary w-100" id="checkoutBtn" disabled>
       Proceed to Checkout
@@ -95,20 +95,23 @@
 <!-- Required Scripts -->
 <script>
   // Load scripts dynamically with correct paths
-  const basePath = window.location.pathname.includes('/pages/') ? '../js/' : 'js/';
+  const basePath = window.location.pathname.includes("/pages/")
+    ? "../js/"
+    : "js/";
   const scripts = [
-    'https://unpkg.com/@supabase/supabase-js@2',
-    basePath + 'supabase-config.js',
-    basePath + 'business-data.js', 
-    basePath + 'form-utils.js',
-    basePath + 'store-functions.js',
-    basePath + 'main.js',
-    basePath + 'shared-store.js'
+    "https://unpkg.com/@supabase/supabase-js@2",
+    basePath + "supabase-config.js",
+    basePath + "business-data.js",
+    basePath + "form-utils.js",
+    basePath + "store-functions.js",
+    basePath + "price-formatter.js",
+    basePath + "main.js",
+    basePath + "shared-store.js",
   ];
-  
-  scripts.forEach(src => {
+
+  scripts.forEach((src) => {
     if (!document.querySelector(`script[src="${src}"]`)) {
-      const script = document.createElement('script');
+      const script = document.createElement("script");
       script.src = src;
       document.head.appendChild(script);
     }

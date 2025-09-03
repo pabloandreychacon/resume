@@ -56,7 +56,13 @@ function shareProduct(platform) {
   const productImage = document.getElementById("modalProductImage").src;
 
   // Create sharing URL
-  const pageUrl = encodeURIComponent(window.location.href);
+  const businessEmail = window.EmailUtils?.getBusinessEmail() || "";
+  const baseUrl = window.location.href;
+  const pageUrl = encodeURIComponent(
+    businessEmail
+      ? `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}email=${businessEmail}`
+      : baseUrl
+  );
   const pageTitle = encodeURIComponent(
     `Check out ${productName} - ${productPrice} at POStore!`
   );
@@ -89,11 +95,22 @@ function shareProduct(platform) {
 
 function shareProductDirect(platform, product) {
   // Create sharing URL
-  const pageUrl = encodeURIComponent(window.location.href);
+  // Try to get business email, fallback to default if not available
+  const businessEmail =
+    (window.EmailUtils?.getBusinessEmail &&
+      window.EmailUtils.getBusinessEmail()) ||
+    getEmailFromLocalStorage() ||
+    "pabloandreychacon@hotmail.com";
+  const baseUrl = window.location.href;
+  const pageUrl = encodeURIComponent(
+    businessEmail
+      ? `${baseUrl}${baseUrl.includes("?") ? "&" : "?"}email=${businessEmail}`
+      : baseUrl
+  );
   const pageTitle = encodeURIComponent(
-    `Check out ${product.Name || product.name} - $${
+    `Check out ${product.Name || product.name} - ${StoreFunctions.formatPrice(
       product.Price || product.price
-    } at POStore!`
+    )} at POStore!`
   );
   const imageUrl = encodeURIComponent(
     product.ImageUrl || product.imageUrl || product.image
@@ -122,11 +139,29 @@ function shareProductDirect(platform, product) {
   if (shareUrl) {
     window.open(shareUrl, "_blank", "width=600,height=400");
   }
-  
+
   // Ensure products remain visible after sharing
   setTimeout(() => {
     if (window.store) {
       window.store.renderProducts();
     }
   }, 100);
+}
+
+/**
+ * Get email from localStorage as a fallback when EmailUtils is not available
+ * @returns {string|null} The business email or null if not found
+ */
+function getEmailFromLocalStorage() {
+  try {
+    // Get the current business email from localStorage
+    const email = JSON.parse(localStorage.getItem("postore_email"));
+    if (email) {
+      return email;
+    }
+    return null;
+  } catch (error) {
+    console.error("Error reading business email from localStorage:", error);
+    return null;
+  }
 }

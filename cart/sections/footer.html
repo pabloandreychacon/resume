@@ -6,7 +6,7 @@
         <h5 class="fw-bold mb-3 footer-title">
           <i class="bi bi-shop me-2"></i>
         </h5>
-        <p class="mb-3">
+        <p class="mb-3" data-i18n="trusted_destination">
           Your trusted destination for premium products and exceptional shopping
           experience.
         </p>
@@ -54,21 +54,37 @@
         </div>
       </div>
       <div class="col-md-3 mb-4">
-        <h6 class="fw-bold mb-3">Quick Links</h6>
+        <h6 class="fw-bold mb-3" data-i18n="quick_links">Quick Links</h6>
         <ul class="list-unstyled">
           <li>
-            <a href="pages/about.html" class="text-decoration-none">About Us</a>
+            <a
+              href="pages/about.html"
+              class="text-decoration-none"
+              data-i18n="about_us"
+              >About Us</a
+            >
           </li>
           <li>
-            <a href="pages/contact.html" class="text-decoration-none"
+            <a
+              href="pages/contact.html"
+              class="text-decoration-none"
+              data-i18n="contact"
               >Contact</a
             >
           </li>
           <li>
-            <a href="pages/faq.html" class="text-decoration-none">FAQ</a>
+            <a
+              href="pages/faq.html"
+              class="text-decoration-none"
+              data-i18n="faqs"
+              >FAQ</a
+            >
           </li>
           <li>
-            <a href="pages/support.html" class="text-decoration-none"
+            <a
+              href="pages/support.html"
+              class="text-decoration-none"
+              data-i18n="support"
               >Support</a
             >
           </li>
@@ -76,8 +92,10 @@
       </div>
 
       <div class="col-md-4 mb-4">
-        <h6 class="fw-bold mb-3">Newsletter</h6>
-        <p class="">Subscribe to get updates on new products and offers.</p>
+        <h6 class="fw-bold mb-3" data-i18n="newsletter">Newsletter</h6>
+        <p class="" data-i18n="newsletter_description">
+          Subscribe to get updates on new products and offers.
+        </p>
         <form id="newsletterForm" class="needs-validation" novalidate>
           <input
             type="hidden"
@@ -92,8 +110,11 @@
               id="newsletterEmail"
               name="replyTo"
               required
+              data-i18n="enter_email"
             />
-            <button class="btn btn-primary" type="submit">Subscribe</button>
+            <button class="btn btn-primary" type="submit" data-i18n="subscribe">
+              Subscribe
+            </button>
           </div>
           <div class="invalid-feedback">
             Please enter a valid email address.
@@ -116,12 +137,18 @@
                 return;
               }
 
-              var email = FormUtils.sanitizeInput(document.getElementById("newsletterEmail").value);
-              
+              var email = FormUtils.sanitizeInput(
+                document.getElementById("newsletterEmail").value
+              );
+
               // Validate email
               if (!FormUtils.isValidEmail(email)) {
-                document.getElementById("newsletterError").classList.remove("d-none");
-                document.getElementById("newsletterSuccess").classList.add("d-none");
+                document
+                  .getElementById("newsletterError")
+                  .classList.remove("d-none");
+                document
+                  .getElementById("newsletterSuccess")
+                  .classList.add("d-none");
                 return;
               }
 
@@ -184,7 +211,8 @@
     <hr class="my-4" />
     <div class="text-center">
       <p class="mb-0">
-        &copy; <span id="year"></span> POStore. All rights reserved.
+        &copy; <span id="year"></span> POStore.
+        <span data-i18n="all_rights_reserved">All rights reserved.</span>
       </p>
       <script>
         document.querySelector("#year").textContent = new Date().getFullYear();
@@ -202,7 +230,7 @@
       titleElement.parentElement.innerHTML = `<i class="bi bi-shop me-2"></i>${businessName}`;
     }
   }
-  
+
   // Listen for business data loaded event
-  window.addEventListener('businessDataLoaded', updateFooterBusinessName);
+  window.addEventListener("businessDataLoaded", updateFooterBusinessName);
 </script>

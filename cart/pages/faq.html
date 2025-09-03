@@ -9,6 +9,7 @@
       author="POStore Team"
       favicon-url="../assets/favicon.ico"
       stylesheets="../css/style.css"
+      scripts="../js/price-formatter.js"
     ></custom-head>
 
     <!-- Section Loader JS -->
@@ -228,9 +229,12 @@
                 >
                   <div class="accordion-body">
                     You can contact our customer service team through multiple
-                    channels: by email at <span id="faq-business-email">support@postore.com</span>, by phone at <span id="faq-business-phone">+1 (800) 123-4567</span> (Monday-Friday, 9am-6pm EST), or by filling
-                    out the contact form on our
-                    <a href="contact.html">Contact page</a>.
+                    channels: by email at
+                    <span id="faq-business-email">support@postore.com</span>, by
+                    phone at
+                    <span id="faq-business-phone">+1 (800) 123-4567</span>
+                    (Monday-Friday, 9am-6pm EST), or by filling out the contact
+                    form on our <a href="contact.html">Contact page</a>.
                   </div>
                 </div>
               </div>
@@ -634,19 +638,21 @@
 
         // Update business contact info when data is ready
         function updateFAQBusinessInfo() {
-          const businessPhone = window.globalStore?.state?.Phone || "+1 (800) 123-4567";
-          const businessEmail = window.globalStore?.state?.Email || "support@postore.com";
-          
+          const businessPhone =
+            window.globalStore?.state?.Phone || "+1 (800) 123-4567";
+          const businessEmail =
+            window.globalStore?.state?.Email || "support@postore.com";
+
           const phoneElement = document.getElementById("faq-business-phone");
           const emailElement = document.getElementById("faq-business-email");
-          
+
           if (phoneElement) phoneElement.textContent = businessPhone;
           if (emailElement) emailElement.textContent = businessEmail;
         }
-        
+
         // Listen for business data loaded event
-        window.addEventListener('businessDataLoaded', updateFAQBusinessInfo);
-        
+        window.addEventListener("businessDataLoaded", updateFAQBusinessInfo);
+
         // Also check if business data is already loaded
         if (window.businessDataReady && window.globalStore?.state) {
           updateFAQBusinessInfo();
