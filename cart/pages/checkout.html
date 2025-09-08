@@ -205,12 +205,13 @@
                       setTimeout(initPayPal, 100);
                       return;
                     }
+                    
+                    // Listen for total updates and reinitialize PayPal button when total changes
+                    document.addEventListener('totalUpdated', function(event) {
+                      // The PayPal button will use the latest total when clicked
+                      console.log('Total updated, PayPal will use the latest amount on checkout');
+                    });
 
-                    // Calculate total from cart
-                    const totalElement = document.getElementById("total");
-                    const totalText = totalElement
-                      ? totalElement.innerText
-                      : "0.00";
                     // Extract numeric value from formatted price
                     // This function handles various international number formats
                     function extractNumericValue(formattedString) {
@@ -263,17 +264,61 @@
                       return isNegative ? -result : result;
                     }
 
-                    const total = extractNumericValue(totalText) || "0.00";
+                    // Get exchange rate from price formatter
+                    function getExchangeRate() {
+                      // Get exchange rate from price formatter if available
+                      if (window.priceFormatter) {
+                        // Check if settings are loaded and contain ExchangeRate
+                        if (
+                          window.priceFormatter.settings &&
+                          window.priceFormatter.settings.ExchangeRate !== undefined
+                        ) {
+                          return window.priceFormatter.settings.ExchangeRate;
+                        }
+                        // Fallback to exchangeRate property if settings not loaded yet
+                        if (window.priceFormatter.exchangeRate !== undefined) {
+                          return window.priceFormatter.exchangeRate;
+                        }
+                      }
+                      return 1; // Default exchange rate
+                    }
+                    
+                    // Function to calculate USD amount from current total
+                    function calculateUSDAmount() {
+                      // Calculate total from cart
+                      const totalElement = document.getElementById("total");
+                      const totalText = totalElement
+                        ? totalElement.innerText
+                        : "0.00";
+                      
+                      // Get the total in local currency
+                      const totalInLocalCurrency = extractNumericValue(totalText) || "0.00";
+                      
+                      // Convert to USD for PayPal (divide by exchange rate)
+                      const exchangeRate = getExchangeRate();
+                      const totalInUSD = (totalInLocalCurrency / exchangeRate).toFixed(2);
+                      
+                      console.log("Payment details:", {
+                        localCurrency: totalInLocalCurrency,
+                        exchangeRate: exchangeRate,
+                        usdAmount: totalInUSD
+                      });
+                      
+                      return totalInUSD;
+                    }
 
                     paypal
                       .Buttons({
                         // Sets up the transaction when a payment button is clicked
                         createOrder: function (data, actions) {
+                          // Get the latest USD amount at the time of button click
+                          const currentTotalInUSD = calculateUSDAmount();
+                          
                           return actions.order.create({
                             purchase_units: [
                               {
                                 amount: {
-                                  value: total, // Use the total from the order summary
+                                  value: currentTotalInUSD, // Use the current USD converted amount for PayPal
                                   currency_code: "USD",
                                 },
                               },
@@ -392,7 +437,9 @@
                                     await supabase
                                       .from("Orders")
                                       .insert({
-                                        TotalAmount: parseFloat(total),
+                                        TotalAmount: parseFloat(totalInLocalCurrency),
+                                        TotalAmountUSD: parseFloat(totalInUSD),
+                                        ExchangeRate: exchangeRate,
                                         StatusId: 1,
                                         PaymentOrderId: orderNumber,
                                         ShippingAddress: addressStr,
@@ -568,87 +615,5 @@
     <custom-bottom></custom-bottom>
     <!-- Checkout JS -->
     <script src="../js/checkout.js"></script>
-
-    <script>
-      // Update business name when data is ready
-      function updateCheckoutBusinessInfo() {
-        const businessName =
-          window.globalStore?.state?.BusinessName || "POStore";
-        const businessNameElement = document.getElementById("business-name");
-        if (businessNameElement) {
-          businessNameElement.textContent = businessName;
-        }
-      }
-
-      // Listen for business data loaded event
-      window.addEventListener("businessDataLoaded", updateCheckoutBusinessInfo);
-
-      // Also check if business data is already loaded
-      document.addEventListener("DOMContentLoaded", function () {
-        if (window.businessDataReady && window.globalStore?.state) {
-          updateCheckoutBusinessInfo();
-        }
-      });
-    </script>
-
-    <script>
-      // Format prices when the page loads
-      document.addEventListener("DOMContentLoaded", function () {
-        // Format shipping prices
-        const standardShippingPrice = document.getElementById(
-          "standardShippingPrice"
-        );
-        if (standardShippingPrice) {
-          standardShippingPrice.textContent = StoreFunctions.formatPrice(5.99);
-        }
-
-        const expressShippingPrice = document.getElementById(
-          "expressShippingPrice"
-        );
-        if (expressShippingPrice) {
-          expressShippingPrice.textContent = StoreFunctions.formatPrice(12.99);
-        }
-
-        const overnightShippingPrice = document.getElementById(
-          "overnightShippingPrice"
-        );
-        if (overnightShippingPrice) {
-          overnightShippingPrice.textContent =
-            StoreFunctions.formatPrice(24.99);
-        }
-
-        // Initialize local currency display
-        const localCurrencyDisplay = document.getElementById(
-          "localCurrencyDisplay"
-        );
-        if (localCurrencyDisplay) {
-          localCurrencyDisplay.innerHTML = "";
-        }
-
-        // Only initialize order summary prices to 0 if cart is empty
-        const cart = JSON.parse(localStorage.getItem("postore_cart")) || [];
-        if (cart.length === 0) {
-          const subtotal = document.getElementById("subtotal");
-          if (subtotal) {
-            subtotal.textContent = StoreFunctions.formatPrice(0);
-          }
-
-          const shippingCost = document.getElementById("shippingCost");
-          if (shippingCost) {
-            shippingCost.textContent = StoreFunctions.formatPrice(0);
-          }
-
-          const tax = document.getElementById("tax");
-          if (tax) {
-            tax.textContent = StoreFunctions.formatPrice(0);
-          }
-
-          const total = document.getElementById("total");
-          if (total) {
-            total.textContent = StoreFunctions.formatPrice(0);
-          }
-        }
-      });
-    </script>
   </body>
 </html>

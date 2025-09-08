@@ -411,7 +411,9 @@ class EcommerceStore {
 
     const modalAddToCartBtn = document.getElementById("modalAddToCart");
     modalAddToCartBtn.onclick = () => {
-      this.addToCart(product);
+      if (window.store) {
+        window.store.addToCart(product);
+      }
       bootstrap.Modal.getInstance(
         document.getElementById("productModal")
       ).hide();
@@ -427,7 +429,9 @@ class EcommerceStore {
         isInWishlist ? "-fill" : ""
       } me-2"></i>${isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}`;
       modalWishlistBtn.onclick = () => {
-        this.toggleWishlist(product);
+        if (window.store) {
+          window.store.toggleWishlist(product);
+        }
         bootstrap.Modal.getInstance(
           document.getElementById("productModal")
         ).hide();
@@ -471,7 +475,7 @@ class EcommerceStore {
       window.store.cart.length !== originalCartLength ||
       window.store.wishlist.length !== originalWishlistLength
     ) {
-      if (window.store.updateCartUI) {
+      if (window.store.updateCartUI && window.store !== this) {
         window.store.updateCartUI();
       }
     }
@@ -479,7 +483,7 @@ class EcommerceStore {
 
   clearWishlist() {
     this.wishlist = [];
-    this.updateCartUI(); // <-- was this.updateWishlistUI()
+    this.updateCartUI();
     this.saveToStorage("postore_wishlist", this.wishlist);
   }
 
@@ -530,7 +534,7 @@ class EcommerceStore {
 
   removeFromCart(productId) {
     this.cart = this.cart.filter((item) => (item.Id || item.id) !== productId);
-    this.updateCartUI(); // <-- was this.updateWishlistUI()
+    this.updateCartUI();
     this.saveToStorage("postore_cart", this.cart);
   }
 
@@ -559,141 +563,6 @@ class EcommerceStore {
     }
   }
 
-  updateCartUI() {
-    const cartCount = document.getElementById("cartCount");
-    const cartItems = document.getElementById("cartItems");
-    const cartTotal = document.getElementById("cartTotal");
-    const checkoutBtn = document.getElementById("checkoutBtn");
-    const wishlistItems = document.getElementById("wishlistItems");
-    const wishlistCount = document.getElementById("wishlistCount");
-
-    const totalItems = this.cart.reduce((sum, item) => sum + item.quantity, 0);
-    const totalPrice = this.cart.reduce(
-      (sum, item) => sum + this.calculatePriceWithTax(item) * item.quantity,
-      0
-    );
-
-    if (cartCount) cartCount.textContent = totalItems;
-    if (cartTotal) cartTotal.textContent = totalPrice.toFixed(2);
-    if (wishlistCount) wishlistCount.textContent = this.wishlist.length;
-
-    if (cartItems) {
-      if (this.cart.length === 0) {
-        cartItems.innerHTML = `
-                  <div class="text-center text-muted py-5">
-                      <i class="bi bi-cart-x display-1"></i>
-                      <p class="mt-3">Your cart is empty</p>
-                  </div>
-              `;
-      } else {
-        cartItems.innerHTML = this.cart
-          .map(
-            (item) => `
-                  <div class="cart-item">
-                      <div class="row align-items-center">
-                          <div class="col-sm-12 col-md-3">
-                              <img src="${
-                                item.ImageUrl || item.imageUrl
-                              }" alt="${
-              item.Name || item.name
-            }" class="cart-item-image">
-                          </div>
-                          <div class="col-sm-12 col-md-6">
-                              <div class="cart-item-info">
-                                  <h6>${item.Name || item.name}</h6>
-                                  <p class="cart-item-price mb-0">${this.formatPrice(
-                                    this.calculatePriceWithTax(item)
-                                  )}</p>
-                              </div>
-                          </div>
-                          <div class="col-3">
-                              <div class="quantity-controls d-flex align-items-center">
-                                  <button class="btn btn-sm btn-outline-secondary" onclick="(window.store || window.productStore).updateQuantity(${
-                                    item.Id || item.id
-                                  }, ${item.quantity - 1})">
-                                      <i class="bi bi-dash"></i>
-                                  </button>
-                                  <input type="number" value="${
-                                    item.quantity
-                                  }" min="1" class="form-control mx-1 text-center" style="width: 60px;" 
-                                         onchange="(window.store || window.productStore).updateQuantity(${
-                                           item.Id || item.id
-                                         }, parseInt(this.value))">
-                                  <button class="btn btn-sm btn-outline-secondary" onclick="(window.store || window.productStore).updateQuantity(${
-                                    item.Id || item.id
-                                  }, ${item.quantity + 1})">
-                                      <i class="bi bi-plus"></i>
-                                  </button>
-                              </div>
-                              <button class="btn btn-sm btn-outline-danger mt-1" onclick="(window.store || window.productStore).removeFromCart(${
-                                item.Id || item.id
-                              })">
-                                  <i class="bi bi-trash"></i>
-                              </button>
-                          </div>
-                      </div>
-                  </div>
-              `
-          )
-          .join("");
-      }
-    }
-
-    if (checkoutBtn) {
-      checkoutBtn.disabled = this.cart.length === 0;
-    }
-
-    // Update wishlist UI
-    if (wishlistItems) {
-      if (this.wishlist.length === 0) {
-        wishlistItems.innerHTML = `
-                  <div class="text-center text-muted py-5">
-                      <i class="bi bi-heart display-1"></i>
-                      <p class="mt-3">Your wishlist is empty</p>
-                  </div>
-              `;
-      } else {
-        wishlistItems.innerHTML = this.wishlist
-          .map(
-            (item) => `
-                  <div class="cart-item">
-                      <div class="row align-items-center">
-                          <div class="col-3">
-                              <img src="${
-                                item.ImageUrl || item.imageUrl
-                              }" alt="${
-              item.Name || item.name
-            }" class="cart-item-image">
-                          </div>
-                          <div class="col-6">
-                              <div class="cart-item-info">
-                                  <h6>${item.Name || item.name}</h6>
-                                  <p class="cart-item-price mb-0">${this.formatPrice(
-                                    this.calculatePriceWithTax(item)
-                                  )}</p>
-                              </div>
-                          </div>
-                          <div class="col-3">
-                              <button class="btn btn-sm btn-primary mb-1 w-100" onclick="(window.store || window.productStore).addToCartFromWishlist(${
-                                item.Id || item.id
-                              })">
-                                  <i class="bi bi-cart-plus"></i>
-                              </button>
-                              <button class="btn btn-sm btn-outline-danger w-100" onclick="(window.store || window.productStore).toggleWishlist({Id: ${
-                                item.Id || item.id
-                              }})">
-                                  <i class="bi bi-trash"></i>
-                              </button>
-                          </div>
-                      </div>
-                  </div>
-              `
-          )
-          .join("");
-      }
-    }
-  }
-
   isInWishlist(productId) {
     return this.wishlist.some((item) => item.Id === productId);
   }
@@ -712,7 +581,7 @@ class EcommerceStore {
     }
 
     this.saveToStorage("postore_wishlist", this.wishlist);
-    this.updateCartUI(); // <-- was this.updateWishlistUI()
+    this.updateCartUI();
 
     // Update only the specific product card's wishlist button instead of re-rendering all products
     this.updateWishlistButton(product.Id);
@@ -728,6 +597,21 @@ class EcommerceStore {
         isInWishlist ? "-fill" : ""
       } me-2"></i>${isInWishlist ? "Remove from Wishlist" : "Add to Wishlist"}`;
     }
+  }
+
+  updateCartUI() {
+    // If window.store is available and has updateCartUI method, use it
+    // But only call it if it's not the same instance as this (prevent recursion)
+    if (
+      window.store &&
+      typeof window.store.updateCartUI === "function" &&
+      window.store !== this
+    ) {
+      window.store.updateCartUI();
+    }
+    // If window.store is not available or doesn't have updateCartUI method, do nothing
+    // This maintains backward compatibility when shared-store.js is not loaded
+    // Or if window.store is the same instance, do nothing to prevent recursion
   }
 
   checkout() {
@@ -901,7 +785,10 @@ function initializeProductStore() {
   console.log("Initializing ProductStore...");
   productStore = new EcommerceStore();
   window.productStore = productStore;
-  window.store = productStore; // Also set as window.store for compatibility
+  // Only set window.store if it's not already set by shared-store.js
+  if (!window.store) {
+    window.store = productStore;
+  }
 }
 
 // Add smooth scroll to navigation links

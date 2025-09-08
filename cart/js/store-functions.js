@@ -7,12 +7,87 @@ class StoreFunctions {
     return (basePrice * (1 + taxRate)).toFixed(2);
   }
 
+  static async waitForPriceFormatter(maxWaitTime = 5000, retryInterval = 50) {
+    // First wait for priceFormatter to exist
+    const startTime = Date.now();
+    while (typeof window.priceFormatter === "undefined" && Date.now() - startTime < maxWaitTime) {
+      await new Promise(resolve => setTimeout(resolve, retryInterval));
+    }
+    
+    // If it doesn't exist after timeout, return false
+    if (typeof window.priceFormatter === "undefined") {
+      console.warn("Price formatter not available after waiting", maxWaitTime, "ms");
+      return false;
+    }
+    
+    // Now wait for initialization
+    const initStartTime = Date.now();
+    while (!window.priceFormatter.initialized && Date.now() - initStartTime < maxWaitTime) {
+      await new Promise(resolve => setTimeout(resolve, retryInterval));
+    }
+    
+    return window.priceFormatter.initialized || false;
+  }
+
   static formatPrice(price) {
     // Use the global price formatter if available, otherwise fallback to default formatting
     if (window.priceFormatter && window.priceFormatter.initialized) {
-      return window.priceFormatter.format(price);
+      try {
+        return window.priceFormatter.format(price);
+      } catch (error) {
+        console.error("Error using price formatter:", error);
+        // Fall back to default formatting
+      }
     }
-    return `${parseFloat(price).toFixed(2)}`;
+    
+    // If price formatter exists but not initialized, log warning and schedule retry
+    if (window.priceFormatter && !window.priceFormatter.initialized) {
+      console.warn("PriceFormatter not yet initialized, using default formatting");
+      
+      // Schedule a retry in the background
+      setTimeout(async () => {
+        const initialized = await this.waitForPriceFormatter();
+        if (initialized) {
+          console.log("Price formatter initialized in background");
+        } else {
+          console.warn("Price formatter initialization timed out");
+        }
+      }, 0);
+    }
+    
+    // Always provide a fallback
+    return `${parseFloat(price || 0).toFixed(2)}`;
+  }
+  
+  static formatPriceWithUsdEquivalent(price) {
+    // Use the global price formatter if available, otherwise fallback to default formatting
+    if (window.priceFormatter && window.priceFormatter.initialized) {
+      try {
+        return window.priceFormatter.formatWithUsdEquivalent(price);
+      } catch (error) {
+        console.error("Error formatting price with USD equivalent:", error);
+        // Fall back to regular price formatting
+        return this.formatPrice(price);
+      }
+    }
+    
+    // If price formatter exists but not initialized, log warning and schedule retry
+    if (window.priceFormatter && !window.priceFormatter.initialized) {
+      console.warn("PriceFormatter not yet initialized, using default formatting");
+      
+      // Schedule a retry in the background
+      setTimeout(async () => {
+        const initialized = await this.waitForPriceFormatter();
+        if (initialized) {
+          console.log("Price formatter initialized in background for USD equivalent");
+        } else {
+          console.warn("Price formatter initialization timed out for USD equivalent");
+        }
+      }, 0);
+    }
+    
+    // Always provide a fallback
+    return `${parseFloat(price || 0).toFixed(2)}`;
   }
 
   static addToCartFromWishlist(store, productId) {

@@ -109,16 +109,19 @@ class SharedStore {
     const wishlistItems = document.getElementById("wishlistItems");
     const wishlistCount = document.getElementById("wishlistCount");
 
+    // Always update cart count in header, even if cart items section is not loaded
+    const totalItems = this.cart.reduce((sum, item) => sum + item.quantity, 0);
+    if (cartCount) cartCount.textContent = totalItems;
+
+    // If cart items section is not loaded, don't update the rest of the UI
     if (!cartItems) return;
 
-    const totalItems = this.cart.reduce((sum, item) => sum + item.quantity, 0);
     const totalPrice = this.cart.reduce(
       (sum, item) =>
         sum + parseFloat(this.calculatePriceWithTax(item)) * item.quantity,
       0
     );
 
-    if (cartCount) cartCount.textContent = totalItems;
     if (cartTotal) cartTotal.textContent = totalPrice.toFixed(2);
     if (wishlistCount) wishlistCount.textContent = this.wishlist.length;
 
@@ -218,7 +221,7 @@ class SharedStore {
                     </button>
                     <button class="btn btn-sm btn-outline-danger w-100" onclick="(window.store || window.productStore).toggleWishlist({...${JSON.stringify(
                       item
-                    ).replace(/"/g, "&quot;")}, Id: ${item.Id || item.id}})">
+                    ).replace(/"/g, '"')}, Id: ${item.Id || item.id}})">
                       <i class="bi bi-trash"></i>
                     </button>
                   </div>

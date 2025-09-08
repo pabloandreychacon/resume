@@ -1,19 +1,83 @@
 // Checkout.js - Modified for PayPal integration
 
+// Update business name when data is ready
+function updateCheckoutBusinessInfo() {
+  const businessName = window.globalStore?.state?.BusinessName || "POStore";
+  const businessNameElement = document.getElementById("business-name");
+  if (businessNameElement) {
+    businessNameElement.textContent = businessName;
+  }
+}
+
+// Listen for business data loaded event
+window.addEventListener("businessDataLoaded", updateCheckoutBusinessInfo);
+
+// Also check if business data is already loaded
+document.addEventListener("DOMContentLoaded", function () {
+  if (window.businessDataReady && window.globalStore?.state) {
+    updateCheckoutBusinessInfo();
+  }
+});
+
+// Format prices when the page loads
+document.addEventListener("DOMContentLoaded", function () {
+  // Initialize local currency display
+  const localCurrencyDisplay = document.getElementById("localCurrencyDisplay");
+  if (localCurrencyDisplay) {
+    localCurrencyDisplay.innerHTML = "";
+  }
+
+  // Only initialize order summary prices to 0 if cart is empty
+  const cart = JSON.parse(localStorage.getItem("postore_cart")) || [];
+  if (cart.length === 0) {
+    const subtotal = document.getElementById("subtotal");
+    if (subtotal) {
+      subtotal.textContent = StoreFunctions.formatPrice(0);
+    }
+
+    const shippingCost = document.getElementById("shippingCost");
+    if (shippingCost) {
+      shippingCost.textContent = StoreFunctions.formatPrice(0);
+    }
+
+    const tax = document.getElementById("tax");
+    if (tax) {
+      tax.textContent = StoreFunctions.formatPrice(0);
+    }
+
+    const total = document.getElementById("total");
+    if (total) {
+      total.textContent = StoreFunctions.formatPrice(0);
+    }
+  }
+});
+
 // Function to wait for price formatter initialization
-async function waitForPriceFormatter() {
+async function waitForPriceFormatter(maxWaitTime = 5000) {
   // If priceFormatter doesn't exist yet, wait for it
+  const startTime = Date.now();
   while (typeof window.priceFormatter === "undefined") {
+    if (Date.now() - startTime > maxWaitTime) {
+      console.warn("Price formatter not available after waiting", maxWaitTime, "ms");
+      return false;
+    }
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
 
   // If priceFormatter exists but is not initialized, wait for initialization
   if (window.priceFormatter && !window.priceFormatter.initialized) {
+    const initStartTime = Date.now();
     // Wait for the price formatter to be initialized
     while (!window.priceFormatter.initialized) {
+      if (Date.now() - initStartTime > maxWaitTime) {
+        console.warn("Price formatter initialization timed out after", maxWaitTime, "ms");
+        return false;
+      }
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
   }
+  
+  return true;
 }
 
 // Function to wait for shared store initialization
@@ -30,101 +94,69 @@ async function waitForSharedStore() {
 }
 
 // Add event listener to refresh cart when page is shown again
-window.addEventListener("pageshow", async (event) => {
+window.addEventListener("pageshow", (event) => {
   // Check if the page is being shown from cache (back/forward navigation)
   if (event.persisted) {
-    // Wait for shared store to be initialized
-    await waitForSharedStore();
+    // Refresh cart items without waiting for shared store
     loadCartItems();
     loadOrderSummary();
+
+    // Also try to refresh shared store in the background
+    waitForSharedStore()
+      .then(() => {
+        console.log("Shared store re-initialized after page show");
+        // Optionally refresh the UI again if needed
+        // loadCartItems();
+        // loadOrderSummary();
+      })
+      .catch((error) => {
+        console.error(
+          "Error re-initializing shared store after page show:",
+          error
+        );
+      });
   }
 });
 
 document.addEventListener("DOMContentLoaded", async function () {
-  // Wait for price formatter to be initialized
-  await waitForPriceFormatter();
+  // Wait for price formatter and shared store before loading cart items
+  // This ensures proper price formatting from the start
+  try {
+    const formatterInitialized = await waitForPriceFormatter(5000);
+    if (formatterInitialized) {
+      console.log("Price formatter initialized successfully");
+    } else {
+      console.warn("Price formatter initialization timed out, will use default formatting");
+    }
+  } catch (error) {
+    console.error("Error initializing price formatter:", error);
+  }
 
-  // Wait for shared store to be initialized
-  await waitForSharedStore();
+  try {
+    await waitForSharedStore();
+    console.log("Shared store initialized");
+  } catch (error) {
+    console.error("Error initializing shared store:", error);
+  }
 
+  // Initialize all functions after waiting for async operations
+  // This ensures proper price formatting from the start
   loadCartItems();
   loadOrderSummary();
   setupEventListeners();
   loadShippingMethods();
 });
 
-function loadCartItems(maxRetries = 3, retryDelay = 100) {
-  // Use shared store if available, otherwise load from localStorage directly
-  if (
-    window.store &&
-    typeof window.store.refreshCartFromStorage === "function"
-  ) {
-    // Refresh cart from storage using shared store
-    window.store.refreshCartFromStorage();
-    // Use the cart from shared store
-    const cart = window.store.cart;
-    const cartItemsContainer = document.getElementById("cartItems");
-    if (!cartItemsContainer) {
-      console.error("Cart items container not found");
-      return;
-    }
-
-    if (cart.length === 0) {
-      cartItemsContainer.innerHTML =
-        '<p class="text-center text-muted">Your cart is empty</p>';
-      return;
-    }
-
-    let itemsHtml = "";
-
-    cart.forEach((item, index) => {
-      itemsHtml += `
-        <div class="card mb-3 cart-item" data-index="${index}">
-          <div class="card-body">
-            <div class="row d-flex justify-content-between align-items-center">
-              <div class="col d-flex align-items-center">
-                <div class="me-3">
-                  <img src="${
-                    item.ImageUrl ||
-                    item.imageUrl ||
-                    item.image ||
-                    "https://via.placeholder.com/50"
-                  }" alt="${
-        item.Name || item.name
-      }" width="50" height="50" class="rounded" onerror="this.onerror=null; this.src='https://via.placeholder.com/50';">
-                </div>
-                <div>
-                  <h6 class="mb-0">${item.Name || item.name}</h6>
-                  <p class="text-muted mb-0">${StoreFunctions.formatPrice(
-                    calculatePriceWithTax(item)
-                  )}</p>
-                </div>
-              </div>
-              <div class="col d-flex align-items-center">
-                <div class="input-group input-group-sm" style="width: 120px;">
-                  <button class="btn btn-outline-secondary decrease-qty" type="button">-</button>
-                  <input type="text" class="form-control text-center item-qty" value="${
-                    item.quantity
-                  }" readonly>
-                  <button class="btn btn-outline-secondary increase-qty" type="button">+</button>
-                </div>
-                <button class="btn btn-sm btn-outline-danger ms-2 remove-item">
-                  <i class="bi bi-trash"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      `;
-    });
-
-    cartItemsContainer.innerHTML = itemsHtml;
-    return;
-  }
-
-  // Load cart from localStorage with retry mechanism
+async function loadCartItems(maxRetries = 3, retryDelay = 100) {
+  // Always load cart from localStorage first to ensure we have the data
   let cart;
   let retryCount = 0;
+
+  // Ensure price formatter is initialized before loading cart items
+  if (!window.priceFormatter || !window.priceFormatter.initialized) {
+    console.log("Price formatter not initialized, waiting before loading cart items...");
+    await StoreFunctions.waitForPriceFormatter(3000);
+  }
 
   while (retryCount <= maxRetries) {
     try {
@@ -148,6 +180,22 @@ function loadCartItems(maxRetries = 3, retryDelay = 100) {
       // Wait before retrying
       const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
       wait(retryDelay * retryCount); // Exponential backoff
+    }
+  }
+
+  // If shared store is available and initialized, refresh it from storage
+  if (
+    window.store &&
+    typeof window.store.refreshCartFromStorage === "function"
+  ) {
+    try {
+      // Refresh cart from storage using shared store
+      window.store.refreshCartFromStorage();
+      // Use the cart from shared store for consistency
+      cart = window.store.cart;
+    } catch (error) {
+      console.error("Error refreshing cart from shared store:", error);
+      // Fall back to localStorage data if shared store fails
     }
   }
 
@@ -209,58 +257,16 @@ function loadCartItems(maxRetries = 3, retryDelay = 100) {
   cartItemsContainer.innerHTML = itemsHtml;
 }
 
-function loadOrderSummary(maxRetries = 3, retryDelay = 100) {
-  // Use shared store if available, otherwise load from localStorage directly
-  if (
-    window.store &&
-    typeof window.store.refreshCartFromStorage === "function"
-  ) {
-    // Refresh cart from storage using shared store
-    window.store.refreshCartFromStorage();
-    // Use the cart from shared store
-    const cart = window.store.cart;
-    const orderItemsContainer = document.getElementById("orderItems");
-    if (!orderItemsContainer) {
-      console.error("Order items container not found");
-      updateTotals(0);
-      return;
-    }
-
-    if (cart.length === 0) {
-      orderItemsContainer.innerHTML =
-        '<p class="text-center text-muted">Your cart is empty</p>';
-      updateTotals(0);
-      return;
-    }
-
-    // Calculate subtotal
-    let subtotal = 0;
-    let itemsHtml = "";
-
-    cart.forEach((item) => {
-      const itemPriceWithTax = parseFloat(calculatePriceWithTax(item));
-      const itemTotal = itemPriceWithTax * item.quantity;
-      subtotal += itemTotal;
-
-      itemsHtml += `
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <div>
-            <h6 class="mb-0">${item.Name || item.name}</h6>
-            <small class="text-muted">Qty: ${item.quantity}</small>
-          </div>
-          <span>${StoreFunctions.formatPrice(itemTotal)}</span>
-        </div>
-      `;
-    });
-
-    orderItemsContainer.innerHTML = itemsHtml;
-    updateTotals(subtotal);
-    return;
-  }
-
-  // Load cart from localStorage with retry mechanism
+async function loadOrderSummary(maxRetries = 3, retryDelay = 100) {
+  // Always load cart from localStorage first to ensure we have the data
   let cart;
   let retryCount = 0;
+  
+  // Ensure price formatter is initialized before loading order summary
+  if (!window.priceFormatter || !window.priceFormatter.initialized) {
+    console.log("Price formatter not initialized, waiting before loading order summary...");
+    await StoreFunctions.waitForPriceFormatter(3000);
+  }
 
   while (retryCount <= maxRetries) {
     try {
@@ -283,7 +289,23 @@ function loadOrderSummary(maxRetries = 3, retryDelay = 100) {
       retryCount++;
       // Wait before retrying
       const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
-      wait(retryDelay * retryCount); // Exponential backoff
+      await wait(retryDelay * retryCount); // Exponential backoff
+    }
+  }
+
+  // If shared store is available and initialized, refresh it from storage
+  if (
+    window.store &&
+    typeof window.store.refreshCartFromStorage === "function"
+  ) {
+    try {
+      // Refresh cart from storage using shared store
+      window.store.refreshCartFromStorage();
+      // Use the cart from shared store for consistency
+      cart = window.store.cart;
+    } catch (error) {
+      console.error("Error refreshing cart from shared store:", error);
+      // Fall back to localStorage data if shared store fails
     }
   }
 
@@ -365,7 +387,8 @@ function updateTotals(subtotal) {
 
   // Get exchange rate
   const exchangeRate = getExchangeRate();
-  const totalInLocalCurrency = total / exchangeRate;
+  // This is the USD equivalent (not local currency)
+  const totalInUSD = total / exchangeRate;
 
   // Update UI
   document.getElementById("subtotal").textContent =
@@ -378,12 +401,12 @@ function updateTotals(subtotal) {
 
   // Update local currency display if exchange rate is not 1
   const localCurrencyDisplay = document.getElementById("localCurrencyDisplay");
-  if (localCurrencyDisplay && exchangeRate !== 1) {
+  if (localCurrencyDisplay && exchangeRate !== 1 && window.priceFormatter?.settings?.CurrencyCode !== 'USD') {
     localCurrencyDisplay.innerHTML = `
       <div class="alert alert-info mt-3">
         <small>
           <i class="bi bi-info-circle me-1"></i>
-          USD equivalent approximately: $${totalInLocalCurrency.toFixed(2)}
+          <strong>Note:</strong> PayPal will process payment in USD: $${totalInUSD.toFixed(2)}
           (based on exchange rate: ${exchangeRate})
         </small>
       </div>
@@ -391,6 +414,11 @@ function updateTotals(subtotal) {
   } else if (localCurrencyDisplay) {
     localCurrencyDisplay.innerHTML = "";
   }
+  
+  // Trigger a custom event to notify that the total has been updated
+  // This will be used to recalculate the PayPal amount
+  const totalUpdatedEvent = new CustomEvent('totalUpdated', { detail: { total: total } });
+  document.dispatchEvent(totalUpdatedEvent);
 }
 
 function setupEventListeners() {
@@ -402,42 +430,42 @@ function setupEventListeners() {
   });
 
   // Quantity change buttons
-  document.addEventListener("click", async function (e) {
+  document.addEventListener("click", function (e) {
     if (e.target.classList.contains("increase-qty")) {
-      await updateQuantity(e.target.closest(".cart-item"), 1);
+      updateQuantity(e.target.closest(".cart-item"), 1);
     } else if (e.target.classList.contains("decrease-qty")) {
-      await updateQuantity(e.target.closest(".cart-item"), -1);
+      updateQuantity(e.target.closest(".cart-item"), -1);
     } else if (
       e.target.classList.contains("remove-item") ||
       e.target.closest(".remove-item")
     ) {
-      await removeItem(e.target.closest(".cart-item"));
+      removeItem(e.target.closest(".cart-item"));
     }
   });
 }
 
-async function updateQuantity(cartItemEl, change) {
+function updateQuantity(cartItemEl, change) {
   // Use shared store if available, otherwise use localStorage directly
   if (window.store && typeof window.store.updateQuantity === "function") {
-    // Wait for shared store to be initialized
-    await waitForSharedStore();
+    // Check if shared store is initialized
+    if (window.store.cart !== undefined) {
+      const index = parseInt(cartItemEl.dataset.index);
+      // Get the cart from shared store
+      const cart = window.store.cart;
 
-    const index = parseInt(cartItemEl.dataset.index);
-    // Get the cart from shared store
-    const cart = window.store.cart;
-
-    if (cart[index]) {
-      const newQuantity = Math.max(1, cart[index].quantity + change);
-      // Use shared store's updateQuantity method
-      window.store.updateQuantity(
-        cart[index].Id || cart[index].id,
-        newQuantity
-      );
-      // Reload all cart UI
-      loadCartItems();
-      loadOrderSummary();
+      if (cart[index]) {
+        const newQuantity = Math.max(1, cart[index].quantity + change);
+        // Use shared store's updateQuantity method
+        window.store.updateQuantity(
+          cart[index].Id || cart[index].id,
+          newQuantity
+        );
+        // Reload all cart UI
+        loadCartItems();
+        loadOrderSummary();
+      }
+      return;
     }
-    return;
   }
 
   const index = parseInt(cartItemEl.dataset.index);
@@ -528,24 +556,24 @@ async function updateQuantity(cartItemEl, change) {
   }
 }
 
-async function removeItem(cartItemEl) {
+function removeItem(cartItemEl) {
   // Use shared store if available, otherwise use localStorage directly
   if (window.store && typeof window.store.removeFromCart === "function") {
-    // Wait for shared store to be initialized
-    await waitForSharedStore();
+    // Check if shared store is initialized
+    if (window.store.cart !== undefined) {
+      const index = parseInt(cartItemEl.dataset.index);
+      // Get the cart from shared store
+      const cart = window.store.cart;
 
-    const index = parseInt(cartItemEl.dataset.index);
-    // Get the cart from shared store
-    const cart = window.store.cart;
-
-    if (cart[index]) {
-      // Use shared store's removeFromCart method
-      window.store.removeFromCart(cart[index].Id || cart[index].id);
-      // Reload all cart UI
-      loadCartItems();
-      loadOrderSummary();
+      if (cart[index]) {
+        // Use shared store's removeFromCart method
+        window.store.removeFromCart(cart[index].Id || cart[index].id);
+        // Reload all cart UI
+        loadCartItems();
+        loadOrderSummary();
+      }
+      return;
     }
-    return;
   }
 
   const index = parseInt(cartItemEl.dataset.index);
@@ -622,7 +650,7 @@ async function loadShippingMethods() {
       await new Promise((resolve) => setTimeout(resolve, 100));
     }
 
-    const businessEmail =
+    let businessEmail =
       window.EmailUtils?.getBusinessEmail() || window.globalStore?.state.Email;
 
     // If no email found, use default

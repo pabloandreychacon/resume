@@ -91,14 +91,45 @@ class PriceFormatter {
       console.warn(
         "PriceFormatter not initialized yet, using default formatting"
       );
-      return `${parseFloat(price).toFixed(2)}`;
+      return `${parseFloat(price || 0).toFixed(2)}`;
     }
 
     try {
-      return this.formatter.format(parseFloat(price));
+      return this.formatter.format(parseFloat(price || 0));
     } catch (error) {
       console.error("Error formatting price:", error);
-      return `${parseFloat(price).toFixed(2)}`;
+      return `${parseFloat(price || 0).toFixed(2)}`;
+    }
+  }
+  
+  formatWithUsdEquivalent(price) {
+    if (!this.initialized) {
+      console.warn(
+        "PriceFormatter not initialized yet, using default formatting"
+      );
+      return `${parseFloat(price || 0).toFixed(2)}`;
+    }
+    
+    try {
+      const formattedPrice = this.formatter.format(parseFloat(price || 0));
+      
+      // If we're already using USD or exchange rate is 1, just return the formatted price
+      if (this.settings.CurrencyCode === 'USD' || this.exchangeRate === 1) {
+        return formattedPrice;
+      }
+      
+      // Calculate USD equivalent
+      const usdEquivalent = parseFloat(price || 0) / this.exchangeRate;
+      const usdFormatted = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD'
+      }).format(usdEquivalent);
+      
+      // Return formatted price with USD equivalent
+      return `${formattedPrice} (${usdFormatted})`;
+    } catch (error) {
+      console.error("Error formatting price with USD equivalent:", error);
+      return `${parseFloat(price || 0).toFixed(2)}`;
     }
   }
 }
@@ -106,10 +137,10 @@ class PriceFormatter {
 // Create global instance
 const priceFormatter = new PriceFormatter();
 
-// Initialize when DOM is loaded
-document.addEventListener("DOMContentLoaded", async () => {
+// Initialize immediately instead of waiting for DOMContentLoaded
+(async () => {
   await priceFormatter.init();
-});
+})();
 
 // Make it globally available
 window.priceFormatter = priceFormatter;
