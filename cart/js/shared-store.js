@@ -15,9 +15,15 @@ class SharedStore {
   }
 
   init() {
-    // Wait for cart components to load
+    // Wait for cart components to load:
+    // cartComponentsSection for cart page
+    // headerSection for other pages
     document.addEventListener("sectionLoaded", (e) => {
-      if (e.detail.id === "cartComponentsSection") {
+      console.log("Section loaded:", e.detail.id);
+      if (
+        e.detail.id === "cartComponentsSection" ||
+        e.detail.id === "headerSection"
+      ) {
         this.bindEvents();
         this.updateCartUI();
       }
