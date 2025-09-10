@@ -10,18 +10,23 @@
       favicon-url="../assets/favicon.ico"
       stylesheets="../css/style.css"
     ></custom-head>
+    <script src="../js/section-loader.js"></script>
+    <!-- i18n -->
+    <script src="../js/i18n.js"></script>
   </head>
   <body class="bg-light">
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
       <div class="container">
         <a class="navbar-brand fw-bold text-primary" href="../index.html">
-          <i class="bi bi-shield-lock me-2"></i>Home
+          <i class="bi bi-shield-lock me-2"></i
+          ><span data-i18n="home_nav">Home</span>
         </a>
         <div class="d-flex align-items-center">
           <span id="businessEmail" class="text-muted me-3"></span>
           <a href="../index.html" class="btn btn-outline-primary">
-            <i class="bi bi-arrow-left me-2"></i>Back to Store
+            <i class="bi bi-arrow-left me-2"></i
+            ><span data-i18n="back_to_store">Back to Store</span>
           </a>
         </div>
       </div>
@@ -34,26 +39,44 @@
         <div class="col-md-6">
           <div class="card shadow">
             <div class="card-body p-4">
-              <h3 class="text-center mb-4">Admin Access</h3>
+              <h3 class="text-center mb-4" data-i18n="admin_access_heading">
+                Admin Access
+              </h3>
               <div class="mb-3">
-                <label for="adminEmail" class="form-label">Email:</label>
+                <label
+                  for="adminEmail"
+                  class="form-label"
+                  data-i18n="email_label"
+                  >Email:</label
+                >
                 <input
                   type="email"
                   class="form-control"
                   id="adminEmail"
+                  data-i18n="enter_admin_email"
                   placeholder="Enter admin email"
                 />
               </div>
               <div class="mb-3">
-                <label for="adminPassword" class="form-label">Password:</label>
+                <label
+                  for="adminPassword"
+                  class="form-label"
+                  data-i18n="password_label"
+                  >Password:</label
+                >
                 <input
                   type="password"
                   class="form-control"
                   id="adminPassword"
+                  data-i18n="enter_admin_password"
                   placeholder="Enter admin password"
                 />
               </div>
-              <button class="btn btn-primary w-100" onclick="authenticate()">
+              <button
+                class="btn btn-primary w-100"
+                onclick="authenticate()"
+                data-i18n="access_admin_panel"
+              >
                 Access Admin Panel
               </button>
               <div id="authError" class="text-danger mt-2 d-none"></div>
@@ -62,6 +85,7 @@
                 href="#"
                 class="d-block mt-3 text-center"
                 onclick="showRegistrationForm()"
+                data-i18n="register_new_business"
                 >Register New Business</a
               >
             </div>
@@ -72,85 +96,156 @@
         <div class="col-md-6">
           <div class="card shadow">
             <div class="card-body p-4">
-              <h3 class="text-center mb-4">Register New Business</h3>
+              <h3
+                class="text-center mb-4"
+                data-i18n="register_business_heading"
+              >
+                Register New Business
+              </h3>
               <form id="registerForm" onsubmit="registerBusiness(event)">
                 <div class="mb-3">
-                  <label for="regEmail" class="form-label">Email:</label>
+                  <label
+                    for="regEmail"
+                    class="form-label"
+                    data-i18n="email_label"
+                    >Email:</label
+                  >
                   <input
                     type="email"
                     class="form-control"
                     id="regEmail"
+                    data-i18n="enter_admin_email"
+                    placeholder="Enter admin email"
                     required
                   />
                 </div>
                 <div class="mb-3">
-                  <label for="regPassword" class="form-label">Password:</label>
+                  <label
+                    for="regPassword"
+                    class="form-label"
+                    data-i18n="password_label"
+                    >Password:</label
+                  >
                   <input
                     type="password"
                     class="form-control"
                     id="regPassword"
+                    data-i18n="enter_admin_password"
+                    placeholder="Enter admin password"
                     required
                   />
                 </div>
                 <div class="mb-3">
-                  <label for="regBusinessName" class="form-label"
+                  <label
+                    for="regBusinessName"
+                    class="form-label"
+                    data-i18n="business_name_label"
                     >Business Name:</label
                   >
                   <input
                     type="text"
                     class="form-control"
                     id="regBusinessName"
+                    data-i18n="business_name_label"
+                    placeholder="Business Name:"
                     required
                   />
                 </div>
                 <div class="mb-3">
-                  <label for="regPhone" class="form-label">Phone:</label>
-                  <input type="text" class="form-control" id="regPhone" />
+                  <label
+                    for="regPhone"
+                    class="form-label"
+                    data-i18n="phone_label"
+                    >Phone:</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="regPhone"
+                    data-i18n="phone_label"
+                    placeholder="Phone:"
+                  />
                 </div>
                 <div class="mb-3">
-                  <label for="regAddress" class="form-label">Address:</label>
-                  <input type="text" class="form-control" id="regAddress" />
+                  <label
+                    for="regAddress"
+                    class="form-label"
+                    data-i18n="address_label"
+                    >Address:</label
+                  >
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="regAddress"
+                    data-i18n="address_label"
+                    placeholder="Address:"
+                  />
                 </div>
                 <div class="mb-3">
-                  <label for="regMapLocation" class="form-label"
+                  <label
+                    for="regMapLocation"
+                    class="form-label"
+                    data-i18n="map_location_label"
                     >Map Location:</label
                   >
-                  <input type="text" class="form-control" id="regMapLocation" />
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="regMapLocation"
+                    data-i18n="map_location_label"
+                    placeholder="Map Location:"
+                  />
                 </div>
                 <div class="mb-3">
-                  <label for="regPaypalClientId" class="form-label"
+                  <label
+                    for="regPaypalClientId"
+                    class="form-label"
+                    data-i18n="paypal_client_id_label"
                     >Paypal Client ID:</label
                   >
                   <input
                     type="text"
                     class="form-control"
                     id="regPaypalClientId"
+                    data-i18n="paypal_client_id_label"
+                    placeholder="Paypal Client ID:"
                   />
                 </div>
                 <div class="mb-3">
-                  <label for="regLanguageFormat" class="form-label"
+                  <label
+                    for="regLanguageFormat"
+                    class="form-label"
+                    data-i18n="language_format_label"
                     >Language Format:</label
                   >
                   <input
                     type="text"
                     class="form-control"
                     id="regLanguageFormat"
+                    data-i18n="language_format_placeholder"
                     placeholder="e.g., en-US"
                   />
                 </div>
                 <div class="mb-3">
-                  <label for="regCurrencyCode" class="form-label"
+                  <label
+                    for="regCurrencyCode"
+                    class="form-label"
+                    data-i18n="currency_format_label"
                     >Currency Format:</label
                   >
                   <input
                     type="text"
                     class="form-control"
                     id="regCurrencyCode"
+                    data-i18n="currency_format_placeholder"
                     placeholder="e.g., USD"
                   />
                 </div>
                 <div class="mb-3">
-                  <label for="regExchangeRate" class="form-label"
+                  <label
+                    for="regExchangeRate"
+                    class="form-label"
+                    data-i18n="exchange_rate_label"
                     >Exchange Rate (USD to Local Currency):</label
                   >
                   <input
@@ -158,10 +253,15 @@
                     step="0.01"
                     class="form-control"
                     id="regExchangeRate"
+                    data-i18n="exchange_rate_placeholder"
                     placeholder="e.g., 540"
                   />
                 </div>
-                <button type="submit" class="btn btn-success w-100">
+                <button
+                  type="submit"
+                  class="btn btn-success w-100"
+                  data-i18n="register_button"
+                >
                   Register
                 </button>
                 <div id="registerStatus" class="text-danger mt-2"></div>
@@ -170,6 +270,7 @@
                 href="#"
                 class="d-block mt-3 text-center"
                 onclick="hideRegistrationForm()"
+                data-i18n="back_to_sign_in"
                 >Back to Sign In</a
               >
             </div>
@@ -188,7 +289,7 @@
               data-bs-toggle="tab"
               data-bs-target="#settingsTab"
             >
-              Settings
+              <span data-i18n="settings_tab">Settings</span>
             </button>
           </li>
           <li class="nav-item">
@@ -198,7 +299,7 @@
               data-bs-toggle="tab"
               data-bs-target="#categoriesTab"
             >
-              Categories
+              <span data-i18n="categories_tab">Categories</span>
             </button>
           </li>
           <li class="nav-item">
@@ -208,7 +309,7 @@
               data-bs-toggle="tab"
               data-bs-target="#productsTab"
             >
-              Products
+              <span data-i18n="products_tab">Products</span>
             </button>
           </li>
           <li class="nav-item">
@@ -217,7 +318,7 @@
               data-bs-toggle="tab"
               data-bs-target="#mediaTab"
             >
-              Product Media
+              <span data-i18n="product_media_tab">Product Media</span>
             </button>
           </li>
           <li class="nav-item">
@@ -226,7 +327,7 @@
               data-bs-toggle="tab"
               data-bs-target="#ordersTab"
             >
-              Orders
+              <span data-i18n="orders_tab">Orders</span>
             </button>
           </li>
           <li class="nav-item">
@@ -235,7 +336,7 @@
               data-bs-toggle="tab"
               data-bs-target="#shippingMethodsTab"
             >
-              Shipping Methods
+              <span data-i18n="shipping_methods_tab">Shipping Methods</span>
             </button>
           </li>
         </ul>
@@ -246,12 +347,19 @@
           <div class="tab-pane fade show active" id="settingsTab">
             <div class="card shadow mb-4">
               <div class="card-header">
-                <h5 class="mb-0">Business Settings</h5>
+                <h5 class="mb-0" data-i18n="business_settings_heading">
+                  Business Settings
+                </h5>
               </div>
               <div class="card-body">
                 <form id="settingsForm" onsubmit="saveSettings(event)">
                   <div class="mb-3">
-                    <label for="settingsEmail" class="form-label">Email</label>
+                    <label
+                      for="settingsEmail"
+                      class="form-label"
+                      data-i18n="email_label"
+                      >Email</label
+                    >
                     <input
                       type="email"
                       class="form-control"
@@ -260,7 +368,10 @@
                     />
                   </div>
                   <div class="mb-3">
-                    <label for="settingsPassword" class="form-label"
+                    <label
+                      for="settingsPassword"
+                      class="form-label"
+                      data-i18n="online_password_label"
                       >Online Password</label
                     >
                     <input
@@ -271,7 +382,12 @@
                     />
                   </div>
                   <div class="mb-3">
-                    <label for="settingsPhone" class="form-label">Phone</label>
+                    <label
+                      for="settingsPhone"
+                      class="form-label"
+                      data-i18n="phone_label"
+                      >Phone</label
+                    >
                     <input
                       type="text"
                       class="form-control"
@@ -279,7 +395,10 @@
                     />
                   </div>
                   <div class="mb-3">
-                    <label for="settingsAddress" class="form-label"
+                    <label
+                      for="settingsAddress"
+                      class="form-label"
+                      data-i18n="address_label"
                       >Address</label
                     >
                     <input
@@ -289,7 +408,10 @@
                     />
                   </div>
                   <div class="mb-3">
-                    <label for="settingsMapLocation" class="form-label"
+                    <label
+                      for="settingsMapLocation"
+                      class="form-label"
+                      data-i18n="map_location_label"
                       >Map Location</label
                     >
                     <input
@@ -299,7 +421,10 @@
                     />
                   </div>
                   <div class="mb-3">
-                    <label for="settingsBusinessName" class="form-label"
+                    <label
+                      for="settingsBusinessName"
+                      class="form-label"
+                      data-i18n="business_name_label"
                       >Business Name</label
                     >
                     <input
@@ -309,7 +434,10 @@
                     />
                   </div>
                   <div class="mb-3">
-                    <label for="settingsPaypalClientId" class="form-label"
+                    <label
+                      for="settingsPaypalClientId"
+                      class="form-label"
+                      data-i18n="paypal_client_id_label"
                       >Paypal Client ID</label
                     >
                     <input
@@ -319,29 +447,40 @@
                     />
                   </div>
                   <div class="mb-3">
-                    <label for="settingsLanguageFormat" class="form-label"
+                    <label
+                      for="settingsLanguageFormat"
+                      class="form-label"
+                      data-i18n="language_format_label"
                       >Language Format</label
                     >
                     <input
                       type="text"
                       class="form-control"
                       id="settingsLanguageFormat"
+                      data-i18n="language_format_placeholder"
                       placeholder="e.g., en-US"
                     />
                   </div>
                   <div class="mb-3">
-                    <label for="settingsCurrencyCode" class="form-label"
+                    <label
+                      for="settingsCurrencyCode"
+                      class="form-label"
+                      data-i18n="currency_format_label"
                       >Currency Format</label
                     >
                     <input
                       type="text"
                       class="form-control"
                       id="settingsCurrencyCode"
+                      data-i18n="currency_format_placeholder"
                       placeholder="e.g., USD"
                     />
                   </div>
                   <div class="mb-3">
-                    <label for="settingsExchangeRate" class="form-label"
+                    <label
+                      for="settingsExchangeRate"
+                      class="form-label"
+                      data-i18n="exchange_rate_label"
                       >Exchange Rate (USD to Local Currency)</label
                     >
                     <input
@@ -349,10 +488,15 @@
                       step="0.01"
                       class="form-control"
                       id="settingsExchangeRate"
+                      data-i18n="exchange_rate_placeholder"
                       placeholder="e.g., 540"
                     />
                   </div>
-                  <button type="submit" class="btn btn-primary">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    data-i18n="save_settings"
+                  >
                     Save Settings
                   </button>
 
@@ -364,8 +508,17 @@
                   class="btn btn-outline-primary mt-2"
                   onclick="goToStoreWithEmail()"
                 >
-                  Go to Store for this Business
+                  <span data-i18n="go_to_store_for_business"
+                    >Go to Store for this Business</span
+                  >
                 </button>
+                <p
+                  data-i18n="go_to_store_for_business_text"
+                  class="text-muted mt-3 text-small"
+                >
+                  Don't forget to add some products and categories to your
+                  store.
+                </p>
               </div>
             </div>
           </div>
@@ -374,7 +527,9 @@
           <div class="tab-pane fade" id="categoriesTab">
             <div class="card shadow mb-4">
               <div class="card-header">
-                <h5 class="mb-0">Manage Categories</h5>
+                <h5 class="mb-0" data-i18n="manage_categories_heading">
+                  Manage Categories
+                </h5>
               </div>
               <div class="card-body">
                 <form
@@ -388,6 +543,7 @@
                         type="text"
                         class="form-control"
                         id="categoryName"
+                        data-i18n="name_placeholder"
                         placeholder="Name"
                         required
                       />
@@ -397,6 +553,7 @@
                         type="text"
                         class="form-control"
                         id="categoryDisplayName"
+                        data-i18n="display_name_placeholder"
                         placeholder="DisplayName (one word)"
                         pattern="^\w+$"
                         required
@@ -407,12 +564,17 @@
                         type="number"
                         class="form-control"
                         id="categoryId"
+                        data-i18n="category_id_placeholder"
                         placeholder="CategoryId"
                         required
                       />
                     </div>
                     <div class="col-md-2">
-                      <button type="submit" class="btn btn-primary w-100">
+                      <button
+                        type="submit"
+                        class="btn btn-primary w-100"
+                        data-i18n="add_category"
+                      >
                         Add Category
                       </button>
                     </div>
@@ -428,21 +590,31 @@
           <div class="tab-pane fade" id="mediaTab">
             <div class="card shadow">
               <div class="card-header">
-                <h5 class="mb-0">Upload Product Media</h5>
+                <h5 class="mb-0" data-i18n="upload_product_media_heading">
+                  Upload Product Media
+                </h5>
               </div>
               <div class="card-body">
                 <div class="row">
                   <div class="col-md-6">
                     <div class="mb-3">
-                      <label for="productSelect" class="form-label"
+                      <label
+                        for="productSelect"
+                        class="form-label"
+                        data-i18n="select_product_label"
                         >Select Product:</label
                       >
                       <select class="form-select" id="productSelect">
-                        <option value="">Loading products...</option>
+                        <option value="" data-i18n="loading_products">
+                          Loading products...
+                        </option>
                       </select>
                     </div>
                     <div class="mb-3">
-                      <label for="mediaFile" class="form-label"
+                      <label
+                        for="mediaFile"
+                        class="form-label"
+                        data-i18n="select_file_label"
                         >Select File:</label
                       >
                       <input
@@ -456,7 +628,8 @@
                       class="btn btn-primary"
                       onclick="adminPanel.uploadMedia()"
                     >
-                      <i class="bi bi-upload me-2"></i>Upload Media
+                      <i class="bi bi-upload me-2"></i
+                      ><span data-i18n="upload_media">Upload Media</span>
                     </button>
                   </div>
                   <div class="col-md-6">
@@ -472,24 +645,30 @@
           <div class="tab-pane fade" id="ordersTab">
             <div class="card shadow">
               <div class="card-header">
-                <h5 class="mb-0">Manage Orders</h5>
+                <h5 class="mb-0" data-i18n="manage_orders_heading">
+                  Manage Orders
+                </h5>
               </div>
               <div class="card-body">
                 <div class="table-responsive">
                   <table class="table table-striped">
                     <thead>
                       <tr>
-                        <th>Order ID</th>
-                        <th>Customer</th>
-                        <th>Total</th>
-                        <th>Status</th>
-                        <th>Date</th>
-                        <th>Actions</th>
+                        <th data-i18n="order_id">Order ID</th>
+                        <th data-i18n="customer">Customer</th>
+                        <th data-i18n="total">Total</th>
+                        <th data-i18n="status">Status</th>
+                        <th data-i18n="date">Date</th>
+                        <th data-i18n="actions">Actions</th>
                       </tr>
                     </thead>
                     <tbody id="ordersTable">
                       <tr>
-                        <td colspan="6" class="text-center">
+                        <td
+                          colspan="6"
+                          class="text-center"
+                          data-i18n="loading_orders"
+                        >
                           Loading orders...
                         </td>
                       </tr>
@@ -504,7 +683,9 @@
           <div class="tab-pane fade" id="productsTab">
             <div class="card shadow mb-4">
               <div class="card-header">
-                <h5 class="mb-0">Manage Products</h5>
+                <h5 class="mb-0" data-i18n="manage_products_heading">
+                  Manage Products
+                </h5>
               </div>
               <div class="card-body">
                 <form
@@ -518,6 +699,7 @@
                         type="text"
                         class="form-control"
                         id="productName"
+                        data-i18n="name_placeholder"
                         placeholder="Name"
                         required
                       />
@@ -528,7 +710,9 @@
                         id="productCategoryId"
                         required
                       >
-                        <option value="">Select Category</option>
+                        <option value="" data-i18n="select_category">
+                          Select Category
+                        </option>
                       </select>
                     </div>
                     <div class="col-md-2">
@@ -537,6 +721,7 @@
                         step="0.01"
                         class="form-control"
                         id="productPrice"
+                        data-i18n="price_placeholder"
                         placeholder="Price"
                         required
                       />
@@ -546,6 +731,7 @@
                         type="number"
                         class="form-control"
                         id="productStockQuantity"
+                        data-i18n="stock_qty_placeholder"
                         placeholder="Stock Qty"
                       />
                     </div>
@@ -554,6 +740,7 @@
                         type="number"
                         class="form-control"
                         id="productId"
+                        data-i18n="product_id_placeholder"
                         placeholder="ProductId"
                         required
                       />
@@ -565,6 +752,7 @@
                         type="text"
                         class="form-control"
                         id="productDescription"
+                        data-i18n="description_placeholder"
                         placeholder="Description"
                         required
                       />
@@ -575,6 +763,7 @@
                         step="0.01"
                         class="form-control"
                         id="productTaxes"
+                        data-i18n="taxes_placeholder"
                         placeholder="Taxes (default 0)"
                       />
                     </div>
@@ -589,7 +778,11 @@
                     </div>
                   </div>
 
-                  <button type="submit" class="btn btn-primary mt-3">
+                  <button
+                    type="submit"
+                    class="btn btn-primary mt-3"
+                    data-i18n="add_product"
+                  >
                     Add Product
                   </button>
                   <div id="productStatus" class="mt-2"></div>
@@ -603,7 +796,9 @@
           <div class="tab-pane fade" id="shippingMethodsTab">
             <div class="card shadow mb-4">
               <div class="card-header">
-                <h5 class="mb-0">Manage Shipping Methods</h5>
+                <h5 class="mb-0" data-i18n="manage_shipping_methods_heading">
+                  Manage Shipping Methods
+                </h5>
               </div>
               <div class="card-body">
                 <form
@@ -617,6 +812,7 @@
                         type="text"
                         class="form-control"
                         id="shippingMethodDescription"
+                        data-i18n="description_placeholder"
                         placeholder="Description"
                         required
                       />
@@ -627,12 +823,17 @@
                         step="0.01"
                         class="form-control"
                         id="shippingMethodPrice"
+                        data-i18n="price_placeholder"
                         placeholder="Price"
                         required
                       />
                     </div>
                     <div class="col-md-3">
-                      <button type="submit" class="btn btn-primary w-100">
+                      <button
+                        type="submit"
+                        class="btn btn-primary w-100"
+                        data-i18n="add_shipping_method"
+                      >
                         Add Shipping Method
                       </button>
                     </div>
@@ -646,7 +847,11 @@
         </div>
 
         <!-- Logout Button -->
-        <button class="btn btn-outline-danger mb-3" onclick="logoutAdmin()">
+        <button
+          class="btn btn-outline-danger mb-3"
+          onclick="logoutAdmin()"
+          data-i18n="logout"
+        >
           Logout
         </button>
       </div>
@@ -659,6 +864,7 @@
     <script src="../js/supabase-config.js"></script>
     <script src="../js/business-data.js"></script>
     <script src="../js/price-formatter.js"></script>
+    <script src="../js/store-functions.js"></script>
     <script src="../js/admin.js"></script>
 
     <script>
