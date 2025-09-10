@@ -12,6 +12,8 @@
       scripts="../js/price-formatter.js"
     ></custom-head>
     <script src="../js/section-loader.js"></script>
+    <!-- i18n -->
+    <script src="../js/i18n.js"></script>
     <script defer>
       // Load sections when the page is ready
       document.addEventListener("DOMContentLoaded", function () {
@@ -35,8 +37,8 @@
       <div class="container">
         <div class="row align-items-center">
           <div class="col-lg-8">
-            <h1 class="display-4 fw-bold">Contact Us</h1>
-            <p class="lead">
+            <h1 class="display-4 fw-bold" data-i18n="contact_us">Contact Us</h1>
+            <p class="lead" data-i18n="contact_us_description">
               We'd love to hear from you. Get in touch with our team.
             </p>
           </div>
@@ -44,13 +46,13 @@
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb justify-content-lg-end mb-0">
                 <li class="breadcrumb-item">
-                  <a href="../index.html" class="text-white">Home</a>
+                  <a href="../index.html" class="text-white" data-i18n="home">Home</a>
                 </li>
                 <li
                   class="breadcrumb-item active text-white"
                   aria-current="page"
                 >
-                  Contact
+                  <span data-i18n="contact">Contact</span>
                 </li>
               </ol>
             </nav>
@@ -69,7 +71,7 @@
                 <div class="feature-icon bg-primary text-white mb-4">
                   <i class="bi bi-geo-alt fs-2"></i>
                 </div>
-                <h3 class="h4 mb-3">Our Location</h3>
+                <h3 class="h4 mb-3" data-i18n="our_location">Our Location</h3>
                 <p id="business-address" class="text-muted mb-0">
                   123 Commerce Street
                 </p>
@@ -82,12 +84,12 @@
                 <div class="feature-icon bg-primary text-white mb-4">
                   <i class="bi bi-telephone fs-2"></i>
                 </div>
-                <h3 class="h4 mb-3">Phone Number</h3>
-                <p class="text-muted mb-0">Customer Service:</p>
+                <h3 class="h4 mb-3" data-i18n="phone_number">Phone Number</h3>
+                <p class="text-muted mb-0" data-i18n="customer_service">Customer Service:</p>
                 <p id="business-phone" class="text-muted mb-0">
                   +1 (800) 123-4567
                 </p>
-                <p class="text-muted">Mon-Fri: 9am - 6pm EST</p>
+                <p class="text-muted" data-i18n="business_hours">Mon-Fri: 9am - 6pm EST</p>
               </div>
             </div>
           </div>
@@ -97,8 +99,8 @@
                 <div class="feature-icon bg-primary text-white mb-4">
                   <i class="bi bi-envelope fs-2"></i>
                 </div>
-                <h3 class="h4 mb-3">Email Address</h3>
-                <p class="text-muted mb-0">Customer Support:</p>
+                <h3 class="h4 mb-3" data-i18n="email_address">Email Address</h3>
+                <p class="text-muted mb-0" data-i18n="customer_support">Customer Support:</p>
                 <p id="business-email" class="text-muted mb-0">
                   support@postore.com
                 </p>
@@ -116,11 +118,11 @@
           <div class="col-lg-8">
             <div class="card border-0 shadow">
               <div class="card-body p-4 p-md-5">
-                <h2 class="text-center mb-4">Send Us a Message</h2>
+                <h2 class="text-center mb-4" data-i18n="send_us_message">Send Us a Message</h2>
                 <form id="contactForm">
                   <div class="row g-3">
                     <div class="col-md-6">
-                      <label for="name" class="form-label">Your Name</label>
+                      <label for="name" class="form-label" data-i18n="your_name">Your Name</label>
                       <input
                         type="text"
                         class="form-control"
@@ -131,7 +133,7 @@
                     </div>
                     <div class="col-md-6">
                       <label for="email" class="form-label"
-                        >Email Address</label
+                        ><span data-i18n="email_address">Email Address</span></label
                       >
                       <input
                         type="email"
@@ -142,7 +144,7 @@
                       />
                     </div>
                     <div class="col-12">
-                      <label for="subject" class="form-label">Subject</label>
+                      <label for="subject" class="form-label" data-i18n="subject">Subject</label>
                       <input
                         type="text"
                         class="form-control"
@@ -152,7 +154,7 @@
                       />
                     </div>
                     <div class="col-12">
-                      <label for="message" class="form-label">Message</label>
+                      <label for="message" class="form-label" data-i18n="message">Message</label>
                       <textarea
                         class="form-control"
                         id="message"
@@ -167,7 +169,7 @@
                         class="btn btn-primary btn-lg px-5"
                         id="submitBtn"
                       >
-                        Send Message
+                        <span data-i18n="send_message">Send Message</span>
                         <i class="bi bi-send ms-2"></i>
                       </button>
                       <button
@@ -181,13 +183,13 @@
                           role="status"
                           aria-hidden="true"
                         ></span>
-                        Sending...
+                        <span data-i18n="sending">Sending...</span>
                       </button>
                     </div>
                   </div>
                 </form>
                 <div id="formSuccess" class="alert alert-success mt-4 d-none">
-                  Thank you for your message! We'll get back to you shortly.
+                  <span data-i18n="thank_you_message">Thank you for your message! We'll get back to you shortly.</span>
                 </div>
               </div>
             </div>
@@ -200,8 +202,8 @@
     <section class="py-5">
       <div class="container">
         <div class="text-center mb-5">
-          <h2 class="display-5 fw-bold">Find Us</h2>
-          <p class="lead text-muted">Visit our store location</p>
+          <h2 class="display-5 fw-bold" data-i18n="find_us">Find Us</h2>
+          <p class="lead text-muted" data-i18n="visit_store_location">Visit our store location</p>
         </div>
         <div class="row">
           <div class="col-12">
@@ -277,7 +279,7 @@
 
             // Validate email
             if (!FormUtils.isValidEmail(sanitizedData.email)) {
-              alert("Please enter a valid email address");
+              alert(window.i18n?.t("please_enter_valid_email") || "Please enter a valid email address");
               return;
             }
 
@@ -318,7 +320,7 @@
                   },
                   function (error) {
                     console.error("Email sending failed:", error);
-                    alert("Failed to send message. Please try again later.");
+                    alert(window.i18n?.t("failed_to_send_message") || "Failed to send message. Please try again later.");
                     FormUtils.toggleLoadingState(
                       "submitBtn",
                       "loadingBtn",

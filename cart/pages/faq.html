@@ -14,6 +14,8 @@
 
     <!-- Section Loader JS -->
     <script src="../js/section-loader.js"></script>
+    <!-- i18n -->
+    <script src="../js/i18n.js"></script>
     <script defer>
       // Load sections when the page is ready
       document.addEventListener("DOMContentLoaded", function () {
@@ -37,8 +39,8 @@
       <div class="container">
         <div class="row align-items-center">
           <div class="col-lg-8">
-            <h1 class="display-4 fw-bold">Frequently Asked Questions</h1>
-            <p class="lead">
+            <h1 class="display-4 fw-bold" data-i18n="frequently_asked_questions">Frequently Asked Questions</h1>
+            <p class="lead" data-i18n="faq_description">
               Find answers to common questions about our products and services.
             </p>
           </div>
@@ -46,13 +48,13 @@
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb justify-content-lg-end mb-0">
                 <li class="breadcrumb-item">
-                  <a href="../index.html" class="text-white">Home</a>
+                  <a href="../index.html" class="text-white" data-i18n="home">Home</a>
                 </li>
                 <li
                   class="breadcrumb-item active text-white"
                   aria-current="page"
                 >
-                  FAQ
+                  <span data-i18n="faqs">FAQ</span>
                 </li>
               </ol>
             </nav>
@@ -66,7 +68,7 @@
       <div class="container">
         <div class="row justify-content-center mb-5">
           <div class="col-lg-8 text-center">
-            <p class="lead text-muted">
+            <p class="lead text-muted" data-i18n="faq_browse_description">
               Browse through our most frequently asked questions to find quick
               answers to your inquiries.
             </p>
@@ -88,7 +90,7 @@
                   type="button"
                   role="tab"
                 >
-                  General
+                  <span data-i18n="general">General</span>
                 </button>
               </li>
               <li class="nav-item mx-2" role="presentation">
@@ -100,7 +102,7 @@
                   type="button"
                   role="tab"
                 >
-                  Orders & Shipping
+                  <span data-i18n="orders_shipping">Orders & Shipping</span>
                 </button>
               </li>
               <li class="nav-item mx-2" role="presentation">
@@ -112,7 +114,7 @@
                   type="button"
                   role="tab"
                 >
-                  Returns & Refunds
+                  <span data-i18n="returns_refunds">Returns & Refunds</span>
                 </button>
               </li>
               <li class="nav-item mx-2" role="presentation">
@@ -124,7 +126,7 @@
                   type="button"
                   role="tab"
                 >
-                  Payment
+                  <span data-i18n="payment">Payment</span>
                 </button>
               </li>
             </ul>
@@ -148,7 +150,7 @@
                     data-bs-toggle="collapse"
                     data-bs-target="#generalOne"
                   >
-                    What is POStore?
+                    <span data-i18n="what_is_postore">What is POStore?</span>
                   </button>
                 </h2>
                 <div
@@ -157,11 +159,11 @@
                   data-bs-parent="#accordionGeneral"
                 >
                   <div class="accordion-body">
-                    POStore is a premium online shopping destination offering
+                    <span data-i18n="what_is_postore_answer">POStore is a premium online shopping destination offering
                     high-quality products across multiple categories including
                     electronics, fashion, and home goods. We curate our
                     selection to ensure every product meets our standards for
-                    quality, design, and value.
+                    quality, design, and value.</span>
                   </div>
                 </div>
               </div>
@@ -173,7 +175,7 @@
                     data-bs-toggle="collapse"
                     data-bs-target="#generalTwo"
                   >
-                    How do I create an account?
+                    <span data-i18n="how_create_account">How do I create an account?</span>
                   </button>
                 </h2>
                 <div
@@ -182,8 +184,8 @@
                   data-bs-parent="#accordionGeneral"
                 >
                   <div class="accordion-body">
-                    No account is needed to browse our products and make
-                    purchases or track your orders.
+                    <span data-i18n="no_account_needed">No account is needed to browse our products and make
+                    purchases or track your orders.</span>
                   </div>
                 </div>
               </div>
@@ -195,7 +197,7 @@
                     data-bs-toggle="collapse"
                     data-bs-target="#generalThree"
                   >
-                    Are all products brand new?
+                    <span data-i18n="are_products_brand_new">Are all products brand new?</span>
                   </button>
                 </h2>
                 <div
@@ -204,10 +206,10 @@
                   data-bs-parent="#accordionGeneral"
                 >
                   <div class="accordion-body">
-                    Yes, all products sold on POStore are brand new and
-                    authentic. We work directly with manufacturers and
+                    <span data-i18n="products_brand_new_answer">Yes, all products sold on POStore are brand new and
+                    authentic. Unless product description says otherwise, we work directly with manufacturers and
                     authorized distributors to ensure the quality and
-                    authenticity of every item we sell.
+                    authenticity of every item we sell.</span>
                   </div>
                 </div>
               </div>
@@ -219,7 +221,7 @@
                     data-bs-toggle="collapse"
                     data-bs-target="#generalFour"
                   >
-                    How can I contact customer service?
+                    <span data-i18n="how_contact_customer_service">How can I contact customer service?</span>
                   </button>
                 </h2>
                 <div
@@ -228,13 +230,13 @@
                   data-bs-parent="#accordionGeneral"
                 >
                   <div class="accordion-body">
-                    You can contact our customer service team through multiple
+                    <span data-i18n="contact_customer_service_answer">You can contact our customer service team through multiple
                     channels: by email at
                     <span id="faq-business-email">support@postore.com</span>, by
                     phone at
                     <span id="faq-business-phone">+1 (800) 123-4567</span>
                     (Monday-Friday, 9am-6pm EST), or by filling out the contact
-                    form on our <a href="contact.html">Contact page</a>.
+                    form on our <a href="contact.html">Contact page</a>.</span>
                   </div>
                 </div>
               </div>
@@ -252,7 +254,7 @@
                     data-bs-toggle="collapse"
                     data-bs-target="#ordersOne"
                   >
-                    How long does shipping take?
+                    <span data-i18n="how_long_shipping">How long does shipping take?</span>
                   </button>
                 </h2>
                 <div
@@ -261,11 +263,11 @@
                   data-bs-parent="#accordionOrders"
                 >
                   <div class="accordion-body">
-                    Standard shipping typically takes 3-5 business days within
+                    <span data-i18n="shipping_times_answer">Standard shipping typically takes 3-5 business days within
                     the continental US. Express shipping options are available
                     at checkout for 1-2 business day delivery. International
                     shipping times vary by destination, generally taking 7-14
-                    business days.
+                    business days.</span>
                   </div>
                 </div>
               </div>
@@ -277,7 +279,7 @@
                     data-bs-toggle="collapse"
                     data-bs-target="#ordersTwo"
                   >
-                    Do you ship internationally?
+                    <span data-i18n="ship_internationally">Do you ship internationally?</span>
                   </button>
                 </h2>
                 <div
@@ -286,11 +288,11 @@
                   data-bs-parent="#accordionOrders"
                 >
                   <div class="accordion-body">
-                    Yes, we ship to most countries worldwide. International
+                    <span data-i18n="international_shipping_answer">Yes, we ship to most countries worldwide. International
                     shipping rates and delivery times are calculated at checkout
                     based on your location and the items in your cart. Please
                     note that customers are responsible for any import duties or
-                    taxes that may apply.
+                    taxes that may apply.</span>
                   </div>
                 </div>
               </div>
@@ -561,13 +563,13 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-8 text-center">
-            <h2 class="display-6 fw-bold mb-4">Still Have Questions?</h2>
-            <p class="lead mb-5">
+            <h2 class="display-6 fw-bold mb-4" data-i18n="still_have_questions">Still Have Questions?</h2>
+            <p class="lead mb-5" data-i18n="customer_support_help_description">
               Our customer support team is here to help you with any other
               questions you might have.
             </p>
             <a href="contact.html" class="btn btn-primary btn-lg px-5"
-              >Contact Us</a
+              ><span data-i18n="contact_us">Contact Us</span></a
             >
           </div>
         </div>

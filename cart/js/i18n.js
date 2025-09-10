@@ -63,7 +63,15 @@ class I18n {
   async loadTranslations(language) {
     console.log("Loading translations for:", language);
     try {
-      const response = await fetch(`translations/${language}.json`);
+      // Determine the correct path based on current location
+      const currentPath = window.location.pathname;
+      const isInSubdirectory =
+        currentPath.includes("/pages/") || currentPath.includes("/admin/");
+      const translationPath = isInSubdirectory
+        ? `../translations/${language}.json`
+        : `translations/${language}.json`;
+
+      const response = await fetch(translationPath);
       console.log("Fetch response for", language, ":", response.status);
       if (!response.ok) {
         throw new Error(`Failed to load ${language} translations`);

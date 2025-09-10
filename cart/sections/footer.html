@@ -227,7 +227,7 @@
     const businessName = window.globalStore?.state?.BusinessName || "POStore";
     const titleElement = document.querySelector(".footer-title i");
     if (titleElement) {
-      titleElement.parentElement.innerHTML = `<i class="bi bi-shop me-2"></i>${businessName}`;
+      titleElement.parentElement.innerHTML = `<img class="postore-logo me-2" src="../assets/img/point-of-sale-icon-10649.png" alt="POStore" class="img-fluid" style="width: 30px; height: 30px;">${businessName}</img>`;
     }
   }
 

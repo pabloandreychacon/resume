@@ -65,7 +65,8 @@
         href="index.html"
         style="font-size: 1.5rem"
       >
-        <i class="bi bi-shop me-2"></i>POStore
+        <!-- Use png image for logo-->
+        <img class="postore-logo me-2" src="../assets/img/point-of-sale-icon-10649.png" alt="POStore" class="img-fluid" style="width: 30px; height: 30px;">POStore</img>
       </a>
     </div>
   </div>
@@ -79,7 +80,8 @@
         href="index.html"
         style="font-size: 1.5rem"
       >
-        <i class="bi bi-shop me-2"></i>POStore
+        <!-- Use png image for logo-->
+        <img class="postore-logo me-2" src="../assets/img/point-of-sale-icon-10649.png" alt="POStore" class="img-fluid" style="width: 30px; height: 30px;">POStore</img>
       </a>
 
       <!-- Right side: Search + Cart + Wishlist (sm+ only) -->
@@ -213,13 +215,14 @@
       "#navOffcanvas .offcanvas-title i"
     );
     if (titleElement) {
-      titleElement.parentElement.innerHTML = `<i class="bi bi-shop me-2"></i>${businessName}`;
+      titleElement.parentElement.innerHTML = `<img class="postore-logo me-2" src="../assets/img/point-of-sale-icon-10649.png" alt="POStore" class="img-fluid" style="width: 30px; height: 30px;">${businessName}</img>`;
     }
 
     // Update all navbar brand elements
     const navbarBrands = document.querySelectorAll(".navbar-brand");
     navbarBrands.forEach((brand) => {
-      brand.innerHTML = `<i class="bi bi-shop me-2"></i>${businessName}`;
+      brand.innerHTML = `<img class="postore-logo me-2" src="../assets/img/point-of-sale-icon-10649.png" alt="POStore" class="img-fluid" style="width: 30px; height: 30px;">${businessName}</img>`;
+      
     });
   }
 
