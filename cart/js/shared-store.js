@@ -115,13 +115,9 @@ class SharedStore {
     const wishlistItems = document.getElementById("wishlistItems");
     const wishlistCount = document.getElementById("wishlistCount");
 
-    // Always update cart count in header, even if cart items section is not loaded
+    // Always update cart count in header, headerSection should be fired previously
     const totalItems = this.cart.reduce((sum, item) => sum + item.quantity, 0);
-    // delayed to ensure DOM is ready for cartCount
-    setTimeout(() => {
-      console.log("Updating cart count to:", totalItems);
-      if (cartCount) cartCount.textContent = totalItems;
-    }, 500);
+    if (cartCount) cartCount.textContent = totalItems;
 
     // If cart items section is not loaded, don't update the rest of the UI
     if (!cartItems) return;
