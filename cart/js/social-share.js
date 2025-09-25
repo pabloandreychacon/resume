@@ -24,8 +24,8 @@ function setupProductCardSharing() {
       const productId = button.getAttribute("data-product-id");
 
       // Find product data
-      if (window.store && window.store.products) {
-        const product = window.store.products.find(
+      if (window.store && window.store.cart) {
+        const product = window.store.cart.find(
           (p) => (p.Id || p.id) == productId
         );
         if (product) {
