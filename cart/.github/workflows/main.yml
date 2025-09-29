@@ -1,0 +1,16 @@
+name: Scheduled Supabase API Call
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 2 * * *' # daily at 2:00 UTC
+
+jobs:
+  call-supabase:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Call Supabase API
+        run: |
+          curl -X GET "https://cfigfcufbornekzjxbqd.supabase.co/rest/v1/Settings" \
+            -H "apikey: ${{ secrets.SUPABASE_API_KEY }}" \
+            -H "Authorization: Bearer ${{ secrets.SUPABASE_API_KEY }}"

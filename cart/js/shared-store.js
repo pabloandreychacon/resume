@@ -128,7 +128,7 @@ class SharedStore {
       0
     );
 
-    if (cartTotal) cartTotal.textContent = totalPrice.toFixed(2);
+    if (cartTotal) cartTotal.textContent = this.formatPrice(totalPrice);
     if (wishlistCount) wishlistCount.textContent = this.wishlist.length;
 
     if (this.cart.length === 0) {
