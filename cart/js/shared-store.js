@@ -56,6 +56,7 @@ class SharedStore {
   }
 
   formatPrice(price) {
+    // Ensure we use the same formatting as product cards
     return StoreFunctions.formatPrice(price);
   }
 
@@ -107,7 +108,7 @@ class SharedStore {
     }
   }
 
-  updateCartUI() {
+  async updateCartUI() {
     const cartCount = document.getElementById("cartCount");
     const cartItems = document.getElementById("cartItems");
     const cartTotal = document.getElementById("cartTotal");
@@ -121,6 +122,9 @@ class SharedStore {
 
     // If cart items section is not loaded, don't update the rest of the UI
     if (!cartItems) return;
+
+    // Wait for price formatter to be ready
+    await StoreFunctions.waitForPriceFormatter();
 
     const totalPrice = this.cart.reduce(
       (sum, item) =>
