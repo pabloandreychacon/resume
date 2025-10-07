@@ -417,6 +417,11 @@ class EcommerceStore {
       bootstrap.Modal.getInstance(
         document.getElementById("productModal")
       ).hide();
+      setTimeout(() => {
+        if (typeof this.renderProducts === 'function') {
+          this.renderProducts();
+        }
+      }, 100);
     };
 
     // Update wishlist button in modal

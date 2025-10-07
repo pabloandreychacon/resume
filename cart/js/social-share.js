@@ -142,7 +142,7 @@ function shareProductDirect(platform, product) {
 
   // Ensure products remain visible after sharing
   setTimeout(() => {
-    if (window.store) {
+    if (window.store && typeof window.store.renderProducts === 'function') {
       window.store.renderProducts();
     }
   }, 100);
